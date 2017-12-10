@@ -17,6 +17,24 @@
         $(".tab.segment").removeClass("active");
         $(".tab.segment[data-tab=\"" + tab + "\"]").addClass("active");
     });
+
+    $("#c1").click(function(){
+        $("#m1").show(300);
+    });
+
+    $("#exit").click(function(){
+        $("#m1").hide(300);
+    });
+
+    $("#c2").click(function () {
+        $("#m1").modal('show');
+    });
+
+    $(document).keyup(function(event) {
+        if (event.keyCode == 27) {
+            $("#m1").hide(300);
+        }
+    });
  });
 
 function sad(){
@@ -28,6 +46,27 @@ function sad(){
   </head>
   <body>
     <!-- 目录结构 -->
+
+
+
+
+
+<div class="ui test modal" id="m1">
+  <i class="close icon"></i>
+  <div class="header">
+    操作系统课程通知
+  </div>
+  <div class="content">
+    <div class="right">
+      <div class="ui header">作业5已经发布，ddl为本周日晚上12点，请大家尽快完成</div>
+    </div>
+  </div>
+  <div class="actions">
+    <div class="ui black button" id="exit">
+      关闭
+    </div>
+  </div>
+</div>
 
 <div class="ui inverted left fixed vertical pointing menu">
   <div class="ui container">
@@ -169,7 +208,7 @@ function sad(){
         <div class="header">操作系统课程有新通知</div>
         <p>作业5已发布，ddl为本周日晚上12点</p>
       </div>
-      <button class="ui button" onclick="sad()">详情</button>
+      <button class="ui button" id="c1">详情</button>
     </div>
     <div class="ui icon message">
       <i class="inbox icon"></i>
@@ -177,7 +216,7 @@ function sad(){
         <div class="header">操作系统课程有新通知</div>
         <p>作业5已发布，ddl为本周日晚上12点</p>
       </div>
-      <button class="ui button" onclick="sad()">详情</button>
+      <button class="ui button" id="c2">详情</button>
     </div>
     <div class="ui icon message">
       <i class="inbox icon"></i>
@@ -190,11 +229,11 @@ function sad(){
   </div>
 </div>
 
-<div class="ui bottom attached tab segment" data-tab="search">
+<div class="ui bottom attached fixed tab segment" data-tab="search">
   <div class="ui container">
     <div class="ui category search">
       <div class="ui icon input">
-        <input class="prompt" type="text" placeholder="搜寻动物……">
+        <input class="prompt" type="text" placeholder="搜索……">
         <i class="search icon"></i>
       </div>
       <div class="results"></div>
@@ -244,6 +283,8 @@ function sad(){
           </div>
     </div>
 </div>
+
+<div class="ui hidden divider"></div>
 
 <div class="ui three bottom fixed item menu">
   <a class="item" href="http://10.202.78.12/">浙江大学现代教务管理系统</a>
