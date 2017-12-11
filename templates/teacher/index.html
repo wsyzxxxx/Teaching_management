@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0">
+    {% load staticfiles %}
+    <title>教学服务系统</title>
+    <!-- 使用本地的样式与js文件 -->
+    <script src="{%  static 'js/jquery-3.2.1.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'Semantic-UI-master/dist/semantic.min.css' %}">
+    <script type="text/javascript" src="{% static 'Semantic-UI-master/dist/semantic.min.js' %}"></script>
+
+ <script>
+$(document).ready(function(){
+    $('.ui .item[data-tab]').on('click', function() {
+        $('.ui .item[data-tab]').removeClass('active');
+        $(this).addClass('active');
+        var tab = $(this).attr("data-tab");
+        $(".tab.segment").removeClass("active");
+        $(".tab.segment[data-tab=\"" + tab + "\"]").addClass("active");
+    });
+});
+
+//通过button的value来定位对应的modal的id，实现modal.show
+function showModal(e) {
+   $("#"+e.value).modal('show');
+}
+ </script>
+</head>
+
+<body>
+    <!-- 目录结构 -->
+    <div class="ui inverted left fixed vertical sidebar menu " id="left_sidebar">
+        <div class="ui container">
+            <p></p>
+            <!--img class="ui avatar tiny centered image" src="{% static 'img/6.jpg' %}"-->
+            <p></p>
+            <a class="item" data-tab="home">
+                <i class="student icon"></i>个人信息</a>
+            <a class="active item" data-tab="work"><i class="table icon"></i>个人开课表</a>
+            <a class="item" data-tab="message"><i class="announcement icon"></i>
+                <div class="ui red label">3</div>消息
+            </a>
+            <a class="item" data-tab="search"><i class="search icon"></i>站内搜索</a>
+            <a class="item" data-tab="liuyan"><i class="edit icon"></i>留言板</a>
+        </div>
+    </div>
+
+
+
+<!--底部导航栏
+    <div class="ui visible inverted bottom fixed menu">
+        <div class="ui container">
+            <a class="item" href="http://10.202.78.12/">浙江大学现代教务管理系统</a>
+            <a class="item" href="https://mail.zju.edu.cn/">浙江大学邮件系统</a>
+            <a class="item" href="http://cc98.org">cc98论坛</a>
+        </div>
+    </div-->
+
+    <!--顶部导航栏-->
+
+
+
+
+<div class="pusher">
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+    <!--顶部菜单栏-->
+    <div class="ui visible red top menu sidebar">
+        <a class="item" onclick="$('#left_sidebar').sidebar('toggle');">菜单</a>
+        <div class="right menu">
+            <div class="ui search">
+                <div class="ui icon input">
+                    <input class="prompt" type="text" placeholder="搜索课程或教师">
+                    <i class="search icon"></i>
+                </div>
+            </div>
+        </div>
+        <a class="item">退出</a>
+    </div>
+<!-- 正文 -->
+    <div class="ui bottom attached tab segment" data-tab="home" id="_course">
+        <div class="ui conty cer">
+            <img class="ui tiny circular image" src="{% static 'img/6.jpg' %}">
+            <h2>姓名：邢卫</h2>
+            <h2>学院：计算机科学与技术学院</h2>
+            <h2>职位：教授</h2>
+            <h2>电话：110</h2>
+            <h2>邮箱：54545@qq.com</h2>
+            <div class="ui top floated small primary labeled icon button"><i class="user icon"></i> 编辑个人信息</div>
+        </div>
+    </div>
+
+<!--个人开课表tab-->
+<div class="ui bottom attached active tab segment" data-tab="work" >
+        <div class="ui link card" onclick="window.location.href='teacher_courses'">
+            <div class="floating ui red label">3</div>
+            <div class="content">
+                <div class="header">软件需求工程</div>
+                <div class="meta">
+                <a>邢卫</a>
+                <a></a>
+                <a>刘玉生</a>
+                </div>
+                <div class="description">周一6，7，8</div>
+            </div>
+            <div class="extra content">
+              <span> 专业课 </span>
+            </div>
+        </div>
+        <div class="ui link card">
+            <div class="content">
+                <div class="header">软件需求工程</div>
+                <div class="meta">
+                    <a>邢卫</a>
+                    <a></a>
+                    <a>刘玉生</a>
+                </div>
+                <div class="description">周一6，7，8</div>
+            </div>
+            <div class="extra content">
+                <span> 专业课 </span>
+            </div>
+        </div>
+
+      <div class="ui link card">
+        <div class="content">
+          <div class="header">软件需求工程</div>
+          <div class="meta">
+            <a>邢卫</a>
+            <a></a>
+            <a>刘玉生</a>
+          </div>
+          <div class="description">周一6，7，8</div>
+        </div>
+        <div class="extra content">
+          <span> 专业课 </span>
+        </div>
+      </div>
+
+      <div class="ui link card">
+        <div class="content">
+          <div class="header">软件需求工程</div>
+          <div class="meta">
+            <a>邢卫</a>
+            <a></a>
+            <a>刘玉生</a>
+          </div>
+          <div class="description">周一6，7，8</div>
+        </div>
+        <div class="extra content">
+          <span> 专业课 </span>
+        </div>
+      </div>
+
+    <div class="ui link card">
+        <div class="content">
+            <div class="header">软件需求工程</div>
+            <div class="meta">
+                <a>邢卫</a>
+                <a></a>
+                <a>刘玉生</a>
+            </div>
+            <div class="description">周一6，7，8</div>
+        </div>
+        <div class="extra content">
+            <span> 专业课 </span>
+        </div>
+    </div>
+</div>
+
+
+
+<!--消息tab-->
+<div class="ui bottom attached tab segment" data-tab="message">
+  <div class="ui container">
+    <div class="ui icon message">
+      <i class="inbox icon"></i>
+      <div class="content">
+        <div class="header">软件需求工程课程有新通知</div>
+        <p>2017.12.12, 20:00</p>
+      </div>
+      <button class="ui button" value="m1" onclick="showModal(this)">详情</button>
+    </div>
+    <div class="ui icon message">
+      <i class="inbox icon"></i>
+      <div class="content">
+        <div class="header">软件需求工程课程有新通知</div>
+        <p>2017.12.12, 20:00</p>
+      </div>
+      <button class="ui button">详情</button>
+    </div>
+    <div class="ui icon message">
+      <i class="inbox icon"></i>
+      <div class="content">
+        <div class="header">软件工程管理课程有新通知</div>
+        <p>2017.12.12, 20:00</p>
+      </div>
+      <button class="ui button">详情</button>
+    </div>
+    <div class="ui icon message">
+      <i class="inbox icon"></i>
+      <div class="content">
+        <div class="header">收到一封学生私信</div>
+        <p>2017.12.12, 20:00</p>
+      </div>
+      <button class="ui button">详情</button>
+    </div>
+  </div>
+</div>
+
+<div class="ui bottom attached fixed tab segment" data-tab="search">
+  <div class="ui container">
+    <div class="ui category search">
+      <div class="ui icon input">
+        <input class="prompt" type="text" placeholder="搜索……">
+        <i class="search icon"></i>
+      </div>
+      <div class="results"></div>
+    </div>
+  </div>
+</div>
+
+<div class="ui bottom attached tab segment" data-tab="liuyan">
+    <div class="ui container">
+        <div class="ui comments">
+            <div class="comment">
+              <a class="avatar">
+                <img src="{% static '/img/4.jpg' %}">
+              </a>
+              <div class="content">
+                <a class="author">游客8888</a>
+                <div class="metadata">
+                  <div class="date">2 天前</div>
+                </div>
+                <div class="text">垃圾网站 </div>
+              </div>
+            </div>
+            <div class="comment">
+              <a class="avatar">
+                <img src="{% static '/img/4.jpg' %}">
+              </a>
+              <div class="content">
+                <a class="author">游客8888</a>
+                <div class="metadata">
+                  <div class="date">2 天前</div>
+                </div>
+                <div class="text">垃圾网站 </div>
+              </div>
+            </div>
+            <div class="comment">
+              <a class="avatar">
+                <img src="{% static '/img/4.jpg' %}">
+              </a>
+              <div class="content">
+                <a class="author">游客8888</a>
+                <div class="metadata">
+                  <div class="date">2 天前</div>
+                </div>
+                <div class="text">垃圾网站 </div>
+              </div>
+            </div>
+          </div>
+    </div>
+</div>
+
+</div>
+
+<div class="ui test modal" id="m1">
+    <i class="close icon"></i>
+    <div class="header">
+        软件需求工程课程通知
+    </div>
+    <div class="content">
+        <div class="right">
+            <div class="ui header">您在“软件需求工程”课程发布的“作业1”ddl已到，请您及时批阅</div>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui black button" id="exit">
+          关闭
+        </div>
+    </div>
+</div>
+
+
+  </body>
+</html>
+

@@ -60,15 +60,15 @@
         .form({
           fields: {
             email: {
-              identifier  : 'email',
+              identifier  : 'id',
               rules: [
                 {
                   type   : 'empty',
-                  prompt : 'Please enter your e-mail'
+                  prompt : 'Please enter your id'
                 },
                 {
-                  type   : 'email',
-                  prompt : 'Please enter a valid e-mail'
+                  type   : 'contains[315010]',
+                  prompt : 'Please enter a valid id'
                 }
               ]
             },
@@ -82,6 +82,10 @@
                 {
                   type   : 'length[6]',
                   prompt : 'Your password must be at least 6 characters'
+                },
+                {
+                    type    : 'contains[123456]',
+                    prompt  :  'Password is incorrect'
                 }
               ]
             }
@@ -96,44 +100,34 @@
 
 <div class="ui middle aligned center aligned grid">
   <div class="column">
-    <h2 class="ui teal header">
+    <h2 class="ui teal image header">
       <div class="content">
-        欢迎使用浙江大学教学服务系统
+        登录到账号
       </div>
     </h2>
-    <form class="ui large form error">
+    <form class="ui large form" action="http://127.0.0.1:8000/index/">
       <div class="ui stacked segment">
-        <div class="field error">
+        <div class="field">
           <div class="ui left icon input">
             <i class="user icon"></i>
-            <input type="text" name="email" placeholder="E-mail address">
+            <input type="text" name="id" placeholder="Student id or teacher id">
           </div>
         </div>
-        <div class="field error">
+        <div class="field">
           <div class="ui left icon input">
             <i class="lock icon"></i>
             <input type="password" name="password" placeholder="Password">
           </div>
         </div>
-        <div class="ui animated fade fluid large teal submit button" onclick="window.location.href='index'">
-            <div class="visible content">登录</div>
-            <div class="hidden content">Login </div>
-        </div>
+        <div class="ui fluid large teal submit button">登录</div>
       </div>
 
-      <div class="ui error message">
-        <ul class="list">
-          <li>Please enter your e-mail</li>
-          <li>Please enter a valid e-mail</li>
-          <li>Please enter your password</li>
-          <li>Your password must be at least 6 characters</li>
-        </ul>
-      </div>
+      <div class="ui error message"></div>
 
     </form>
 
     <div class="ui message">
-      New to us? <a href="#">Sign Up</a>
+      新用户
     </div>
   </div>
 </div>

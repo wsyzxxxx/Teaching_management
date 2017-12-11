@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    {% load staticfiles %}
+    <title>教学服务系统</title>
+    <!-- 使用本地的样式与js文件 -->
+    <script src="{%  static 'js/jquery-3.2.1.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'Semantic-UI-master/dist/semantic.min.css' %}">
+    <script type="text/javascript" src="{% static 'Semantic-UI-master/dist/semantic.min.js' %}"></script>
+
+<script>
+    $(document).ready(function(){
+        $('.ui .item[data-tab]').on('click', function() {
+            $('.ui .item[data-tab]').removeClass('active');
+            $(this).addClass('active');
+            var tab = $(this).attr("data-tab");
+            $(".tab.segment").removeClass("active");
+            $(".tab.segment[data-tab=\"" + tab + "\"]").addClass("active");
+        });
+    });
+    //通过button的value来定位对应的modal的id，实现modal.show
+    function showModal(e) {
+       $("#"+e.value).modal('show');
+    }
+</script>
+</head>
+<body>
+    <div class="ui inverted left fixed vertical sidebar menu" id="left_sidebar">
+      <div class="ui container">
+
+        <a class="active item" data-tab="syllabus">
+            <i class="home icon"></i>课程大纲</a>
+        <a class="item" data-tab="homework"><i class="file text outline icon"></i>课程作业</a>
+        <a class="item" data-tab="message"><i class="announcement icon"></i>
+            <div class="ui red label">3</div>课程通知
+        </a>
+        <a class="item" data-tab="teacher_list"><i class="users icon"></i>教师信息</a>
+        <a class="item" data-tab="forum"><i class="comments outline icon"></i>课程论坛</a>
+        <a class="item" data-tab="resources"><i class="folder open outline icon"></i>课程资源</a>
+        <a class="item" data-tab="return" onclick="window.location.href='http://127.0.0.1:8000/index'"><i class="reply icon"></i>返回个人主页</a>
+        <a class="item" data-tab="logout" onclick="window.location.href='http://127.0.0.1:8000'"><i class="sign out icon" ></i>退出系统</a>
+      </div>
+    </div>
+
+    <div class="pusher">
+    <!--顶部菜单栏-->
+        <div class="ui visible red top menu sidebar">
+            <a class="item" onclick="$('#left_sidebar').sidebar('toggle');">菜单</a>
+            <div class="right menu">
+                <div class="ui search">
+                    <div class="ui icon input">
+                        <input class="prompt" type="text" placeholder="搜索课程或教师">
+                        <i class="search icon"></i>
+                    </div>
+                </div>
+            </div>
+            <a class="item">退出</a>
+        </div>
+        <div class="ui hidden divider"></div>
+        <!--课程大纲tab-->
+        <div class="ui bottom attached active tab segment" data-tab="syllabus">
+            <div class="ui container" >
+                <div class="ui segment">
+                    <img class="ui small right floated image" src="{% static '/img/11.jpg' %}">
+                    <h2>课程简介</h2>
+                    <p>富春山居图是元朝书画，画家黄公望为郑樗（无用师）所绘，以浙江富春江为背景，全图用墨淡雅，山和水的布置疏密得当，墨色浓淡干湿并用，极富于变化，是黄公望的代表作，被称为“中国十大传世名画”之一。</p>
+                    <p>明朝末年传到收藏家吴洪裕手中，吴洪裕极为喜爱此画，甚至在临死前下令将此画焚烧殉葬，被吴洪裕的侄子从火中抢救出，但此时画已被烧成一大一小两段。较长的后段称《无用师卷》，现藏台北故宫博物院；前段称《剩山图》，现收藏于浙江省博物馆。在中国国务院前总理温家宝先生的决定下，《富春山居图》2011年6月在台湾台北故宫博物院展出。</p>
+                </div>
+
+                <table class="ui celled striped table">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>时间</th>
+                            <th>安排</th>
+                            <th>地点</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="collapsing">2017.12.12</td>
+                            <td class="collapsing">6,7,8节</td>
+                            <td >第一次上课</td>
+                            <td class="right aligned collapsing">教7-604</td>
+                        </tr>
+                        <tr>
+                            <td >2017.12.13</td>
+                            <td class="collapsing">6,7,8节</td>
+                            <td>第二次上课</td>
+                            <td class="right aligned">教7-604</td>
+                        </tr>
+                        <tr>
+                            <td>2017.12.14</td>
+                            <td class="collapsing">6,7,8节</td>
+                            <td>第三次上课</td>
+                            <td class="right aligned">教7-604</td>
+                        </tr>
+                        <tr>
+                            <td>2017.12.15</td>
+                            <td class="collapsing">6,7,8节</td>
+                            <td>第四次上课，quiz</td>
+                            <td class="right aligned">教7-604</td>
+                        </tr>
+                        <tr>
+                            <td>2017.12.16</td>
+                            <td class="collapsing">14:30~16:30</td>
+                            <td>考试</td>
+                            <td class="right aligned">教7-604</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--课程作业tab-->
+        <div class="ui bottom attached tab segment" data-tab="homework">
+            <div class="ui container" >
+                <div class="ui icon message" >
+                    <i class="inbox icon"></i>
+                    <div class="content">
+                        <div class="header">作业1</div>
+                        <p>2017.12.12, 20:00</p>
+                    </div>
+                    <button class="ui button">详情</button>
+                </div>
+                <div class="ui icon message" >
+                    <i class="inbox icon"></i>
+                    <div class="content">
+                        <div class="header">作业2</div>
+                        <p>2017.12.12, 20:00</p>
+                    </div>
+                    <button class="ui button">详情</button>
+                </div>
+                <div class="ui icon red message" >
+                    <i class="inbox icon"></i>
+                    <div class="content">
+                        <div class="header">作业3</div>
+                        <p>2017.12.12, 20:00</p>
+                    </div>
+                    <button class="ui button">详情</button>
+                </div>
+            </div>
+        </div>
+        <!--课程通知tab-->
+        <div class="ui bottom attached tab segment" data-tab="message">
+            <div class="ui container" >
+              <div class="ui icon message" >
+                <i class="inbox icon"></i>
+                <div class="content">
+                    <div class="header">作业1已发布</div>
+                    <p>2017.12.12, 20:00</p>
+                </div>
+                <button class="ui button" value="m1" onclick="showModal(this)">详情</button>
+              </div>
+
+              <div class="ui icon message" >
+                <i class="inbox icon"></i>
+                <div class="content">
+                    <div class="header">收到来自邢卫老师的私信</div>
+                    <p>2017.12.12, 20:00</p>
+                </div>
+                <button class="ui button">详情</button>
+              </div>
+
+            </div>
+        </div>
+        <!--教师列表tab-->
+        <div class="ui bottom attached tab segment" data-tab="teacher_list">
+    <div class="ui container" >
+      <div class="ui cards">
+          <div class="card">
+            <div class="content">
+              <img class="right floated mini ui image" src="{% static 'img/8.jpg' %}">
+              <div class="header">邢卫 </div>
+              <div class="meta">教授 </div>
+              <div class="description">浙江大学计算机学院教授 </div>
+            </div>
+            <div class="extra content">
+              <div class="ui two buttons">
+                <div class="ui basic green button">详细信息</div>
+                <div class="ui basic blue button">发送私信</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="content">
+              <img class="right floated mini ui image" src="{% static 'img/9.jpg' %}">
+              <div class="header">刘玉生 </div>
+              <div class="meta">教授 </div>
+              <div class="description">浙江大学计算机学院教授</div>
+            </div>
+            <div class="extra content">
+              <div class="ui two buttons">
+                <div class="ui basic green button">详细信息</div>
+                <div class="ui basic blue button">发送私信</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="content">
+              <img class="right floated mini ui image" src="{% static 'img/9.jpg' %}">
+              <div class="header">刘玉生 </div>
+              <div class="meta">教授 </div>
+              <div class="description">浙江大学计算机学院教授</div>
+            </div>
+            <div class="extra content">
+              <div class="ui two buttons">
+                <div class="ui basic green button">详细信息</div>
+                <div class="ui basic blue button">发送私信</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="content">
+              <img class="right floated mini ui image" src="{% static 'img/9.jpg' %}">
+              <div class="header">刘玉生 </div>
+              <div class="meta">教授 </div>
+              <div class="description">浙江大学计算机学院教授</div>
+            </div>
+            <div class="extra content">
+              <div class="ui two buttons">
+                <div class="ui basic green button">详细信息</div>
+                <div class="ui basic blue button">发送私信</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="content">
+              <img class="right floated mini ui image" src="{% static 'img/9.jpg' %}">
+              <div class="header">刘玉生 </div>
+              <div class="meta">教授 </div>
+              <div class="description">浙江大学计算机学院教授</div>
+            </div>
+            <div class="extra content">
+              <div class="ui two buttons">
+                <div class="ui basic green button">详细信息</div>
+                <div class="ui basic blue button">发送私信</div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+</div>
+        <!--论坛tab-->
+        <div class="ui bottom attached tab segment" data-tab="forum">
+    <div class="ui container" >
+      <table class="ui large table">
+          <thead>
+            <tr>
+              <th>主题</th>
+              <th>发贴人</th>
+              <th>发贴时间</th>
+              <th>最后回复人</th>
+              <th>最后回复时间</th>
+              <th>总回复数</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>关于作业1</td>
+              <td>邢卫</td>
+              <td>2017.12.12，20：00</td>
+              <td></td>
+              <td></td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>不想写作业</td>
+              <td>咸鱼</td>
+              <td>2017.12.12，20：00</td>
+              <td>菜鸡</td>
+              <td>2017.12.13，20：00</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>这课好难</td>
+              <td>菜鸡</td>
+              <td>2017.12.12，20：00</td>
+              <td>咸鱼</td>
+              <td>2017.12.13，20：00</td>
+              <td>4</td>
+            </tr>
+          </tbody>
+      </table>
+      <div class="ui hidden divider"></div>
+      <div class="ui form">
+          <div class="field">
+            <label>主题</label>
+            <textarea rows="1"></textarea>
+          </div>
+          <div class="field">
+            <label>内容</label>
+            <textarea rows="8"></textarea>
+          </div>
+          <button class="ui button">发布</button>
+      </div>
+    </div>
+</div>
+        <!--课程资源tab0-->
+        <div class="ui bottom attached tab segment" data-tab="resources">
+    <div class="ui container" >
+      <table class="ui selectable celled striped table">
+            <thead>
+                <tr>
+                    <th>资源名称</th>
+                    <th>上传者</th>
+                    <th>上传时间</th>
+                    <th>下载</th>
+                </tr>
+            </thead>
+          <tbody>
+            <tr>
+              <td class="collapsing">uml.ppt</td>
+              <td class="collapsing">刘玉生</td>
+              <td >2017.12.12</td>
+              <td><button class="ui button">下载</button></td>
+            </tr>
+            <tr>
+              <td class="collapsing">操作系统概念.pdf</td>
+              <td class="collapsing">邢卫</td>
+              <td>2017.12.12</td>
+              <td><button class="ui button">下载</button></td>
+            </tr>
+            <tr>
+              <td class="collapsing">软件需求.pdf</td>
+              <td class="collapsing">邢卫</td>
+              <td>2017.12.12</td>
+              <td><button class="ui button">下载</button></td>
+            </tr>
+            <tr>
+              <td class="collapsing">作业成绩.xls</td>
+              <td class="collapsing">邢卫</td>
+              <td>2017.12.12</td>
+              <td><button class="ui button">下载</button></td>
+            </tr>
+            <tr>
+              <td class="collapsing">5.ppt</td>
+              <td class="collapsing">邢卫</td>
+              <td>2017.12.12</td>
+              <td class="collapsing"><button class="ui button">下载</button></td>
+            </tr>
+          </tbody>
+          <tfoot class="full-width">
+            <tr>
+              <th colspan="4">
+                <div class="ui right floated small primary labeled icon button">
+                  <i class="user icon"></i>上传资源
+                </div>
+              </th>
+            </tr>
+          </tfoot>
+        </table>
+    </div>
+</div>
+
+    </div>
+    <!--modal-->
+    <div class="ui test modal" id="m1">
+        <i class="close icon"></i>
+        <div class="header">
+            操作系统课程通知
+        </div>
+        <div class="content">
+            <div class="right">
+                <div class="ui header">作业5已经发布，ddl为本周日晚上12点，请大家尽快完成</div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui black button" id="exit">
+              关闭
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
