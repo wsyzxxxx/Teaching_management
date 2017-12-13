@@ -10,7 +10,6 @@
         <script src="{%  static 'js/jquery-3.2.1.min.js' %}"></script>
         <link rel="stylesheet" href="{% static 'Semantic-UI-master/dist/semantic.min.css' %}">
         <script type="text/javascript" src="{% static 'Semantic-UI-master/dist/semantic.min.js' %}"></script>
-
         <script>
             $(document).ready(function(){
                 $('.ui .item[data-tab]').on('click', function() {
@@ -21,7 +20,6 @@
                     $(".tab.segment[data-tab=\"" + tab + "\"]").addClass("active");
                 });
             });
-
             //通过button的value来定位对应的modal的id，实现modal.show
             function showModal(e) {
                $("#"+e.value).modal('show');
@@ -213,7 +211,7 @@
         </div>
     </div>
 
-
+    <!--学生课表tab-->
     <div class="ui bottom attached active tab segment" data-tab="work" >
         <div class="ui link card" onclick="window.location.href='student_courses'">
             <div class="floating ui red label">3</div>
@@ -293,76 +291,21 @@
 
 
 
+    <!--全局消息tab-->
+    <div class="ui bottom attached tab segment" data-tab="message">
+        <div class="ui container">
+            <div class="ui icon message">
+                <i class="inbox icon"></i>
+                <div class="content">
+                    <div class="header">操作系统课程有新通知</div>
+                    <p>2017.12.12, 20:00</p>
+                </div>
+                <button class="ui button" value="m1" onclick="showModal(this)">详情</button>
+            </div>
+        </div>
+    </div>
 
-<div class="ui bottom attached tab segment" data-tab="message">
-  <div class="ui container">
-    <div class="ui icon message">
-      <i class="inbox icon"></i>
-      <div class="content">
-        <div class="header">操作系统课程有新通知</div>
-        <p>2017.12.12, 20:00</p>
-      </div>
-      <button class="ui button" value="m1" onclick="showModal(this)">详情</button>
-    </div>
-    <div class="ui icon message">
-      <i class="inbox icon"></i>
-      <div class="content">
-        <div class="header">操作系统课程有新通知</div>
-        <p>2017.12.12, 20:00</p>
-      </div>
-      <button class="ui button" id="c2">详情</button>
-    </div>
-    <div class="ui icon message">
-      <i class="inbox icon"></i>
-      <div class="content">
-        <div class="header">操作系统课程有新通知</div>
-        <p>2017.12.12, 20:00</p>
-      </div>
-      <button class="ui button">详情</button>
-    </div>
-    <div class="ui icon message">
-      <i class="inbox icon"></i>
-      <div class="content">
-        <div class="header">操作系统课程有新通知</div>
-        <p>2017.12.12, 20:00</p>
-      </div>
-      <button class="ui button">详情</button>
-    </div>
-    <div class="ui icon message">
-      <i class="inbox icon"></i>
-      <div class="content">
-        <div class="header">操作系统课程有新通知</div>
-        <p>2017.12.12, 20:00</p>
-      </div>
-      <button class="ui button">详情</button>
-    </div>
-    <div class="ui icon message">
-      <i class="inbox icon"></i>
-      <div class="content">
-        <div class="header">操作系统课程有新通知</div>
-        <p>2017.12.12, 20:00</p>
-      </div>
-      <button class="ui button">详情</button>
-    </div>
-    <div class="ui icon message">
-      <i class="inbox icon"></i>
-      <div class="content">
-        <div class="header">操作系统课程有新通知</div>
-        <p>2017.12.12, 20:00</p>
-      </div>
-      <button class="ui button">详情</button>
-    </div>
-    <div class="ui icon message">
-      <i class="inbox icon"></i>
-      <div class="content">
-        <div class="header">操作系统课程有新通知</div>
-        <p>2017.12.12, 20:00</p>
-      </div>
-      <button class="ui button">详情</button>
-    </div>
-  </div>
-</div>
-
+<!--全局搜索tab（考虑弃用)-->
 <div class="ui bottom attached fixed tab segment" data-tab="search">
   <div class="ui container">
     <div class="ui category search">
@@ -375,6 +318,7 @@
   </div>
 </div>
 
+    <!--留言板tab-->
 <div class="ui bottom attached tab segment" data-tab="liuyan">
     <div class="ui container">
         <div class="ui comments">

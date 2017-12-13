@@ -11,5 +11,9 @@ def course(request):
     return render(request, 'student/student_courses.html')
 
 
+def hw(request):
+    return render(request, 'student/student_hw.html')
+
+
 def ret(request):
     return render(request, 'login.html')
