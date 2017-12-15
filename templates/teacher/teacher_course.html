@@ -23,7 +23,7 @@
            $("#"+e.value).modal('show');
         }
     </script>
-    
+    <!--以下脚本对应课程大纲的所有操作-->
     <script>
         //初始化课程大纲
         function init_syllabus() {
@@ -58,7 +58,7 @@
                 td[4].className = 'right aligned collapsing';   //设置第0、1、3、4个td的class*/
             }
         }
-        //修改课程大纲
+        //修改课程简介
         function modify_syllabus() {
             $('p').text(document.getElementById('modify_summary').value);   //修改内容
         }
@@ -217,7 +217,7 @@
                         <div class="header">作业1</div>
                         <p>2017.12.12, 20:00</p>
                     </div>
-                    <button class="ui button">详情</button>
+                    <button class="ui button" onclick="window.location.href='teacher_hw'">详情</button>
                 </div>
                 <div class="ui icon message" >
                     <i class="inbox icon"></i>

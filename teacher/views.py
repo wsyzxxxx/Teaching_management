@@ -9,3 +9,7 @@ def index(request):
 
 def course(request):
     return render(request, 'teacher/teacher_course.html')
+
+
+def hw(request):
+    return render(request, 'teacher/teacher_hw.html')
