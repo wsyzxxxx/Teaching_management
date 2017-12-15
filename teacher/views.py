@@ -13,3 +13,7 @@ def course(request):
 
 def hw(request):
     return render(request, 'teacher/teacher_hw.html')
+
+
+def new_hw(request):
+    return render(request, 'teacher/new_hw.html')
