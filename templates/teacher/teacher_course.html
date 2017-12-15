@@ -8,24 +8,104 @@
     <script src="{%  static 'js/jquery-3.2.1.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'Semantic-UI-master/dist/semantic.min.css' %}">
     <script type="text/javascript" src="{% static 'Semantic-UI-master/dist/semantic.min.js' %}"></script>
-
-<script>
-    $(document).ready(function(){
-        $('.ui .item[data-tab]').on('click', function() {
-            $('.ui .item[data-tab]').removeClass('active');
-            $(this).addClass('active');
-            var tab = $(this).attr("data-tab");
-            $(".tab.segment").removeClass("active");
-            $(".tab.segment[data-tab=\"" + tab + "\"]").addClass("active");
+    <script>
+        $(document).ready(function(){
+            $('.ui .item[data-tab]').on('click', function() {
+                $('.ui .item[data-tab]').removeClass('active');
+                $(this).addClass('active');
+                var tab = $(this).attr("data-tab");
+                $(".tab.segment").removeClass("active");
+                $(".tab.segment[data-tab=\"" + tab + "\"]").addClass("active");
+            });
         });
-    });
-    //通过button的value来定位对应的modal的id，实现modal.show
-    function showModal(e) {
-       $("#"+e.value).modal('show');
-    }
-</script>
+        //通过button的value来定位对应的modal的id，实现modal.show
+        function showModal(e) {
+           $("#"+e.value).modal('show');
+        }
+    </script>
+    
+    <script>
+        //初始化课程大纲
+        function init_syllabus() {
+            //以下部分初始化课程简介
+            var summary = '这门课程叫软件需求工程';    //简介内容从后台获得
+            var p = document.createElement('p');    //创建段落标签
+            var div_summary = document.getElementById('summary');   //获得课程简介div的id
+            div_summary.appendChild(p);     //将段落加入课程简介div中
+            p.innerHTML = summary;
+            $('#modify_summary').val(summary);
+            //以下部分初始化课程日历
+            var arrangement_td = [];  //表格每栏的内容，从后台获取
+            arrangement_td[0] = '2017.12.12';       //此处初始化用于测试
+            arrangement_td[1] = '13:15~15:40';
+            arrangement_td[2] = '第一次上课';
+            arrangement_td[3] = '教7-604';
+            arrangement_td[4] = '<div class="ui button" onclick="modify_row(this)">修改</div><div class="ui button" onclick="delete_row(this)">删除</div>';   //按钮必须初始化
+            var tbody = document.getElementById('calendars');   //tbody标签
+            var tr;                         //表格tr标签
+            var td = [];                    //表格td标签
+            for(var i = 0; i < 10; i++){        //此处设置安排为10条，实际要从后台获得
+                tr = document.createElement('tr');
+                tbody.appendChild(tr);    //创建tr标签并加入tbody中
+                for(var j = 0; j < 5; j++){
+                    td[j] = document.createElement('td');
+                    td[j].innerHTML = arrangement_td[j];
+                    tr.appendChild(td[j]);      //创建四个td标签并加入tr中
+                }
+                td[0].className = 'collapsing';
+                td[1].className = 'collapsing';
+                td[3].className = 'collapsing';
+                td[4].className = 'right aligned collapsing';   //设置第0、1、3、4个td的class*/
+            }
+        }
+        //修改课程大纲
+        function modify_syllabus() {
+            $('p').text(document.getElementById('modify_summary').value);   //修改内容
+        }
+        //编辑某行课程日历
+        function modify_row(r) {
+            var i = r.parentNode.parentNode;    //获取当前tr
+            i.setAttribute('contentEditable', 'true');  //使当前行可编辑
+            r.parentNode.setAttribute('contentEditable', 'false');  //使得按钮对应的列不可修改
+            r.innerHTML = '保存';             //设置按钮值为保存
+            r.setAttribute('onclick', 'save_row(this)');    //改变按钮操作为保存
+        }
+        //保存当前行的修改，实际操作需要与后台对接
+        function save_row(r) {
+            var i = r.parentNode.parentNode;        //获取当前tr
+            i.setAttribute('contentEditable', 'false');     //使当前行不可编辑
+            r.innerHTML = '修改';         //设置按钮值为修改
+            r.setAttribute('onclick', 'modify_row(this)');    //改变按钮操作为保存
+            alert('保存成功');
+        }
+        //删除某行课程日历，实际操作需要连接后台删除后台数据
+        function delete_row(r) {
+            var i = r.parentNode.parentNode.rowIndex;
+            document.getElementById('calendars_table').deleteRow(i);
+            alert('删除成功');
+        }
+        //增加一行课程日历，实际操作需要连接后台增加数据
+        function add_row() {
+            var tbody = document.getElementById('calendars');       //获得tbody标签
+            var tr;     //表格tr标签
+            var td = [];    //表格td标签
+            tr = document.createElement('tr');
+            tbody.appendChild(tr);      //创建tr标签并加入tbody中
+            for(var i = 0; i < 5; i++){
+                td[i] = document.createElement('td');
+                tr.appendChild(td[i]);      //创建四个td标签并加入tr中
+            }
+            td[0].className = 'collapsing';
+            td[1].className = 'collapsing';
+            td[3].className = 'collapsing';
+            td[4].className = 'right aligned collapsing';   //设置第0、1、3、4个td的class*/
+            td[4].innerHTML = '<div class="ui button" onclick="save_row(this)">保存</div><div class="ui button" onclick="delete_row(this)">删除</div>'
+            tr.setAttribute('contentEditable', 'true');  //使当前行可编辑
+            td[4].setAttribute('contentEditable', 'false');  //使得按钮对应的列不可修改
+        }
+    </script>
 </head>
-<body>
+<body onload="init_syllabus()">
     <div class="ui inverted left fixed vertical sidebar menu" id="left_sidebar">
       <div class="ui container">
 
@@ -56,19 +136,57 @@
             </div>
             <a class="item">退出</a>
         </div>
-
-
         <div class="ui hidden divider"></div>
         <!--课程大纲tab-->
         <div class="ui bottom attached active tab segment" data-tab="syllabus">
             <div class="ui container" >
-                <div class="ui segment">
-                    <img class="ui small right floated image" src="{% static '/img/11.jpg' %}">
+                <div class="ui segment" id="summary">
                     <h2>课程简介</h2>
-                    <p>富春山居图是元朝书画，画家黄公望为郑樗（无用师）所绘，以浙江富春江为背景，全图用墨淡雅，山和水的布置疏密得当，墨色浓淡干湿并用，极富于变化，是黄公望的代表作，被称为“中国十大传世名画”之一。</p>
-                    <p>明朝末年传到收藏家吴洪裕手中，吴洪裕极为喜爱此画，甚至在临死前下令将此画焚烧殉葬，被吴洪裕的侄子从火中抢救出，但此时画已被烧成一大一小两段。较长的后段称《无用师卷》，现藏台北故宫博物院；前段称《剩山图》，现收藏于浙江省博物馆。在中国国务院前总理温家宝先生的决定下，《富春山居图》2011年6月在台湾台北故宫博物院展出。</p>
                 </div>
-                <div class="ui button">编辑课程简介</div>
+                <a class="item" data-tab="modify_syllabus"><div class="ui button">编辑课程简介</div></a>
+                <table class="ui celled striped table" id="calendars_table">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>时间</th>
+                            <th>安排</th>
+                            <th>地点</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="calendars">
+                        <!--tr> 课程安排范例
+                            <td class="collapsing">2017.12.12</td>
+                            <td class="collapsing">6,7,8节</td>
+                            <td >第一次上课</td>
+                            <td class="right aligned collapsing">教7-604</td>
+                        </tr-->
+                    </tbody>
+                </table>
+                <div class="ui button" onclick="add_row()">添加</div>
+            </div>
+        </div>
+
+        <!--修改课程简介tab-->
+        <div class="ui bottom attached tab segment" data-tab="modify_syllabus">
+            <div class="ui container">
+                <div class="ui segment">
+                    <h2>课程简介</h2>
+                    <div class="ui form">
+                        <div class="field">
+                            <textarea rows="8" id="modify_summary"></textarea>
+                        </div>
+                        <a class="item" data-tab="syllabus">
+                            <div class="ui button" onclick="modify_syllabus()">保存修改</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--修改课程日历tab-->
+        <div class="ui bottom attached tab segment" data-tab="modify_calendars">
+            <div class="ui container" >
                 <table class="ui celled striped table">
                     <thead>
                         <tr>
@@ -78,43 +196,18 @@
                             <th>地点</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
+                    <tbody id="modify_arrangement">
+                        <!--tr> 课程安排范例
                             <td class="collapsing">2017.12.12</td>
                             <td class="collapsing">6,7,8节</td>
                             <td >第一次上课</td>
                             <td class="right aligned collapsing">教7-604</td>
-                        </tr>
-                        <tr>
-                            <td >2017.12.13</td>
-                            <td class="collapsing">6,7,8节</td>
-                            <td>第二次上课</td>
-                            <td class="right aligned">教7-604</td>
-                        </tr>
-                        <tr>
-                            <td>2017.12.14</td>
-                            <td class="collapsing">6,7,8节</td>
-                            <td>第三次上课</td>
-                            <td class="right aligned">教7-604</td>
-                        </tr>
-                        <tr>
-                            <td>2017.12.15</td>
-                            <td class="collapsing">6,7,8节</td>
-                            <td>第四次上课，quiz</td>
-                            <td class="right aligned">教7-604</td>
-                        </tr>
-                        <tr>
-                            <td>2017.12.16</td>
-                            <td class="collapsing">14:30~16:30</td>
-                            <td>考试</td>
-                            <td class="right aligned">教7-604</td>
-                        </tr>
+                        </tr-->
                     </tbody>
                 </table>
                 <div class="ui button">编辑课程日历</div>
             </div>
         </div>
-
         <!--课程作业tab-->
         <div class="ui bottom attached tab segment" data-tab="homework">
             <div class="ui container" >
@@ -171,60 +264,60 @@
         <!--论坛tab-->
         <div class="ui bottom attached tab segment" data-tab="forum">
             <div class="ui container">
-              <table class="ui large striped table">
-                  <thead>
-                    <tr>
-                      <th>主题</th>
-                      <th>发贴人</th>
-                      <th>发贴时间</th>
-                      <th>最后回复人</th>
-                      <th>最后回复时间</th>
-                      <th>总回复数</th>
-                      <th class="Collapsing">操作</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>关于作业1</td>
-                      <td>邢卫</td>
-                      <td>2017.12.12，20：00</td>
-                      <td></td>
-                      <td></td>
-                      <td>0</td>
-                      <td class="Collapsing"><button class="ui button">删除</button></td>
-                    </tr>
-                    <tr>
-                      <td>不想写作业</td>
-                      <td>咸鱼</td>
-                      <td>2017.12.12，20：00</td>
-                      <td>菜鸡</td>
-                      <td>2017.12.13，20：00</td>
-                      <td>1</td>
-                      <td class="Collapsing"><button class="ui button">删除</button></td>
-                    </tr>
-                    <tr>
-                      <td>这课好难</td>
-                      <td>菜鸡</td>
-                      <td>2017.12.12，20：00</td>
-                      <td>咸鱼</td>
-                      <td>2017.12.13，20：00</td>
-                      <td>4</td>
-                      <td class="collapsing"><button class="ui button">删除</button></td>
-                    </tr>
-                  </tbody>
-              </table>
-              <div class="ui hidden divider"></div>
-              <div class="ui form">
-                  <div class="field">
-                    <label>主题</label>
-                    <textarea rows="1"></textarea>
-                  </div>
-                  <div class="field">
-                    <label>内容</label>
-                    <textarea rows="8"></textarea>
-                  </div>
-                  <button class="ui button">发布</button>
-              </div>
+                <table class="ui large striped table">
+                    <thead>
+                        <tr>
+                            <th>主题</th>
+                            <th>发贴人</th>
+                            <th>发贴时间</th>
+                            <th>最后回复人</th>
+                            <th>最后回复时间</th>
+                            <th>总回复数</th>
+                            <th class="Collapsing">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>关于作业1</td>
+                            <td>邢卫</td>
+                            <td>2017.12.12，20：00</td>
+                            <td></td>
+                            <td></td>
+                            <td>0</td>
+                            <td class="Collapsing"><button class="ui button">删除</button></td>
+                        </tr>
+                        <tr>
+                            <td>不想写作业</td>
+                            <td>咸鱼</td>
+                            <td>2017.12.12，20：00</td>
+                            <td>菜鸡</td>
+                            <td>2017.12.13，20：00</td>
+                            <td>1</td>
+                            <td class="Collapsing"><button class="ui button">删除</button></td>
+                        </tr>
+                        <tr>
+                            <td>这课好难</td>
+                            <td>菜鸡</td>
+                            <td>2017.12.12，20：00</td>
+                            <td>咸鱼</td>
+                            <td>2017.12.13，20：00</td>
+                            <td>4</td>
+                            <td class="collapsing"><button class="ui button">删除</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="ui hidden divider"></div>
+                <div class="ui form">
+                    <div class="field">
+                        <label>主题</label>
+                        <textarea rows="1"></textarea>
+                    </div>
+                    <div class="field">
+                        <label>内容</label>
+                        <textarea rows="8"></textarea>
+                    </div>
+                    <button class="ui button">发布</button>
+                </div>
             </div>
         </div>
         <!--课程资源tab-->

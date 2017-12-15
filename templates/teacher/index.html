@@ -25,6 +25,10 @@
             function showModal(e) {
                $("#"+e.value).modal('show');
             }
+
+            function HideModal() {
+                $('.ui .modal').modal('hide');
+            }
         </script>
 
         <script>
@@ -405,7 +409,7 @@
         </div>
     </div>
     <div class="actions">
-        <div class="ui black button" id="exit">
+        <div class="ui black button" onclick="HideModal()">
           关闭
         </div>
     </div>
