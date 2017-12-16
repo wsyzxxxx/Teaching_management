@@ -19,6 +19,8 @@
                     var tab = $(this).attr("data-tab");
                     $(".tab.segment").removeClass("active");
                     $(".tab.segment[data-tab=\"" + tab + "\"]").addClass("active");
+                    var second_item = document.getElementById('second_item');
+                    second_item.innerHTML = trans(tab);
                 });
             });
             //通过button的value来定位对应的modal的id，实现modal.show
@@ -61,25 +63,32 @@
                     document.getElementById(td_id).innerHTML = document.getElementById(input_id).value;
                 }
             }
+            //将tab转成中文显示出来
+            function trans(tab) {
+                if(tab === 'home')
+                    return '个人信息';
+                else if(tab === 'course_table')
+                    return '个人开课表';
+                else if(tab === 'message')
+                    return '消息';
+                else if(tab === 'liuyan')
+                    return '留言板';
+                else
+                    return false;
+            }
         </script>
-
-
     </head>
 
 <body onload="init()">
     <!-- 目录结构 -->
     <div class="ui inverted left fixed vertical sidebar menu " id="left_sidebar">
         <div class="ui container">
-            <p></p>
-            <!--img class="ui avatar tiny centered image" src="{% static 'img/6.jpg' %}"-->
-            <p></p>
             <a class="item" data-tab="home">
                 <i class="student icon"></i>个人信息</a>
-            <a class="active item" data-tab="work"><i class="table icon"></i>个人开课表</a>
+            <a class="active item" data-tab="course_table"><i class="table icon"></i>个人开课表</a>
             <a class="item" data-tab="message"><i class="announcement icon"></i>
-                <div class="ui red label">3</div>消息
+                <div class="ui red label">{{ unreadGlobalNotice }}</div>消息
             </a>
-            <a class="item" data-tab="search"><i class="search icon"></i>站内搜索</a>
             <a class="item" data-tab="liuyan"><i class="edit icon"></i>留言板</a>
         </div>
     </div>
@@ -98,11 +107,12 @@
     <!--顶部导航栏-->
 
 <div class="pusher">
-    <div class="ui hidden divider"></div>
-    <div class="ui hidden divider"></div>
     <!--顶部菜单栏-->
-    <div class="ui visible red top large menu sidebar">
-        <a class="item" onclick="$('#left_sidebar').sidebar('toggle');">菜单</a>
+    <div class="ui breadcrumb borderless menu">
+        <a class="item" onclick="$('#left_sidebar').sidebar('toggle');">
+            浙江大学教学服务系统<span><i class="right chevron icon divider"></i></span>
+        </a>
+        <a class="item" id="second_item">个人开课表</a>
         <div class="right menu">
             <div class="ui search">
                 <div class="ui icon input">
@@ -157,133 +167,66 @@
     </div>
 
 <!--个人开课表tab-->
-    <div class="ui bottom attached active tab segment" data-tab="work" >
+    <div class="ui bottom attached active tab segment" data-tab="course_table" >
+        {% for foo in CoursesList %}
         <div class="ui link card" onclick="window.location.href='teacher_courses'">
-            <div class="floating ui red label">3</div>
+            <div class="floating ui red label">{{ foo.4 }}</div>
             <div class="content">
-                <div class="header">软件需求工程</div>
+                <div class="header">{{ foo.0 }}</div>
                 <div class="meta">
-                <a>邢卫</a>
-                <a></a>
-                <a>刘玉生</a>
-                </div>
-                <div class="description">周一6，7，8</div>
-            </div>
-            <div class="extra content">
-              <span> 专业课 </span>
-            </div>
-        </div>
-
-        <div class="ui link card">
-            <div class="content">
-                <div class="header">软件需求工程</div>
-                <div class="meta">
-                    <a>邢卫</a>
+                    {% for i in foo.1 %}
+                    <a>{{ i }}</a>
                     <a></a>
-                    <a>刘玉生</a>
+                    {% endfor %}
                 </div>
-                <div class="description">周一6，7，8</div>
-            </div>
-            <div class="extra content">
-                <span> 专业课 </span>
+                <div class="description">{{ foo.2 }}</div>
+                <div class="extra content">
+                    <span>{{ foo.3 }}</span>
+                </div>
             </div>
         </div>
-
-        <div class="ui link card">
-            <div class="content">
-                <div class="header">软件需求工程</div>
-                <div class="meta">
-                    <a>邢卫</a>
-                    <a></a>
-                    <a>刘玉生</a>
-                </div>
-                <div class="description">周一6，7，8</div>
-            </div>
-            <div class="extra content">
-                <span> 专业课 </span>
-            </div>
-        </div>
-
-        <div class="ui link card">
-            <div class="content">
-                <div class="header">软件需求工程</div>
-                <div class="meta">
-                    <a>邢卫</a>
-                    <a></a>
-                    <a>刘玉生</a>
-                </div>
-                <div class="description">周一6，7，8</div>
-            </div>
-            <div class="extra content">
-                <span> 专业课 </span>
-            </div>
-        </div>
-
-        <div class="ui link card">
-            <div class="content">
-                <div class="header">软件需求工程</div>
-                <div class="meta">
-                    <a>邢卫</a>
-                    <a></a>
-                    <a>刘玉生</a>
-                </div>
-                <div class="description">周一6，7，8</div>
-            </div>
-            <div class="extra content">
-                <span> 专业课 </span>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 
 <!--消息tab-->
 <div class="ui bottom attached tab segment" data-tab="message">
-  <div class="ui container">
-    <div class="ui icon message">
-      <i class="inbox icon"></i>
-      <div class="content">
-        <div class="header">软件需求工程课程有新通知</div>
-        <p>2017.12.12, 20:00</p>
-      </div>
-      <button class="ui button" value="m1" onclick="showModal(this)">详情</button>
+    <div class="ui container">
+        {% for i in GlobalNoticeList %}
+            {% ifequal i.0 '0' %}
+            <div class="ui icon red message">
+                <i class="inbox icon"></i>
+                <div class="content">
+                    <div class="header">{{ i.1 }}</div>
+                    <p>{{ i.2 }}</p>
+                </div>
+                <button class="ui button" value="global_notice{{ forloop.counter0 }}" onclick="showModal(this)">详情</button>
+            </div>
+            {% else %}
+            <div class="ui icon message">
+                <i class="inbox icon"></i>
+                <div class="content">
+                    <div class="header">{{ i.1 }}</div>
+                    <p>{{ i.2 }}</p>
+                </div>
+                <button class="ui button" value="global_notice{{ forloop.counter0 }}" onclick="showModal(this)">详情</button>
+            </div>
+            {% endifequal %}
+            <div class="ui test modal" id="global_notice{{ forloop.counter0 }}">
+                <i class="close icon"></i>
+                <div class="header">{{ i.1 }}</div>
+                <div class="content">
+                    <div class="right">
+                        <div class="ui header">{{ i.3 }}</div>
+                    </div>
+                </div>
+                <div class="actions">
+                    <div class="ui black button" onclick="HideModal()">
+                      关闭
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
-    <div class="ui icon message">
-      <i class="inbox icon"></i>
-      <div class="content">
-        <div class="header">软件需求工程课程有新通知</div>
-        <p>2017.12.12, 20:00</p>
-      </div>
-      <button class="ui button">详情</button>
-    </div>
-    <div class="ui icon message">
-      <i class="inbox icon"></i>
-      <div class="content">
-        <div class="header">软件工程管理课程有新通知</div>
-        <p>2017.12.12, 20:00</p>
-      </div>
-      <button class="ui button">详情</button>
-    </div>
-    <div class="ui icon message">
-      <i class="inbox icon"></i>
-      <div class="content">
-        <div class="header">收到一封学生私信</div>
-        <p>2017.12.12, 20:00</p>
-      </div>
-      <button class="ui button">详情</button>
-    </div>
-  </div>
-</div>
-
-<!--搜索tab（考虑弃用）-->
-<div class="ui bottom attached fixed tab segment" data-tab="search">
-  <div class="ui container">
-    <div class="ui category search">
-      <div class="ui icon input">
-        <input class="prompt" type="text" placeholder="搜索……">
-        <i class="search icon"></i>
-      </div>
-      <div class="results"></div>
-    </div>
-  </div>
 </div>
 
 <!--网站留言tab-->

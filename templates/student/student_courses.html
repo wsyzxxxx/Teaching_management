@@ -22,7 +22,11 @@
         });
         //通过button的value来定位对应的modal的id，实现modal.show
         function showModal(e) {
-           $("#"+e.value).modal('show');
+            $("#"+e.value).modal('show');
+        }
+        //隐藏模态层
+        function HideModal() {
+            $('.ui .modal').modal('hide');
         }
         //转换tab为中文名
         function trans(tab) {
@@ -137,9 +141,10 @@
             <a class="active item" data-tab="syllabus">
                 <i class="home icon"></i>课程大纲
             </a>
-            <a class="item" data-tab="homework"><i class="file text outline icon"></i>课程作业</a>
+            <a class="item" data-tab="homework"><i class="file text outline icon"></i>
+                <div class="ui red label">{{ unsubmitHw }}</div>课程作业</a>
             <a class="item" data-tab="message"><i class="announcement icon"></i>
-                <div class="ui red label">3</div>课程通知
+                <div class="ui red label">{{ unreadNotice }}</div>课程通知
             </a>
             <a class="item" data-tab="teacher_list"><i class="users icon"></i>教师信息</a>
             <a class="item" data-tab="forum"><i class="comments outline icon"></i>课程论坛</a>
@@ -166,8 +171,6 @@
             </div>
             <a class="item">退出</a>
         </div>
-
-        <div class="ui hidden divider"></div>
         <!--课程大纲tab-->
         <div class="ui bottom attached active tab segment" data-tab="syllabus">
             <div class="ui container" >
@@ -193,57 +196,124 @@
         <!--课程作业tab-->
         <div class="ui bottom attached tab segment" data-tab="homework">
             <div class="ui container" >
-                <div class="ui icon message" >
-                    <i class="inbox icon"></i>
-                    <div class="content">
-                        <div class="header">作业1</div>
-                        <p>2017.12.12, 20:00</p>
+                {% for foo in HwList %}
+                    {% ifequal foo.0 '0' %}
+                    <div class="ui icon red message">
+                        <i class="inbox icon"></i>
+                        <div class="content">
+                            <div class="header">{{ foo.1 }}</div>
+                            <p>{{ foo.2 }}</p>
+                        </div>
+                        <button class="ui button" onclick="window.location.href='student_hw'">详情</button>
                     </div>
-                    <button class="ui button" onclick="window.location.href='student_hw'">详情</button>
-                </div>
+                    {% else %}
+                    <div class="ui icon message">
+                        <i class="inbox icon"></i>
+                        <div class="content">
+                            <div class="header">{{ foo.1 }}</div>
+                            <p>{{ foo.2 }}</p>
+                        </div>
+                        <button class="ui button" onclick="window.location.href='student_hw'">详情</button>
+                    </div>
+                    {% endifequal %}
+                {% endfor %}
             </div>
         </div>
         <!--课程通知tab-->
         <div class="ui bottom attached tab segment" data-tab="message">
             <div class="ui container" >
-              <div class="ui icon message" >
-                <i class="inbox icon"></i>
-                <div class="content">
-                    <div class="header">作业1已发布</div>
-                    <p>2017.12.12, 20:00</p>
-                </div>
-                <button class="ui button" value="m1" onclick="showModal(this)">详情</button>
-              </div>
-
-              <div class="ui icon message" >
-                <i class="inbox icon"></i>
-                <div class="content">
-                    <div class="header">收到来自邢卫老师的私信</div>
-                    <p>2017.12.12, 20:00</p>
-                </div>
-                <button class="ui button">详情</button>
-              </div>
-
+                {% for i in NoticeList %}
+                    {% ifequal i.0 '0' %}
+                    <div class="ui icon red message">
+                        <i class="inbox icon"></i>
+                        <div class="content">
+                            <div class="header">{{ i.1 }}</div>
+                            <p>{{ i.2 }}</p>
+                        </div>
+                        <button class="ui button" value="notice{{ forloop.counter0 }}" onclick="showModal(this)">详情</button>
+                    </div>
+                    {% else %}
+                    <div class="ui icon message">
+                        <i class="inbox icon"></i>
+                        <div class="content">
+                            <div class="header">{{ i.1 }}</div>
+                            <p>{{ i.2 }}</p>
+                        </div>
+                        <button class="ui button" value="notice{{ forloop.counter0 }}" onclick="showModal(this)">详情</button>
+                    </div>
+                    {% endifequal %}
+                    <div class="ui test modal" id="notice{{ forloop.counter0 }}">
+                        <i class="close icon"></i>
+                        <div class="header">{{ i.1 }}</div>
+                        <div class="content">
+                            <div class="right">
+                                <div class="ui header">{{ i.3 }}</div>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <div class="ui black button" onclick="HideModal()">
+                              关闭
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
         <!--教师列表tab-->
         <div class="ui bottom attached tab segment" data-tab="teacher_list">
             <div class="ui container" >
                 <div class="ui cards">
+                    {% for foo in TeacherList %}
                     <div class="card">
                         <div class="content">
-                            <img class="right floated mini ui image" src="{% static 'img/8.jpg' %}">
-                            <div class="header">邢卫 </div>
-                            <div class="meta">教授 </div>
-                            <div class="description">浙江大学计算机学院教授 </div>
+                            <img class="right floated mini ui image" src="{% static 'Semantic-UI-master/examples/assets/images/avatar/tom.jpg' %}">
+                            <div class="header">{{ foo.0 }}</div>
+                            <div class="meta">{{ foo.1 }}</div>
+                            <div class="description">{{ foo.2 }}</div>
                         </div>
                         <div class="extra content">
                             <div class="ui two buttons">
-                                <div class="ui basic green button">详细信息</div>
-                                <div class="ui basic blue button">发送私信</div>
+                                <button class="ui basic green button" value="teacher{{ forloop.counter0 }}" onclick="showModal(this)">详细信息</button>
+                                <button class="ui basic blue button">发送私信</button>
                             </div>
                         </div>
                     </div>
+                    <div class="ui test modal" id="teacher{{ forloop.counter0 }}">
+                        <i class="close icon"></i>
+                        <div class="header">{{ foo.0 }}老师的详细信息</div>
+                        <div class="content">
+                            <table class="ui celled padded selectable table segment">
+                                <tbody>
+                                    <tr>
+                                        <td>姓名</td>
+                                        <td>{{ foo.0 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="collapsing">学院</td>
+                                        <td>{{ foo.2 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="collapsing">职称</td>
+                                        <td>{{ foo.1 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="collapsing">电子邮箱</td>
+                                        <td>{{ foo.3 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="collapsing">联系方式</td>
+                                        <td>{{ foo.4 }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="actions">
+                            <div class="ui black button" onclick="HideModal()">
+                              关闭
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -301,36 +371,14 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for foo in ResoursesList %}
                         <tr>
-                            <td class="collapsing">uml.ppt</td>
-                            <td class="collapsing">刘玉生</td>
-                            <td >2017.12.12</td>
-                            <td><button class="ui button">下载</button></td>
+                            <td class="collapsing">{{ foo.0 }}</td>
+                            <td class="collapsing">{{ foo.1 }}</td>
+                            <td>{{ foo.2 }}</td>
+                            <td class="right allgn collapsing"><button class="ui button">下载</button></td>
                         </tr>
-                        <tr>
-                            <td class="collapsing">操作系统概念.pdf</td>
-                            <td class="collapsing">邢卫</td>
-                            <td>2017.12.12</td>
-                            <td><button class="ui button">下载</button></td>
-                        </tr>
-                        <tr>
-                            <td class="collapsing">软件需求.pdf</td>
-                            <td class="collapsing">邢卫</td>
-                            <td>2017.12.12</td>
-                            <td><button class="ui button">下载</button></td>
-                        </tr>
-                        <tr>
-                            <td class="collapsing">作业成绩.xls</td>
-                            <td class="collapsing">邢卫</td>
-                            <td>2017.12.12</td>
-                            <td><button class="ui button">下载</button></td>
-                        </tr>
-                        <tr>
-                            <td class="collapsing">5.ppt</td>
-                            <td class="collapsing">邢卫</td>
-                            <td>2017.12.12</td>
-                            <td class="collapsing"><button class="ui button">下载</button></td>
-                        </tr>
+                        {% endfor %}
                     </tbody>
                     <tfoot class="full-width">
                         <tr>
@@ -344,6 +392,7 @@
                 </table>
             </div>
         </div>
+    
     </div>
     <!--modal-->
     <div class="ui test modal" id="m1">
@@ -357,7 +406,7 @@
             </div>
         </div>
         <div class="actions">
-            <div class="ui black button" id="exit">
+            <div class="ui black button" onclick="HideModal()">
               关闭
             </div>
         </div>

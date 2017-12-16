@@ -221,9 +221,11 @@
 
             <a class="active item" data-tab="syllabus">
                 <i class="home icon"></i>课程大纲</a>
-            <a class="item" data-tab="homework"><i class="file text outline icon"></i>课程作业</a>
+            <a class="item" data-tab="homework"><i class="file text outline icon"></i>
+                <div class="ui red label">{{ unsubmitHw }}</div>课程作业
+            </a>
             <a class="item" data-tab="message"><i class="announcement icon"></i>
-                <div class="ui red label">3</div>课程通知
+                <div class="ui red label">{{ unreadNotice }}</div>课程通知
             </a>
             <a class="item" data-tab="forum"><i class="comments outline icon"></i>课程论坛</a>
             <a class="item" data-tab="resources"><i class="folder open outline icon"></i>课程资源</a>
@@ -248,7 +250,6 @@
             </div>
             <a class="item">退出</a>
         </div>
-        <div class="ui hidden divider"></div>
         <!--课程大纲tab-->
         <div class="ui bottom attached active tab segment" data-tab="syllabus">
             <div class="ui container" >
@@ -324,28 +325,68 @@
         <div class="ui bottom attached tab segment" data-tab="homework">
             <div class="ui container">
                 <div class="ui button" onclick="window.location.href='new_hw'">发布新作业</div>
-                <div class="ui icon message" >
-                    <i class="inbox icon"></i>
-                    <div class="content">
-                        <div class="header">作业1</div>
-                        <p>2017.12.12, 20:00</p>
+                {% for foo in HwList %}
+                    {% ifequal foo.0 '0' %}
+                    <div class="ui icon red message">
+                        <i class="inbox icon"></i>
+                        <div class="content">
+                            <div class="header">{{ foo.1 }}</div>
+                            <p>{{ foo.2 }}</p>
+                        </div>
+                        <button class="ui button" onclick="window.location.href='teacher_hw'">详情</button>
                     </div>
-                    <button class="ui button" onclick="new_hw()">详情</button>
-                </div>
+                    {% else %}
+                    <div class="ui icon message">
+                        <i class="inbox icon"></i>
+                        <div class="content">
+                            <div class="header">{{ foo.1 }}</div>
+                            <p>{{ foo.2 }}</p>
+                        </div>
+                        <button class="ui button" onclick="window.location.href='teacher_hw'">详情</button>
+                    </div>
+                    {% endifequal %}
+                {% endfor %}
             </div>
         </div>
 
         <!--课程通知tab-->
         <div class="ui bottom attached tab segment" data-tab="message">
             <div class="ui container" >
-                <div class="ui icon message" >
-                    <i class="inbox icon"></i>
-                    <div class="content">
-                        <div class="header">作业1已发布</div>
-                        <p>2017.12.12, 20:00</p>
+                {% for i in NoticeList %}
+                    {% ifequal i.0 '0' %}
+                    <div class="ui icon red message">
+                        <i class="inbox icon"></i>
+                        <div class="content">
+                            <div class="header">{{ i.1 }}</div>
+                            <p>{{ i.2 }}</p>
+                        </div>
+                        <button class="ui button" value="notice{{ forloop.counter0 }}" onclick="showModal(this)">详情</button>
                     </div>
-                    <button class="ui button" value="m1" onclick="showModal(this)">详情</button>
-                </div>
+                    {% else %}
+                    <div class="ui icon message">
+                        <i class="inbox icon"></i>
+                        <div class="content">
+                            <div class="header">{{ i.1 }}</div>
+                            <p>{{ i.2 }}</p>
+                        </div>
+                        <button class="ui button" value="notice{{ forloop.counter0 }}" onclick="showModal(this)">详情</button>
+                    </div>
+                    {% endifequal %}
+                    <div class="ui test modal" id="notice{{ forloop.counter0 }}">
+                        <i class="close icon"></i>
+                        <div class="header">{{ i.1 }}</div>
+                        <div class="content">
+                            <div class="right">
+                                <div class="ui header">{{ i.3 }}</div>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <div class="ui black button" onclick="HideModal()">
+                              关闭
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
         <!--论坛tab-->
