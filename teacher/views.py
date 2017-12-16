@@ -8,7 +8,10 @@ def index(request):
 
 
 def course(request):
-    return render(request, 'teacher/teacher_course.html')
+    PostList = [['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
+                 ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
+                 ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0']]
+    return render(request, 'teacher/teacher_course.html', {'PostList': PostList})
 
 
 def hw(request):
@@ -17,3 +20,7 @@ def hw(request):
 
 def new_hw(request):
     return render(request, 'teacher/new_hw.html')
+
+
+def teacher_forum(request):
+    return render(request, 'teacher/teacher_forum.html')

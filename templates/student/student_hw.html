@@ -31,6 +31,7 @@
         <script>
             //初始化作业
             function init() {
+                document.getElementById('hw_name2').innerHTML = "Homework";     //此处初始化用于测试，实际要从后台获取名称
                 var flag = 1; //0代表判断题，1代表选择题，2代表简答题，此处初始化是为了测试，实际要在循环里从后台取值
                 var ToF = [];
                 ToF[0] = 'T';
@@ -101,6 +102,19 @@
                 }
                 $('.ui.checkbox').checkbox();
             }
+            //保存作业
+            function save_hw() {
+                //将作业提交到后台保存
+                //......
+                alert('保存成功');
+                window.location.reload();   //刷新页面
+            }
+            function submit_hw(){
+                //将作业保存到后台，设置学生本次作业状态为已提交
+                //......
+                alert('提交成功');
+                window.location.reload();   //刷新页面
+            }
         </script>
 </head>
 
@@ -154,13 +168,18 @@
     <div class="ui hidden divider"></div>
     <!--作业内容-->
     <div class="ui container">
+        <div class="ui form">
+            <div class="field">
+                <h1 class="ui header" id="hw_name2"></h1>
+            </div>
+        </div>
+        <div class="ui hidden divider"></div>
         <div class="ui form" id="hw_form">
             <!--作业正文-->
         </div>
-        <button class="ui button">保存</button>
-        <button class="ui button">提交</button>
+        <button class="ui button" onclick="save_hw()">保存</button>
+        <button class="ui button" onclick="submit_hw()">提交</button>
     </div>
-
 
 </body>
 </html>

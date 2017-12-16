@@ -167,9 +167,15 @@
             //添加选项
             var option_num = 0;     //选项个数,初始为0
             function add_option(b) {
+                option_num++;       //将选项个数加1
+                if(option_num > 4){
+                    option_num--;
+                    alert('最多只能设置4个选项');
+                    return false;
+                }
                 b.innerHTML = "保存选项";       //把按钮改成保存选项
                 b.setAttribute('onclick', 'save_option(this)');
-                option_num++;       //将选项个数加1
+
 
                 var tbody = document.getElementById('options');       //获得tbody标签
                 var tr;     //表格tr标签
@@ -218,6 +224,7 @@
             }
             //删除选项
             function del_option(r) {
+                option_num--;
                 var i = r.parentNode.parentNode.rowIndex;
                 document.getElementById('options_table').deleteRow(i);
             }
@@ -300,12 +307,36 @@
                 //......
                 $('.ui .modal').modal('hide');
             }
+            //初始化作业名称
+            function init_hw_name() {
+                document.getElementById('hw_name').innerHTML = "Homework";//设置默认作业名称为Homework
+                document.getElementById('hw_name2').innerHTML = "Homework";
+            }
+            //编辑作业名称
+            function modify_hw_name() {
+                document.getElementById('hw_text').value = document.getElementById('hw_name').innerHTML;
+                $("#setname").modal('setting', 'closable', false).modal('show');
+            }
+            //保存作业名称
+            function save_hw_name() {
+                var hw_name = document.getElementById('hw_text').value;
+                var tmp = hw_name.trim();
+                if(tmp === ''){     //判断是否全是空格，如果是就警告并终止保存，重新输入
+                    alert('请输入作业名称');
+                    return false;
+                }
+                document.getElementById('hw_name').innerHTML = hw_name;     //修改页面内显示的作业名称
+                document.getElementById('hw_name2').innerHTML = hw_name;
+                //修改后台相关内容
+                //......
+                $('.ui .modal').modal('hide');
+            }
         </script>
     </head>
 
 
 
-    <body onload="init();init_list();init_ddl()">
+    <body onload="init();init_list();init_ddl();init_hw_name()">
         <!--这是单选题的模板（4个选项）-->
         <!--div class="grouped fields">
             <label>How often do you use checkboxes?</label>
@@ -366,6 +397,12 @@
         <!--学生作业完成情况表-->
         <div class="ui bottom attached active tab segment" data-tab="student_list">
             <div class="ui container">
+                <div class="ui form">
+                    <div class="field">
+                        <h2 class="ui header" id="hw_name"></h2>
+                    </div>
+                    <button class="ui button" onclick="modify_hw_name()">编辑作业名称</button>
+                </div>
                 <table class="ui large celled collapsing striped table" id="student_list">
                         <thead>
                             <tr>
@@ -385,6 +422,12 @@
         <!--作业内容-->
         <div class="ui bottom attached tab segment" data-tab="homework" >
             <div class="ui container">
+                <div class="ui form">
+                    <div class="field">
+                        <h2 class="ui header" id="hw_name2"></h2>
+                    </div>
+                    <button class="ui button" onclick="modify_hw_name()">编辑作业名称</button>
+                </div>
                 <div class="ui form" id="hw_form">
                     <!--作业正文-->
                 </div>
@@ -465,7 +508,7 @@
                 </div>
             </div>
         </div>
-
+        <!--设置ddl-->
         <div class="ui test modal" id="setddl">
             <i class="close icon"></i>
             <div class="header">
@@ -485,7 +528,24 @@
                 </div>
             </div>
         </div>
-
+        <!--编辑作业名称-->
+        <div class="ui test modal" id="setname">
+            <i class="close icon"></i>
+            <div class="header">
+                请设置本次作业的名称
+            </div>
+            <div class="content">
+                <div class="ui fluid input left icon">
+                    <i class="edit icon"></i>
+                    <input class="fluid" type="text" id="hw_text">
+                </div>
+            </div>
+            <div class="actions">
+                <div class="ui black button" onclick="save_hw_name()">
+                    保存
+                </div>
+            </div>
+        </div>
     </body>
 </html>
 

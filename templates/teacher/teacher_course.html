@@ -16,11 +16,30 @@
                 var tab = $(this).attr("data-tab");
                 $(".tab.segment").removeClass("active");
                 $(".tab.segment[data-tab=\"" + tab + "\"]").addClass("active");
+                var second_item = document.getElementById('second_item');
+                second_item.innerHTML = trans(tab);
             });
         });
         //通过button的value来定位对应的modal的id，实现modal.show
         function showModal(e) {
            $("#"+e.value).modal('show');
+        }
+        //转换tab为中文名
+        function trans(tab) {
+            if(tab === 'syllabus')
+                return '课程大纲';
+            else if(tab === 'homework')
+                return '课程作业';
+            else if(tab === 'message')
+                return '课程通知';
+            else if(tab === 'teacher_list')
+                return '教师信息';
+            else if(tab === 'forum')
+                return '课程论坛';
+            else if(tab === 'resources')
+                return '课程资源';
+            else
+                return false;
         }
     </script>
     <!--以下脚本对应课程大纲的所有操作-->
@@ -50,7 +69,7 @@
                 for(var j = 0; j < 5; j++){
                     td[j] = document.createElement('td');
                     td[j].innerHTML = arrangement_td[j];
-                    tr.appendChild(td[j]);      //创建四个td标签并加入tr中
+                    tr.appendChild(td[j]);      //创建5个td标签并加入tr中
                 }
                 td[0].className = 'collapsing';
                 td[1].className = 'collapsing';
@@ -104,16 +123,99 @@
             td[4].setAttribute('contentEditable', 'false');  //使得按钮对应的列不可修改
         }
     </script>
-    <!--发布新作业函数-->
     <script>
+        //发布新作业
         function new_hw() {
             //向数据库中添加新作业的信息，名字默认设置为Homework
             //...
             window.location.href='teacher_hw';
         }
+        //判断要加载的tab
+        function switch_tab() {
+            var tab = location.search.slice(1);
+            $('.ui .item[data-tab]').removeClass('active');
+            $('.tab.segment').removeClass("active");
+            var second_item = document.getElementById('second_item');
+            if(tab === '2'){
+                $('.ui .item[data-tab=homework]').addClass('active');
+                $('.tab.segment[data-tab=homework]').addClass('active');
+                second_item.innerHTML = '课程作业';
+            }
+            else if(tab === '3'){
+                $('.ui .item[data-tab=message]').addClass('active');
+                $('.tab.segment[data-tab=message]').addClass('active');
+                second_item.innerHTML = '课程通知';
+            }
+            else if(tab === '4'){
+                $('.ui .item[data-tab=teacher_list]').addClass('active');
+                $('.tab.segment[data-tab=teacher_list]').addClass('active');
+                second_item.innerHTML = '教师信息';
+            }
+            else if(tab === '5'){
+                $('.ui .item[data-tab=forum]').addClass('active');
+                $('.tab.segment[data-tab=forum]').addClass('active');
+                second_item.innerHTML = '课程论坛';
+            }
+            else if(tab === '6'){
+                $('.ui .item[data-tab=resources]').addClass('active');
+                $('.tab.segment[data-tab=resources]').addClass('active');
+                second_item.innerHTML = '课程资源';
+            }
+            else{
+                $('.ui .item[data-tab=syllabus]').addClass('active');
+                $('.tab.segment[data-tab=syllabus]').addClass('active');
+                second_item.innerHTML = '课程大纲';
+            }
+        }
+        //删除贴子
+        var tr_id;
+        function if_del(t) {
+            tr_id = t.parentNode.parentNode.id;
+            $('#del_post_modal').modal('setting', 'closable', false).modal('show');
+        }
+        //确定删除
+        function confirm_del() {
+            $('tr[id = '+tr_id+']').remove();
+            //从数据库中删除
+            //......
+            alert('删除成功');
+            $('#del_post_modal').modal('hide');
+        }
+        //关闭回复
+        function close_reply(t) {
+            tr_id = t.parentNode.parentNode.id; //获取本行id
+            $('#close_reply_modal').modal('setting', 'closable', false).modal('show');
+        }
+        function confirm_close() {
+            //数据库中应设有一个标志，确定关闭的话改变标志的值使得本行对应的贴子无法再回复
+            //......
+            alert('关闭回复成功');
+            $('#close_reply_modal').modal('hide');
+        }
+        //发布新贴
+        function new_post(){
+            var topic = document.getElementById('new_topic').value;
+            var content = document.getElementById('new_content').value;
+            if(topic.trim() === ''){
+                alert('主题不可为空！');
+                return false;
+            }
+            if(content.trim() === ''){
+                alert('内容不可为空！');
+                return false;
+            }
+            //将数据传到数据库中
+            //......
+            alert('主题发布成功！');
+            window.location.reload();
+        }
+        //隐藏模态层
+        function HideModal() {
+            $('.ui .modal').modal('hide');
+        }
     </script>
 </head>
-<body onload="init_syllabus()">
+<body onload="init_syllabus();switch_tab()">
     <div class="ui inverted left fixed vertical sidebar menu" id="left_sidebar">
         <div class="ui container">
 
@@ -129,11 +231,13 @@
             <a class="item" data-tab="logout" onclick="window.location.href='http://127.0.0.1:8000'"><i class="sign out icon" ></i>退出系统</a>
         </div>
     </div>
-
     <div class="pusher">
     <!--顶部菜单栏-->
-        <div class="ui visible red top menu sidebar">
-            <a class="item" onclick="$('#left_sidebar').sidebar('toggle');">菜单</a>
+        <div class="ui breadcrumb borderless menu">
+            <a class="item" onclick="$('#left_sidebar').sidebar('toggle');">
+                软件需求工程<span><i class="right chevron icon divider"></i></span>
+            </a>
+            <a class="item" id="second_item"></a>
             <div class="right menu">
                 <div class="ui search">
                     <div class="ui icon input">
@@ -247,7 +351,7 @@
         <!--论坛tab-->
         <div class="ui bottom attached tab segment" data-tab="forum">
             <div class="ui container">
-                <table class="ui large striped table">
+                <table class="ui large striped table" id="post_list">
                     <thead>
                         <tr>
                             <th>主题</th>
@@ -256,50 +360,37 @@
                             <th>最后回复人</th>
                             <th>最后回复时间</th>
                             <th>总回复数</th>
-                            <th class="Collapsing">操作</th>
+                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>关于作业1</td>
-                            <td>邢卫</td>
-                            <td>2017.12.12，20：00</td>
-                            <td></td>
-                            <td></td>
-                            <td>0</td>
-                            <td class="Collapsing"><button class="ui button">删除</button></td>
-                        </tr>
-                        <tr>
-                            <td>不想写作业</td>
-                            <td>咸鱼</td>
-                            <td>2017.12.12，20：00</td>
-                            <td>菜鸡</td>
-                            <td>2017.12.13，20：00</td>
-                            <td>1</td>
-                            <td class="Collapsing"><button class="ui button">删除</button></td>
-                        </tr>
-                        <tr>
-                            <td>这课好难</td>
-                            <td>菜鸡</td>
-                            <td>2017.12.12，20：00</td>
-                            <td>咸鱼</td>
-                            <td>2017.12.13，20：00</td>
-                            <td>4</td>
-                            <td class="collapsing"><button class="ui button">删除</button></td>
-                        </tr>
+                        {% for element in PostList %}
+                            <tr id="post{{ forloop.counter0 }}">
+                                <td><a href="teacher_forum.html">{{ element.0 }}</a></td>
+                                <td>{{ element.1 }}</td>
+                                <td>{{ element.2 }}</td>
+                                <td>{{ element.3 }}</td>
+                                <td>{{ element.4 }}</td>
+                                <td>{{ element.5 }}</td>
+                                <td class="collapsing">
+                                    <button class="ui button" onclick="if_del(this)">删除</button>
+                                    <button class="ui button" onclick="close_reply(this)">关闭回复</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
                 <div class="ui hidden divider"></div>
                 <div class="ui form">
                     <div class="field">
                         <label>主题</label>
-                        <textarea rows="1"></textarea>
+                        <textarea rows="1" id="new_topic"></textarea>
                     </div>
                     <div class="field">
                         <label>内容</label>
-                        <textarea rows="8"></textarea>
+                        <textarea rows="8" id="new_content"></textarea>
                     </div>
-                    <button class="ui button">发布</button>
+                    <button class="ui button" onclick="new_post()">发布</button>
                 </div>
             </div>
         </div>
@@ -385,5 +476,34 @@
         </div>
     </div>
 
+    <div class="ui small basic modal" id="del_post_modal">
+        <i class="close icon"></i>
+        <div class="header">
+            您确定要删除此回复吗？（注意：此操作不可逆!)
+        </div>
+        <div class="actions">
+            <div class="ui red button" onclick="confirm_del()">
+              确定
+            </div>
+            <div class="ui green button" onclick="HideModal()">
+              取消
+            </div>
+        </div>
+    </div>
+
+    <div class="ui small basic modal" id="close_reply_modal">
+        <i class="close icon"></i>
+        <div class="header">
+            您确定要关闭此贴子的回复功能吗？（注意：此操作不可逆!)
+        </div>
+        <div class="actions">
+            <div class="ui red button" onclick="confirm_close()">
+              确定
+            </div>
+            <div class="ui green button" onclick="HideModal()">
+              取消
+            </div>
+        </div>
+    </div>
 </body>
 </html>

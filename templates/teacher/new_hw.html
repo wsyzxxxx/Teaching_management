@@ -83,9 +83,15 @@
             //添加选项
             var option_num = 0;     //选项个数,初始为0
             function add_option(b) {
+                option_num++;       //将选项个数加1
+                if(option_num > 4){
+                    option_num--;
+                    alert('最多只能设置4个选项');
+                    return false;
+                }
                 b.innerHTML = "保存选项";       //把按钮改成保存选项
                 b.setAttribute('onclick', 'save_option(this)');
-                option_num++;       //将选项个数加1
+
 
                 var tbody = document.getElementById('options');       //获得tbody标签
                 var tr;     //表格tr标签
@@ -104,6 +110,7 @@
             }
             //删除选项
             function del_option(r) {
+                option_num--;
                 var i = r.parentNode.parentNode.rowIndex;
                 document.getElementById('options_table').deleteRow(i);
             }
@@ -288,8 +295,6 @@
                     </div>
                     <button class="ui button" onclick="modify_hw_name()">编辑作业名称</button>
                 </div>
-
-
                 <table class="ui large celled collapsing striped table" id="student_list">
                     <thead>
                         <tr>
@@ -324,7 +329,6 @@
         <div class="ui bottom attached tab segment" data-tab="add_tof" >
             <div class="ui container">
                 <div class="ui form">
-
                     <div class="field">
                         <label>问题内容</label>
                         <textarea rows="4" id="tof_question"></textarea>

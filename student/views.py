@@ -8,11 +8,18 @@ def index(request):
 
 
 def course(request):
-    return render(request, 'student/student_courses.html')
+    PostList = [['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
+                ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
+                ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0']]
+    return render(request, 'student/student_courses.html', {'PostList': PostList})
 
 
 def hw(request):
     return render(request, 'student/student_hw.html')
+
+
+def forum(request):
+    return render(request, 'student/student_forum.html')
 
 
 def ret(request):
