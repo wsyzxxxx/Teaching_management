@@ -1,121 +1,121 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0">
-        {% load staticfiles %}
-        <title>浙江大学教学服务系统</title>
-        <!-- 使用本地的样式与js文件 -->
-        <script src="{%  static 'js/jquery-3.2.1.min.js' %}"></script>
-        <link rel="stylesheet" href="{% static 'Semantic-UI-master/dist/semantic.min.css' %}">
-        <script type="text/javascript" src="{% static 'Semantic-UI-master/dist/semantic.min.js' %}"></script>
-        <!--tab切换脚本-->
-        <script>
-            $(document).ready(function(){
-                $('.ui .item[data-tab]').on('click', function() {
-                    $('.ui .item[data-tab]').removeClass('active');
-                    $(this).addClass('active');
-                    var tab = $(this).attr("data-tab");
-                    $(".tab.segment").removeClass("active");
-                    $(".tab.segment[data-tab=\"" + tab + "\"]").addClass("active");
-                });
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0"> {% load staticfiles %}
+    <title>浙江大学教学服务系统</title>
+    <!-- 使用本地的样式与js文件 -->
+    <script src="{%  static 'js/jquery-3.2.1.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'Semantic-UI-master/dist/semantic.min.css' %}">
+    <script type="text/javascript" src="{% static 'Semantic-UI-master/dist/semantic.min.js' %}"></script>
+    <!--tab切换脚本-->
+    <script>
+        $(document).ready(function () {
+            $('.ui .item[data-tab]').on('click', function () {
+                $('.ui .item[data-tab]').removeClass('active');
+                $(this).addClass('active');
+                var tab = $(this).attr("data-tab");
+                $(".tab.segment").removeClass("active");
+                $(".tab.segment[data-tab=\"" + tab + "\"]").addClass("active");
             });
+        });
 
-            //通过button的value来定位对应的modal的id，实现modal.show
-            function showModal(e) {
-               $("#"+e.value).modal('show');
-            }
-        </script>
-        <!--初始化与修改函数-->
-        <script>
-            //初始化作业
-            function init() {
-                document.getElementById('hw_name2').innerHTML = "Homework";     //此处初始化用于测试，实际要从后台获取名称
-                var flag = 1; //0代表判断题，1代表选择题，2代表简答题，此处初始化是为了测试，实际要在循环里从后台取值
-                var ToF = [];
-                ToF[0] = 'T';
-                ToF[1] = 'F';
-                var question_id;        //这个不是题号，是input标签里的name属性，没有这个属性选择题跟判断题会出错
-                var question;       //问题内容
-                var hw_form = document.getElementById('hw_form');  //题目表
-                var div;            //每道题的起始标签都为div
-                var label;          //题目的内容放在<label></label>里
-                var field_div = [];      //选项的div，类型为field，简答题用field_div[0]表示文本框
-                var checkbox_div = [];                  //判断题、选择题的选项div（指的是前面用来点击的小圆圈）
-                var checkbox_label;                //checkbox的内容label
-                for(var i = 0; i < 20; i ++){   //题目总数从后台获得
-                    question_id = "q" + i;
-                    question = '这门课的老师是谁?'; //问题，从后台获得
-                    div = document.createElement('div');    //创建这道题的div
-                    hw_form.appendChild(div);             //将这道题的div加入题目表div
-                    label = document.createElement('label');    //创建题名label
-                    label.innerHTML = i + 1 + '. ' + question;       //题名
-                    div.appendChild(label);                 //将题名label加入到题目div中
-                    div.className = 'grouped fields';       //设置这道题的div类型
-                    if(flag === 3){             //简答题
-                        field_div[0] = document.createElement('div');   //创建输入框class
-                        field_div[0].className = 'field';            //设置输入框class
-                        div.appendChild(field_div[0]);                  //将该div加入到上面创建的题目div中
-                        field_div[0].innerHTML = '<textarea rows="8"></textarea>';  //创建答题文本框
-                        flag = 0;       //用来测试，实际无需
+        //通过button的value来定位对应的modal的id，实现modal.show
+        function showModal(e) {
+            $("#" + e.value).modal('show');
+        }
+    </script>
+    <!--初始化与修改函数-->
+    <script>
+        //初始化作业
+        function init() {
+            document.getElementById('hw_name2').innerHTML = "Homework";     //此处初始化用于测试，实际要从后台获取名称
+            var flag = 1; //0代表判断题，1代表选择题，2代表简答题，此处初始化是为了测试，实际要在循环里从后台取值
+            var ToF = [];
+            ToF[0] = 'T';
+            ToF[1] = 'F';
+            var question_id;        //这个不是题号，是input标签里的name属性，没有这个属性选择题跟判断题会出错
+            var question;       //问题内容
+            var hw_form = document.getElementById('hw_form');  //题目表
+            var div;            //每道题的起始标签都为div
+            var label;          //题目的内容放在<label></label>里
+            var field_div = [];      //选项的div，类型为field，简答题用field_div[0]表示文本框
+            var checkbox_div = [];                  //判断题、选择题的选项div（指的是前面用来点击的小圆圈）
+            var checkbox_label;                //checkbox的内容label
+            for (var i = 0; i < 20; i++) {   //题目总数从后台获得
+                question_id = "q" + i;
+                question = '这门课的老师是谁?'; //问题，从后台获得
+                div = document.createElement('div');    //创建这道题的div
+                hw_form.appendChild(div);             //将这道题的div加入题目表div
+                label = document.createElement('label');    //创建题名label
+                label.innerHTML = i + 1 + '. ' + question;       //题名
+                div.appendChild(label);                 //将题名label加入到题目div中
+                div.className = 'grouped fields';       //设置这道题的div类型
+                if (flag === 3) {             //简答题
+                    field_div[0] = document.createElement('div');   //创建输入框class
+                    field_div[0].className = 'field';            //设置输入框class
+                    div.appendChild(field_div[0]);                  //将该div加入到上面创建的题目div中
+                    field_div[0].innerHTML = '<textarea rows="8"></textarea>';  //创建答题文本框
+                    flag = 0;       //用来测试，实际无需
+                }
+                else {
+
+                    if (flag === 0) {     //判断题
+                        for (var k = 0; k < 2; k++) {
+                            field_div[k] = document.createElement('div'); //创建选项的div field
+                            field_div[k].className = 'field';            //设置选项class为field
+                            div.appendChild(field_div[k]);  //将该div加入到上面创建的题目div中
+                            checkbox_div[k] = document.createElement('div'); //创建checkbox
+                            checkbox_div[k].className = 'ui radio checkbox'; //设置class
+                            field_div[k].appendChild(checkbox_div[k]);  //将checkbox加到这个选项的div中
+                            checkbox_div[k].innerHTML = '<input type="radio" name="' + question_id + '">';  //加入input标签
+                            label = document.createElement('label');   //创建选项内容标签
+                            checkbox_div[k].appendChild(label);        //将选项内容标签加入checkbox
+                            label.innerHTML = ToF[k];
+                        }
+                        flag++;     //用来测试，实际无需
                     }
-                    else{
-
-                        if(flag === 0){     //判断题
-                            for(var k = 0; k < 2; k++){
-                                field_div[k] = document.createElement('div'); //创建选项的div field
-                                field_div[k].className = 'field';            //设置选项class为field
-                                div.appendChild(field_div[k]);  //将该div加入到上面创建的题目div中
-                                checkbox_div[k] = document.createElement('div'); //创建checkbox
-                                checkbox_div[k].className = 'ui radio checkbox'; //设置class
-                                field_div[k].appendChild(checkbox_div[k]);  //将checkbox加到这个选项的div中
-                                checkbox_div[k].innerHTML = '<input type="radio" name="'+ question_id +'">';  //加入input标签
-                                label = document.createElement('label');   //创建选项内容标签
-                                checkbox_div[k].appendChild(label);        //将选项内容标签加入checkbox
-                                label.innerHTML = ToF[k];
-                            }
-                            flag++;     //用来测试，实际无需
+                    else if (flag === 1) {     //单选题
+                        var choice = [];        //各个选项的内容，后端完成时用循环获取选项内容
+                        choice[0] = '邢卫';
+                        choice[1] = '吴朝晖';
+                        choice[2] = '薛伟';
+                        choice[3] = '没有老师';
+                        div.className = 'grouped fields';       //设置这道题的div的class
+                        for (var j = 0; j < 4; j++) {     //选项总数从后台获得
+                            field_div[j] = document.createElement('div'); //创建选项的div field
+                            field_div[j].className = 'field';            //设置选项class为field
+                            div.appendChild(field_div[j]);  //将该div加入到上面创建的题目div中
+                            checkbox_div[j] = document.createElement('div'); //创建checkbox
+                            checkbox_div[j].className = 'ui radio checkbox'; //设置class
+                            field_div[j].appendChild(checkbox_div[j]);  //将checkbox加到这个选项的div中
+                            checkbox_div[j].innerHTML = '<input type="radio" name="' + question_id + '">';  //加入input标签
+                            label = document.createElement('label');   //创建选项内容标签
+                            checkbox_div[j].appendChild(label);        //将选项内容标签加入checkbox
+                            label.innerHTML = choice[j];
                         }
-                        else if(flag === 1){     //单选题
-                            var choice = [];        //各个选项的内容，后端完成时用循环获取选项内容
-                            choice[0] = '邢卫';
-                            choice[1] = '吴朝晖';
-                            choice[2] = '薛伟';
-                            choice[3] = '没有老师';
-                            div.className = 'grouped fields';       //设置这道题的div的class
-                            for(var j = 0; j < 4; j++){     //选项总数从后台获得
-                                field_div[j] = document.createElement('div'); //创建选项的div field
-                                field_div[j].className = 'field';            //设置选项class为field
-                                div.appendChild(field_div[j]);  //将该div加入到上面创建的题目div中
-                                checkbox_div[j] = document.createElement('div'); //创建checkbox
-                                checkbox_div[j].className = 'ui radio checkbox'; //设置class
-                                field_div[j].appendChild(checkbox_div[j]);  //将checkbox加到这个选项的div中
-                                checkbox_div[j].innerHTML = '<input type="radio" name="'+ question_id +'">';  //加入input标签
-                                label = document.createElement('label');   //创建选项内容标签
-                                checkbox_div[j].appendChild(label);        //将选项内容标签加入checkbox
-                                label.innerHTML = choice[j];
-                            }
-                            flag = 3;     //用来测试，实际无需
-                        }
+                        flag = 3;     //用来测试，实际无需
                     }
                 }
-                $('.ui.checkbox').checkbox();
             }
-            //保存作业
-            function save_hw() {
-                //将作业提交到后台保存
-                //......
-                alert('保存成功');
-                window.location.reload();   //刷新页面
-            }
-            function submit_hw(){
-                //将作业保存到后台，设置学生本次作业状态为已提交
-                //......
-                alert('提交成功');
-                window.location.reload();   //刷新页面
-            }
-        </script>
+            $('.ui.checkbox').checkbox();
+        }
+        //保存作业
+        function save_hw() {
+            //将作业提交到后台保存
+            //......
+            alert('保存成功');
+            window.location.reload();   //刷新页面
+        }
+        function submit_hw() {
+            //将作业保存到后台，设置学生本次作业状态为已提交
+            //......
+            alert('提交成功');
+            window.location.reload();   //刷新页面
+        }
+    </script>
 </head>
 
 
@@ -149,7 +149,7 @@
             </div>
         </div>
     </div-->
-        <!--顶部菜单栏-->
+    <!--顶部菜单栏-->
     <div class="ui fixed red top large menu">
         <div class="right menu">
             <div class="ui search">
@@ -182,5 +182,5 @@
     </div>
 
 </body>
-</html>
 
+</html>

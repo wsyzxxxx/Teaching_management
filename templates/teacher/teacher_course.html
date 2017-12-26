@@ -1,42 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    {% load staticfiles %}
+    <meta charset="utf-8"> {% load staticfiles %}
     <title>教学服务系统</title>
     <!-- 使用本地的样式与js文件 -->
     <script src="{%  static 'js/jquery-3.2.1.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'Semantic-UI-master/dist/semantic.min.css' %}">
     <script type="text/javascript" src="{% static 'Semantic-UI-master/dist/semantic.min.js' %}"></script>
     <script>
-        $(document).ready(function(){
-            $('.ui .item[data-tab]').on('click', function() {
+        $(document).ready(function () {
+            $('.ui .item[data-tab]').on('click', function () {
                 $('.ui .item[data-tab]').removeClass('active');
                 $(this).addClass('active');
                 var tab = $(this).attr("data-tab");
-                $(".tab.segment").removeClass("active");
-                $(".tab.segment[data-tab=\"" + tab + "\"]").addClass("active");
+                $(".tab").removeClass("active");
+                $(".tab[data-tab=\"" + tab + "\"]").addClass("active");
                 var second_item = document.getElementById('second_item');
                 second_item.innerHTML = trans(tab);
             });
+            $('.sidebar').sidebar({
+                dimPage: false,
+                closable: false
+            });
         });
+        //显示侧边栏
+        function show_left() {
+            var left_sidebar = $("#left_sidebar");
+            left_sidebar.sidebar('toggle');
+            $('#pusher').attr('style', 'margin-left: 182px');
+            $('#menu1').attr('onclick', 'hide_left()');
+        }
+        //隐藏侧边栏
+        function hide_left() {
+            $('#left_sidebar').sidebar('hide');
+            $('#pusher').attr('style', '');
+            $('#menu1').attr('onclick', 'show_left()');
+        }
         //通过button的value来定位对应的modal的id，实现modal.show
         function showModal(e) {
-           $("#"+e.value).modal('show');
+            $("#" + e.value).modal('show');
         }
         //转换tab为中文名
         function trans(tab) {
-            if(tab === 'syllabus')
+            if (tab === 'syllabus')
                 return '课程大纲';
-            else if(tab === 'homework')
+            else if (tab === 'homework')
                 return '课程作业';
-            else if(tab === 'message')
+            else if (tab === 'message')
                 return '课程通知';
-            else if(tab === 'teacher_list')
+            else if (tab === 'teacher_list')
                 return '教师信息';
-            else if(tab === 'forum')
+            else if (tab === 'forum')
                 return '课程论坛';
-            else if(tab === 'resources')
+            else if (tab === 'resources')
                 return '课程资源';
             else
                 return false;
@@ -63,10 +80,10 @@
             var tbody = document.getElementById('calendars');   //tbody标签
             var tr;                         //表格tr标签
             var td = [];                    //表格td标签
-            for(var i = 0; i < 10; i++){        //此处设置安排为10条，实际要从后台获得
+            for (var i = 0; i < 10; i++) {        //此处设置安排为10条，实际要从后台获得
                 tr = document.createElement('tr');
                 tbody.appendChild(tr);    //创建tr标签并加入tbody中
-                for(var j = 0; j < 5; j++){
+                for (var j = 0; j < 5; j++) {
                     td[j] = document.createElement('td');
                     td[j].innerHTML = arrangement_td[j];
                     tr.appendChild(td[j]);      //创建5个td标签并加入tr中
@@ -110,7 +127,7 @@
             var td = [];    //表格td标签
             tr = document.createElement('tr');
             tbody.appendChild(tr);      //创建tr标签并加入tbody中
-            for(var i = 0; i < 5; i++){
+            for (var i = 0; i < 5; i++) {
                 td[i] = document.createElement('td');
                 tr.appendChild(td[i]);      //创建四个td标签并加入tr中
             }
@@ -128,7 +145,7 @@
         function new_hw() {
             //向数据库中添加新作业的信息，名字默认设置为Homework
             //...
-            window.location.href='teacher_hw';
+            window.location.href = 'teacher_hw';
         }
         //判断要加载的tab
         function switch_tab() {
@@ -136,32 +153,32 @@
             $('.ui .item[data-tab]').removeClass('active');
             $('.tab.segment').removeClass("active");
             var second_item = document.getElementById('second_item');
-            if(tab === '2'){
+            if (tab === '2') {
                 $('.ui .item[data-tab=homework]').addClass('active');
                 $('.tab.segment[data-tab=homework]').addClass('active');
                 second_item.innerHTML = '课程作业';
             }
-            else if(tab === '3'){
+            else if (tab === '3') {
                 $('.ui .item[data-tab=message]').addClass('active');
                 $('.tab.segment[data-tab=message]').addClass('active');
                 second_item.innerHTML = '课程通知';
             }
-            else if(tab === '4'){
+            else if (tab === '4') {
                 $('.ui .item[data-tab=teacher_list]').addClass('active');
                 $('.tab.segment[data-tab=teacher_list]').addClass('active');
                 second_item.innerHTML = '教师信息';
             }
-            else if(tab === '5'){
+            else if (tab === '5') {
                 $('.ui .item[data-tab=forum]').addClass('active');
                 $('.tab.segment[data-tab=forum]').addClass('active');
                 second_item.innerHTML = '课程论坛';
             }
-            else if(tab === '6'){
+            else if (tab === '6') {
                 $('.ui .item[data-tab=resources]').addClass('active');
                 $('.tab.segment[data-tab=resources]').addClass('active');
                 second_item.innerHTML = '课程资源';
             }
-            else{
+            else {
                 $('.ui .item[data-tab=syllabus]').addClass('active');
                 $('.tab.segment[data-tab=syllabus]').addClass('active');
                 second_item.innerHTML = '课程大纲';
@@ -175,7 +192,7 @@
         }
         //确定删除
         function confirm_del() {
-            $('tr[id = '+tr_id+']').remove();
+            $('tr[id = ' + tr_id + ']').remove();
             //从数据库中删除
             //......
             alert('删除成功');
@@ -193,14 +210,14 @@
             $('#close_reply_modal').modal('hide');
         }
         //发布新贴
-        function new_post(){
+        function new_post() {
             var topic = document.getElementById('new_topic').value;
             var content = document.getElementById('new_content').value;
-            if(topic.trim() === ''){
+            if (topic.trim() === '') {
                 alert('主题不可为空！');
                 return false;
             }
-            if(content.trim() === ''){
+            if (content.trim() === '') {
                 alert('内容不可为空！');
                 return false;
             }
@@ -215,48 +232,78 @@
         }
     </script>
 </head>
+
 <body onload="init_syllabus();switch_tab()">
-    <div class="ui inverted left fixed vertical sidebar menu" id="left_sidebar">
+    <div style="background-color: #E0E0E0;" class="ui visible left vertical overlay small sidebar menu" id="left_sidebar">
         <div class="ui container">
 
             <a class="active item" data-tab="syllabus">
                 <i class="home icon"></i>课程大纲</a>
-            <a class="item" data-tab="homework"><i class="file text outline icon"></i>
+            <a class="item" data-tab="homework">
+                <i class="file text outline icon"></i>
                 <div class="ui red label">{{ unsubmitHw }}</div>课程作业
             </a>
-            <a class="item" data-tab="message"><i class="announcement icon"></i>
+            <a class="item" data-tab="message">
+                <i class="announcement icon"></i>
                 <div class="ui red label">{{ unreadNotice }}</div>课程通知
             </a>
-            <a class="item" data-tab="forum"><i class="comments outline icon"></i>课程论坛</a>
-            <a class="item" data-tab="resources"><i class="folder open outline icon"></i>课程资源</a>
-            <a class="item" data-tab="return" onclick="window.location.href='http://127.0.0.1:8000/t_index'"><i class="reply icon"></i>返回个人主页</a>
-            <a class="item" data-tab="logout" onclick="window.location.href='http://127.0.0.1:8000'"><i class="sign out icon" ></i>退出系统</a>
+            <a class="item" data-tab="forum">
+                <i class="comments outline icon"></i>课程论坛</a>
+            <a class="item" data-tab="resources">
+                <i class="folder open outline icon"></i>课程资源</a>
+            <a class="item" data-tab="return" onclick="window.location.href='http://127.0.0.1:8000/t_index'">
+                <i class="reply icon"></i>返回个人主页</a>
+            <a class="item" data-tab="logout" onclick="window.location.href='http://127.0.0.1:8000'">
+                <i class="sign out icon"></i>退出系统</a>
         </div>
     </div>
-    <div class="pusher">
-    <!--顶部菜单栏-->
-        <div class="ui breadcrumb borderless menu">
-            <a class="item" onclick="$('#left_sidebar').sidebar('toggle');">
-                软件需求工程<span><i class="right chevron icon divider"></i></span>
-            </a>
-            <a class="item" id="second_item"></a>
-            <div class="right menu">
-                <div class="ui search">
-                    <div class="ui icon input">
-                        <input class="prompt" type="text" placeholder="搜索课程或教师">
-                        <i class="search icon"></i>
+    <div class="pusher" id="pusher" style="margin-left: 182px;">
+        <!--顶部-->
+        <div class="ui container" style="width: 90%;margin-top: 10px">
+            <div class="ui items">
+                <div class="item">
+                    <a class="ui tiny image">
+                        <img src="{% static 'img/zju4.jpg' %}">
+                    </a>
+                    <div class="middle aligned content">
+                        <a class="header">欢迎使用浙江大学教学服务系统</a>
                     </div>
                 </div>
             </div>
-            <a class="item">退出</a>
         </div>
+        <!--顶部菜单栏-->
+        <div class="ui vertical masthead center aligned segment">
+            <div class="ui container" style="width: 91%">
+                <div class="ui secondary small breadcrumb borderless visible menu">
+                    <a class="item" onclick="hide_left()" id="menu1">
+                        软件需求工程
+                        <span>
+                            <i class="right chevron icon divider"></i>
+                        </span>
+                    </a>
+                    <a class="item" id="second_item"></a>
+                    <div class="right menu">
+                        <div class="ui search">
+                            <div class="ui icon input">
+                                <input class="prompt" type="text" placeholder="搜索课程或教师">
+                                <i class="search icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="item">退出</a>
+                </div>
+            </div>
+        </div>
+        <div class="ui hidden divider"></div>
         <!--课程大纲tab-->
-        <div class="ui bottom attached active tab segment" data-tab="syllabus">
-            <div class="ui container" >
+        <div class="ui bottom attached active tab" data-tab="syllabus" style="min-height: 568px">
+            <div class="ui container">
                 <div class="ui segment" id="summary">
                     <h2>课程简介</h2>
                 </div>
-                <a class="item" data-tab="modify_syllabus"><div class="ui button">编辑课程简介</div></a>
+                <a class="item" data-tab="modify_syllabus">
+                    <div class="ui button">编辑课程简介</div>
+                </a>
                 <table class="ui celled striped table" id="calendars_table">
                     <thead>
                         <tr>
@@ -281,7 +328,7 @@
         </div>
 
         <!--修改课程简介tab-->
-        <div class="ui bottom attached tab segment" data-tab="modify_syllabus">
+        <div class="ui bottom attached tab" data-tab="modify_syllabus" style="min-height: 568px">
             <div class="ui container">
                 <div class="ui segment">
                     <h2>课程简介</h2>
@@ -298,8 +345,8 @@
         </div>
 
         <!--修改课程日历tab-->
-        <div class="ui bottom attached tab segment" data-tab="modify_calendars">
-            <div class="ui container" >
+        <div class="ui bottom attached tab" data-tab="modify_calendars" style="min-height: 568px">
+            <div class="ui container">
                 <table class="ui celled striped table">
                     <thead>
                         <tr>
@@ -322,75 +369,72 @@
             </div>
         </div>
         <!--课程作业tab-->
-        <div class="ui bottom attached tab segment" data-tab="homework">
+        <div class="ui bottom attached tab" data-tab="homework" style="min-height: 568px">
             <div class="ui container">
                 <div class="ui button" onclick="window.location.href='new_hw'">发布新作业</div>
-                {% for foo in HwList %}
-                    {% ifequal foo.0 '0' %}
-                    <div class="ui icon red message">
-                        <i class="inbox icon"></i>
-                        <div class="content">
-                            <div class="header">{{ foo.1 }}</div>
-                            <p>{{ foo.2 }}</p>
-                        </div>
-                        <button class="ui button" onclick="window.location.href='teacher_hw'">详情</button>
+                {% for foo in HwList %} {% ifequal foo.0 '0' %}
+                <div class="ui icon red message">
+                    <i class="inbox icon"></i>
+                    <div class="content">
+                        <div class="header">{{ foo.1 }}</div>
+                        <p>{{ foo.2 }}</p>
                     </div>
-                    {% else %}
-                    <div class="ui icon message">
-                        <i class="inbox icon"></i>
-                        <div class="content">
-                            <div class="header">{{ foo.1 }}</div>
-                            <p>{{ foo.2 }}</p>
-                        </div>
-                        <button class="ui button" onclick="window.location.href='teacher_hw'">详情</button>
+                    <button class="ui button" onclick="window.location.href='teacher_hw'">详情</button>
+                </div>
+                {% else %}
+                <div class="ui icon message">
+                    <i class="inbox icon"></i>
+                    <div class="content">
+                        <div class="header">{{ foo.1 }}</div>
+                        <p>{{ foo.2 }}</p>
                     </div>
-                    {% endifequal %}
-                {% endfor %}
+                    <button class="ui button" onclick="window.location.href='teacher_hw'">详情</button>
+                </div>
+                {% endifequal %} {% endfor %}
             </div>
         </div>
 
         <!--课程通知tab-->
-        <div class="ui bottom attached tab segment" data-tab="message">
-            <div class="ui container" >
-                {% for i in NoticeList %}
-                    {% ifequal i.0 '0' %}
-                    <div class="ui icon red message">
-                        <i class="inbox icon"></i>
-                        <div class="content">
-                            <div class="header">{{ i.1 }}</div>
-                            <p>{{ i.2 }}</p>
-                        </div>
-                        <button class="ui button" value="notice{{ forloop.counter0 }}" onclick="showModal(this)">详情</button>
-                    </div>
-                    {% else %}
-                    <div class="ui icon message">
-                        <i class="inbox icon"></i>
-                        <div class="content">
-                            <div class="header">{{ i.1 }}</div>
-                            <p>{{ i.2 }}</p>
-                        </div>
-                        <button class="ui button" value="notice{{ forloop.counter0 }}" onclick="showModal(this)">详情</button>
-                    </div>
-                    {% endifequal %}
-                    <div class="ui test modal" id="notice{{ forloop.counter0 }}">
-                        <i class="close icon"></i>
+        <div class="ui bottom attached tab" data-tab="message" style="min-height: 568px">
+            <div class="ui container">
+                {% for i in NoticeList %} {% ifequal i.0 '0' %}
+                <div class="ui icon red message">
+                    <i class="inbox icon"></i>
+                    <div class="content">
                         <div class="header">{{ i.1 }}</div>
-                        <div class="content">
-                            <div class="right">
-                                <div class="ui header">{{ i.3 }}</div>
-                            </div>
-                        </div>
-                        <div class="actions">
-                            <div class="ui black button" onclick="HideModal()">
-                              关闭
-                            </div>
+                        <p>{{ i.2 }}</p>
+                    </div>
+                    <button class="ui button" value="notice{{ forloop.counter0 }}" onclick="showModal(this)">详情</button>
+                </div>
+                {% else %}
+                <div class="ui icon message">
+                    <i class="inbox icon"></i>
+                    <div class="content">
+                        <div class="header">{{ i.1 }}</div>
+                        <p>{{ i.2 }}</p>
+                    </div>
+                    <button class="ui button" value="notice{{ forloop.counter0 }}" onclick="showModal(this)">详情</button>
+                </div>
+                {% endifequal %}
+                <div class="ui test modal" id="notice{{ forloop.counter0 }}">
+                    <i class="close icon"></i>
+                    <div class="header">{{ i.1 }}</div>
+                    <div class="content">
+                        <div class="right">
+                            <div class="ui header">{{ i.3 }}</div>
                         </div>
                     </div>
+                    <div class="actions">
+                        <div class="ui black button" onclick="HideModal()">
+                            关闭
+                        </div>
+                    </div>
+                </div>
                 {% endfor %}
             </div>
         </div>
         <!--论坛tab-->
-        <div class="ui bottom attached tab segment" data-tab="forum">
+        <div class="ui bottom attached tab" data-tab="forum" style="min-height: 568px">
             <div class="ui container">
                 <table class="ui large striped table" id="post_list">
                     <thead>
@@ -406,18 +450,20 @@
                     </thead>
                     <tbody>
                         {% for element in PostList %}
-                            <tr id="post{{ forloop.counter0 }}">
-                                <td><a href="teacher_forum.html">{{ element.0 }}</a></td>
-                                <td>{{ element.1 }}</td>
-                                <td>{{ element.2 }}</td>
-                                <td>{{ element.3 }}</td>
-                                <td>{{ element.4 }}</td>
-                                <td>{{ element.5 }}</td>
-                                <td class="collapsing">
-                                    <button class="ui button" onclick="if_del(this)">删除</button>
-                                    <button class="ui button" onclick="close_reply(this)">关闭回复</button>
-                                </td>
-                            </tr>
+                        <tr id="post{{ forloop.counter0 }}">
+                            <td>
+                                <a href="teacher_forum.html">{{ element.0 }}</a>
+                            </td>
+                            <td>{{ element.1 }}</td>
+                            <td>{{ element.2 }}</td>
+                            <td>{{ element.3 }}</td>
+                            <td>{{ element.4 }}</td>
+                            <td>{{ element.5 }}</td>
+                            <td class="collapsing">
+                                <button class="ui button" onclick="if_del(this)">删除</button>
+                                <button class="ui button" onclick="close_reply(this)">关闭回复</button>
+                            </td>
+                        </tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -436,9 +482,9 @@
             </div>
         </div>
         <!--课程资源tab-->
-        <div class="ui bottom attached tab segment" data-tab="resources">
-            <div class="ui container" >
-              <table class="ui selectable celled striped table">
+        <div class="ui bottom attached tab" data-tab="resources" style="min-height: 568px">
+            <div class="ui container">
+                <table class="ui selectable celled striped table">
                     <thead>
                         <tr>
                             <th>资源名称</th>
@@ -448,53 +494,108 @@
                             <th>删除</th>
                         </tr>
                     </thead>
-                  <tbody>
-                    <tr>
-                      <td class="collapsing">uml.ppt</td>
-                      <td class="collapsing">刘玉生</td>
-                      <td >2017.12.12</td>
-                      <td><button class="ui button">下载</button></td>
-                      <td><button class="ui button">删除</button></td>
-                    </tr>
-                    <tr>
-                      <td class="collapsing">操作系统概念.pdf</td>
-                      <td class="collapsing">邢卫</td>
-                      <td>2017.12.12</td>
-                      <td><button class="ui button">下载</button></td>
-                      <td><button class="ui button">删除</button></td>
-                    </tr>
-                    <tr>
-                      <td class="collapsing">软件需求.pdf</td>
-                      <td class="collapsing">邢卫</td>
-                      <td>2017.12.12</td>
-                      <td><button class="ui button">下载</button></td>
-                      <td><button class="ui button">删除</button></td>
-                    </tr>
-                    <tr>
-                      <td class="collapsing">作业成绩.xls</td>
-                      <td class="collapsing">邢卫</td>
-                      <td>2017.12.12</td>
-                      <td><button class="ui button">下载</button></td>
-                      <td><button class="ui button">删除</button></td>
-                    </tr>
-                    <tr>
-                      <td class="collapsing">5.ppt</td>
-                      <td class="collapsing">邢卫</td>
-                      <td>2017.12.12</td>
-                      <td class="collapsing"><button class="ui button">下载</button></td>
-                      <td class="collapsing"><button class="ui button">删除</button></td>
-                    </tr>
-                  </tbody>
-                  <tfoot class="full-width">
-                    <tr>
-                      <th colspan="5">
-                        <div class="ui right floated small primary labeled icon button">
-                          <i class="user icon"></i>上传资源
-                        </div>
-                      </th>
-                    </tr>
-                  </tfoot>
+                    <tbody>
+                        <tr>
+                            <td class="collapsing">uml.ppt</td>
+                            <td class="collapsing">刘玉生</td>
+                            <td>2017.12.12</td>
+                            <td>
+                                <button class="ui button">下载</button>
+                            </td>
+                            <td>
+                                <button class="ui button">删除</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="collapsing">操作系统概念.pdf</td>
+                            <td class="collapsing">邢卫</td>
+                            <td>2017.12.12</td>
+                            <td>
+                                <button class="ui button">下载</button>
+                            </td>
+                            <td>
+                                <button class="ui button">删除</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="collapsing">软件需求.pdf</td>
+                            <td class="collapsing">邢卫</td>
+                            <td>2017.12.12</td>
+                            <td>
+                                <button class="ui button">下载</button>
+                            </td>
+                            <td>
+                                <button class="ui button">删除</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="collapsing">作业成绩.xls</td>
+                            <td class="collapsing">邢卫</td>
+                            <td>2017.12.12</td>
+                            <td>
+                                <button class="ui button">下载</button>
+                            </td>
+                            <td>
+                                <button class="ui button">删除</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="collapsing">5.ppt</td>
+                            <td class="collapsing">邢卫</td>
+                            <td>2017.12.12</td>
+                            <td class="collapsing">
+                                <button class="ui button">下载</button>
+                            </td>
+                            <td class="collapsing">
+                                <button class="ui button">删除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="full-width">
+                        <tr>
+                            <th colspan="5">
+                                <div class="ui right floated small primary labeled icon button">
+                                    <i class="user icon"></i>上传资源
+                                </div>
+                            </th>
+                        </tr>
+                    </tfoot>
                 </table>
+            </div>
+        </div>
+        <div class="ui footer basic segment" style="background-color: #E0E0E0;">
+            <div class="ui center aligned container">
+                <div class="ui stackable divided equal height stackable grid">
+                    <div class="five wide column">
+                        <h4 class="ui header">友情链接</h4>
+                        <div class="ui link list">
+                            <a href="http://www.zju.edu.cn" class="item">浙江大学官方网站</a>
+                            <a href="http://jwbinfosys.zju.edu.cn/default2.aspx" class="item">浙江大学现代教务管理系统</a>
+                            <a href="http://www.cs.zju.edu.cn/" class="item">浙江大学计算机科学与技术学院</a>
+                            <a href="http://www.cc98.org/" class="item">CC98论坛</a>
+                        </div>
+                    </div>
+                    <div class="five wide column">
+                        <h4 class="ui header">常用网站导航</h4>
+                        <div class="ui link list">
+                            <a href="https://github.com/" class="item">GitHub</a>
+                            <a href="https://scholar.google.com/" class="item">Gooele Scholar</a>
+                            <a href="https://translate.google.cn/" class="item">Google Translate</a>
+                            <a href="http://www.cnki.net/" class="item">中国知网</a>
+                        </div>
+                    </div>
+                    <div class="four wide column">
+                        <h4 class="ui header">资源导航</h4>
+                        <div class="ui link list">
+                            <a href="http://mirrors.zju.edu.cn/#list" class="item">浙江大学开源镜像站</a>
+                            <a href="https://www.jiumodiary.com/" class="item">Jiumo E-Book Search</a>
+                            <a href="http://www.nexushd.org/index.php" class="item">NexusHD</a>
+                            <a href="ftp://software.cc98.org/" class="item">CC98资源站</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui inverted section divider"></div>
+                <h4>浙江大学2015级软件需求工程、软件工程管理G04课程组开发</h4>
             </div>
         </div>
 
@@ -512,7 +613,7 @@
         </div>
         <div class="actions">
             <div class="ui black button" id="exit">
-              关闭
+                关闭
             </div>
         </div>
     </div>
@@ -524,10 +625,10 @@
         </div>
         <div class="actions">
             <div class="ui red button" onclick="confirm_del()">
-              确定
+                确定
             </div>
             <div class="ui green button" onclick="HideModal()">
-              取消
+                取消
             </div>
         </div>
     </div>
@@ -539,12 +640,13 @@
         </div>
         <div class="actions">
             <div class="ui red button" onclick="confirm_close()">
-              确定
+                确定
             </div>
             <div class="ui green button" onclick="HideModal()">
-              取消
+                取消
             </div>
         </div>
     </div>
 </body>
+
 </html>

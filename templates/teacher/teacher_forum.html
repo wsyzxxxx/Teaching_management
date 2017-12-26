@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    {% load staticfiles %}
+    <meta charset="utf-8"> {% load staticfiles %}
     <title>课程论坛</title>
     <!-- 使用本地的样式与js文件 -->
     <script src="{%  static 'js/jquery-3.2.1.min.js' %}"></script>
@@ -23,8 +23,8 @@
                 strDate = "0" + strDate;
             }
             var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-                    + " " + date.getHours() + seperator2 + date.getMinutes()
-                    + seperator2 + date.getSeconds();
+                + " " + date.getHours() + seperator2 + date.getMinutes()
+                + seperator2 + date.getSeconds();
             return currentdate;
         }
         //初始化贴子内容
@@ -40,8 +40,8 @@
             var h4;
             var div = [];
             var name, type, content, reply_time;
-            for(var i = 0; i < floor_num; i++){
-                for(var j = 0; j < 4; j++)
+            for (var i = 0; i < floor_num; i++) {
+                for (var j = 0; j < 4; j++)
                     td[j] = document.createElement('td');   //创建四个单元格
                 cur_floor = i + 1;  //当前楼层
                 name = '邢卫';    //层主姓名，从后台获得
@@ -64,7 +64,7 @@
                 h4 = document.createElement('h4');
                 h4.className = 'ui image header';
                 td[0].appendChild(h4);      //创建层主信息栏并加入第一个单元格
-                h4.innerHTML = '<img src="{% static 'Semantic-UI-master/examples/assets/images/avatar/tom.jpg' %}" class="ui large rounded image">'   //添加头像
+                h4.innerHTML = '<img src="{% static 'Semantic - UI - master / examples / assets / images / avatar / tom.jpg' %}" class="ui large rounded image">'   //添加头像
                 div[0] = document.createElement('div');
                 div[0].className = 'content';
                 h4.appendChild(div[0]);     //创建层主信息div，加入h4中
@@ -93,7 +93,7 @@
         }
         //确定删除
         function confirm_del() {
-            $('table[id = '+table_id+']').remove();
+            $('table[id = ' + table_id + ']').remove();
             //从数据库中删除
             //......
             alert('删除成功');
@@ -109,7 +109,7 @@
             var h4;
             var div = [];
             var name, type, content, reply_time;
-            for(var j = 0; j < 4; j++)
+            for (var j = 0; j < 4; j++)
                 td[j] = document.createElement('td');   //创建四个单元格
             cur_floor = floor_num + 1;  //当前楼层
             name = '邢卫';    //层主姓名，从当前登录用户数据中获得
@@ -132,7 +132,7 @@
             h4 = document.createElement('h4');
             h4.className = 'ui image header';
             td[0].appendChild(h4);      //创建层主信息栏并加入第一个单元格
-            h4.innerHTML = '<img src="{% static 'Semantic-UI-master/examples/assets/images/avatar/tom.jpg' %}" class="ui large rounded image">'   //添加头像
+            h4.innerHTML = '<img src="{% static 'Semantic - UI - master / examples / assets / images / avatar / tom.jpg' %}" class="ui large rounded image">'   //添加头像
             div[0] = document.createElement('div');
             div[0].className = 'content';
             h4.appendChild(div[0]);     //创建层主信息div，加入h4中
@@ -162,70 +162,87 @@
         }
     </script>
 </head>
-<body onload="init()">
-<div class="ui inverted left fixed vertical sidebar menu" id="left_sidebar">
-    <div class="ui container">
-        <a class="item" data-tab="syllabus" onclick="window.location.href='student_courses?1'">
-            <i class="home icon"></i>课程大纲
-        </a>
-        <a class="item" data-tab="homework" onclick="window.location.href='student_courses?2'"><i class="file text outline icon"></i>课程作业</a>
-        <a class="item" data-tab="message" onclick="window.location.href='student_courses?3'"><i class="announcement icon"></i>
-            <div class="ui red label">3</div>课程通知
-        </a>
-        <a class="item" data-tab="teacher_list" onclick="window.location.href='student_courses?4'"><i class="users icon"></i>教师信息</a>
-        <a class="item active" data-tab="forum" onclick="window.location.href='student_courses?5'"><i class="comments outline icon"></i>课程论坛</a>
-        <a class="item" data-tab="resources" onclick="window.location.href='student_courses?6'"><i class="folder open outline icon"></i>课程资源</a>
-        <a class="item" data-tab="return" onclick="window.location.href='http://127.0.0.1:8000/index'"><i class="reply icon"></i>返回个人主页</a>
-        <a class="item" data-tab="logout" onclick="window.location.href='http://127.0.0.1:8000'"><i class="sign out icon" ></i>退出系统</a>
-    </div>
-</div>
 
-<div class="pusher">
-    <div class="ui breadcrumb borderless menu">
-        <a class="item" onclick="$('#left_sidebar').sidebar('toggle');">软件需求工程<span><i class="right chevron icon divider"></i></span></a>
-        <a class="item" onclick="window.location.href='teacher_courses?5'">课程论坛<span><i class="right chevron icon divider"></i></span></a>
-        <a class="item" id="tittle"></a>
-        <div class="right menu">
-            <div class="item">
-                <div class="ui icon input">
-                    <input type="text" placeholder="Search...">
-                    <i class="search link icon"></i>
-                </div>
-            </div>
-        <a class="ui item">登出 </a>
+<body onload="init()">
+    <div class="ui inverted left fixed vertical sidebar menu" id="left_sidebar">
+        <div class="ui container">
+            <a class="item" data-tab="syllabus" onclick="window.location.href='student_courses?1'">
+                <i class="home icon"></i>课程大纲
+            </a>
+            <a class="item" data-tab="homework" onclick="window.location.href='student_courses?2'">
+                <i class="file text outline icon"></i>课程作业</a>
+            <a class="item" data-tab="message" onclick="window.location.href='student_courses?3'">
+                <i class="announcement icon"></i>
+                <div class="ui red label">3</div>课程通知
+            </a>
+            <a class="item" data-tab="teacher_list" onclick="window.location.href='student_courses?4'">
+                <i class="users icon"></i>教师信息</a>
+            <a class="item active" data-tab="forum" onclick="window.location.href='student_courses?5'">
+                <i class="comments outline icon"></i>课程论坛</a>
+            <a class="item" data-tab="resources" onclick="window.location.href='student_courses?6'">
+                <i class="folder open outline icon"></i>课程资源</a>
+            <a class="item" data-tab="return" onclick="window.location.href='http://127.0.0.1:8000/index'">
+                <i class="reply icon"></i>返回个人主页</a>
+            <a class="item" data-tab="logout" onclick="window.location.href='http://127.0.0.1:8000'">
+                <i class="sign out icon"></i>退出系统</a>
         </div>
     </div>
-    <div class="ui container" style='width: 90%;' id="container1">
-        <h3 class="ui block header" id="tittle_h3">
 
-        </h3>
-    </div>
-    <div class="ui hidden divider"></div>
-    <div class="ui container" style='width: 90%;' id="container2">
-        <div class="ui form">
-            <div class="field">
-                <label>发表回复：</label>
-                <textarea rows="8" id="reply_text"></textarea>
+    <div class="pusher">
+        <div class="ui breadcrumb borderless menu">
+            <a class="item" onclick="$('#left_sidebar').sidebar('toggle');">软件需求工程
+                <span>
+                    <i class="right chevron icon divider"></i>
+                </span>
+            </a>
+            <a class="item" onclick="window.location.href='teacher_courses?5'">课程论坛
+                <span>
+                    <i class="right chevron icon divider"></i>
+                </span>
+            </a>
+            <a class="item" id="tittle"></a>
+            <div class="right menu">
+                <div class="item">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+                <a class="ui item">登出 </a>
             </div>
-            <button class="ui button" onclick="reply()">发表</button>
+        </div>
+        <div class="ui container" style='width: 90%;' id="container1">
+            <h3 class="ui block header" id="tittle_h3">
+
+            </h3>
         </div>
         <div class="ui hidden divider"></div>
+        <div class="ui container" style='width: 90%;' id="container2">
+            <div class="ui form">
+                <div class="field">
+                    <label>发表回复：</label>
+                    <textarea rows="8" id="reply_text"></textarea>
+                </div>
+                <button class="ui button" onclick="reply()">发表</button>
+            </div>
+            <div class="ui hidden divider"></div>
+        </div>
     </div>
-</div>
 
-<div class="ui small basic modal" id="m1">
-    <i class="close icon"></i>
-    <div class="header">
-        您确定要删除此回复吗？（注意：此操作不可逆!)
-    </div>
-    <div class="actions">
-        <div class="ui red button" onclick="confirm_del()">
-          确定
+    <div class="ui small basic modal" id="m1">
+        <i class="close icon"></i>
+        <div class="header">
+            您确定要删除此回复吗？（注意：此操作不可逆!)
         </div>
-        <div class="ui green button" onclick="HideModal()">
-          取消
+        <div class="actions">
+            <div class="ui red button" onclick="confirm_del()">
+                确定
+            </div>
+            <div class="ui green button" onclick="HideModal()">
+                取消
+            </div>
         </div>
     </div>
-</div>
 </body>
+
 </html>
