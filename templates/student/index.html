@@ -271,8 +271,8 @@
 
         <!--学生课表tab-->
         <div class="ui bottom attached active tab" data-tab="course_table" style="min-height: 568px">
-            <div class="ui container" style="width: 90%">
-                {% for foo in CoursesList %}
+            <div class="ui container" style="width: 80%">
+                <!--{% for foo in CoursesList %}
                 <div class="ui link card" onclick="window.location.href='student_courses'">
                     <div class="floating ui red label">{{ foo.4 }}</div>
                     <div class="content">
@@ -289,7 +289,49 @@
                         </div>
                     </div>
                 </div>
-                {% endfor %}
+                {% endfor %}-->
+                <table class="ui celled structured table">
+                    <thead>
+                        <tr>
+                            <th class="center aligned two wide">课程名称</th>
+                            <th class="center aligned two wide">课程教师</th>
+                            <th class="center aligned two wide">上课时间</th>
+                            <th class="center aligned two wide">课程类别</th>
+                            <th colspan="2" class="center aligned four wide">待办事项</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for foo in CoursesList %}
+                        <tr>
+                            <td rowspan="3" class="center aligned"><a href='student_courses'>{{ foo.0 }}</a></td>
+                            <td rowspan="3" class="center aligned">
+                            {% for i in foo.1 %}
+                            <p>{{ i }}</p>
+                            {% endfor %}
+                            </td>
+                            <td rowspan="3" class="center aligned">{{ foo.2 }}</td>
+                            <td rowspan="3" class="center aligned">{{ foo.3 }}</td>
+                            <td class="center aligned">
+                                <div class="ui header">未读通知</div>
+                            </td>
+                            <td>{{ foo.4 }}</td>
+                        </tr>
+                        <tr>
+                            <td class="center aligned">
+                                <div class="ui header">未完成作业</div>
+                            </td>
+                            <td>{{ foo.5 }}</td>
+                        </tr>
+                        <tr>
+                            <td class="center aligned two wide">
+                                <div class="ui header">未阅读课件</div>
+                            </td>
+                            <td>{{ foo.6 }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
             </div>
         </div>
 
