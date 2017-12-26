@@ -151,36 +151,36 @@
         function switch_tab() {
             var tab = location.search.slice(1);
             $('.ui .item[data-tab]').removeClass('active');
-            $('.tab.segment').removeClass("active");
+            $('.tab').removeClass("active");
             var second_item = document.getElementById('second_item');
             if (tab === '2') {
                 $('.ui .item[data-tab=homework]').addClass('active');
-                $('.tab.segment[data-tab=homework]').addClass('active');
+                $('.tab[data-tab=homework]').addClass('active');
                 second_item.innerHTML = '课程作业';
             }
             else if (tab === '3') {
                 $('.ui .item[data-tab=message]').addClass('active');
-                $('.tab.segment[data-tab=message]').addClass('active');
+                $('.tab[data-tab=message]').addClass('active');
                 second_item.innerHTML = '课程通知';
             }
             else if (tab === '4') {
                 $('.ui .item[data-tab=teacher_list]').addClass('active');
-                $('.tab.segment[data-tab=teacher_list]').addClass('active');
+                $('.tab[data-tab=teacher_list]').addClass('active');
                 second_item.innerHTML = '教师信息';
             }
             else if (tab === '5') {
                 $('.ui .item[data-tab=forum]').addClass('active');
-                $('.tab.segment[data-tab=forum]').addClass('active');
+                $('.tab[data-tab=forum]').addClass('active');
                 second_item.innerHTML = '课程论坛';
             }
             else if (tab === '6') {
                 $('.ui .item[data-tab=resources]').addClass('active');
-                $('.tab.segment[data-tab=resources]').addClass('active');
+                $('.tab[data-tab=resources]').addClass('active');
                 second_item.innerHTML = '课程资源';
             }
             else {
                 $('.ui .item[data-tab=syllabus]').addClass('active');
-                $('.tab.segment[data-tab=syllabus]').addClass('active');
+                $('.tab[data-tab=syllabus]').addClass('active');
                 second_item.innerHTML = '课程大纲';
             }
         }
