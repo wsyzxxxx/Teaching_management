@@ -7,8 +7,12 @@
     <title>教学服务系统</title>
     <!-- 使用本地的样式与js文件 -->
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+
     <link rel="stylesheet" href="{% static 'Semantic-UI-master/dist/semantic.min.css' %}">
     <script type="text/javascript" src="{% static 'Semantic-UI-master/dist/semantic.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/tab.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pagination.css' %}">
     <script>
         $(document).ready(function () {
             $('.ui .item[data-tab]').on('click', function () {
@@ -252,6 +256,22 @@
         //上传资源
         function shangchuan() {
 
+        }
+
+        //下载资源
+        function download() {
+
+        }
+
+        //删除资源
+        function if_del_res() {
+            $('#del_res_modal').modal('show').modal('setting', 'closable', false);
+        }
+
+        //确定删除
+        function confirm_del_res() {
+            alert('删除成功');
+            $('#del_res_modal').modal('hide');
         }
     </script>
 </head>
@@ -547,10 +567,10 @@
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="collapsing">
-                                                        <button class="ui button">下载</button>
+                                                        <button class="ui button" onclick="download()">下载</button>
                                                     </td>
                                                     <td class="right aligned collapsing">
-                                                        <button class="ui button">删除</button>
+                                                        <button class="ui button" onclick="if_del_res()">删除</button>
                                                     </td>
                                                 </tr>
                                             {% endfor %}
@@ -578,10 +598,10 @@
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="right allgn collapsing">
-                                                        <button class="ui button">下载</button>
+                                                        <button class="ui button" onclick="download()">下载</button>
                                                     </td>
                                                     <td class="right aligned collapsing">
-                                                        <button class="ui button">删除</button>
+                                                        <button class="ui button" onclick="if_del_res()">删除</button>
                                                     </td>
                                                 </tr>
                                             {% endfor %}
@@ -894,6 +914,22 @@
         </div>
     </div>
 </div>
+
+<div class="ui small basic modal" id="del_res_modal">
+    <i class="close icon"></i>
+    <div class="header">
+        您确定要删除此资源吗？（注意：此操作不可逆!)
+    </div>
+    <div class="actions">
+        <div class="ui red button" onclick="confirm_del_res()">
+            确定
+        </div>
+        <div class="ui green button" onclick="HideModal()">
+            取消
+        </div>
+    </div>
+</div>
+
 </body>
 
 </html>

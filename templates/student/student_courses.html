@@ -7,11 +7,12 @@
     <title>教学服务系统</title>
     <!-- 使用本地的样式与js文件 -->
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+
     <link rel="stylesheet" href="{% static 'Semantic-UI-master/dist/semantic.min.css' %}">
     <script type="text/javascript" src="{% static 'Semantic-UI-master/dist/semantic.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/tab.css' %}">
     <link rel="stylesheet" href="{% static 'css/pagination.css' %}">
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
     <script>
         $(document).ready(function () {
             $('.ui .item[data-tab]').on('click', function () {
@@ -175,6 +176,7 @@
                 }
             })
         }
+
         //上传资源
         function shangchuan() {
 
@@ -778,7 +780,7 @@
                         {% endfor %}
                     </div>
                 </div>
-            <button class="ui left floated blue button" onclick="shangchuan()">上传</button>
+                <button class="ui left floated blue button" onclick="shangchuan()">上传</button>
             </div>
 
         </div>

@@ -132,8 +132,6 @@ def course(request):
                                                             'NoticeList': NoticeList, 'unreadNotice': unreadNotice,
                                                             'HwList': HwList, 'unsubmitHw': unsubmitHw,
                                                             'TeacherList': TeacherList,
-                                                            'MediaList': MediaList,
-                                                            'OthersList': OthersList,
                                                             'PPTPage': PPTPage, 'PPTPaginator': PPTPaginator,
                                                             'PDFPage': PDFPage, 'PDFPaginator': PDFPaginator,
                                                             'MediaPage': MediaPage, 'MediaPaginator': MediaPaginator,
