@@ -7,8 +7,7 @@
     <title>教学服务系统</title>
     <!-- 使用本地的样式与js文件 -->
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
-
+    <script type="text/javascript" src="{% static 'bootstrap-4.0.0-alpha.6-dist/js/bootstrap.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'Semantic-UI-master/dist/semantic.min.css' %}">
     <script type="text/javascript" src="{% static 'Semantic-UI-master/dist/semantic.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/tab.css' %}">
@@ -28,6 +27,11 @@
                 dimPage: false,
                 closable: false
             });
+            //处理bootstrap的tab点击，有bug
+            $('[data-toggle="tab"]').click(function () {
+                $('[data-toggle="tab"]').removeClass('active');
+                $(this).parent('li').addClass('active');
+            })
         });
 
         //通过button的value来定位对应的modal的id，实现modal.show
@@ -495,7 +499,7 @@
         <div class="ui container" style="width: 70%;">
             <ul id="myTab" class="nav nav-tabs">
                 <li class="active">
-                    <a href="#ppt" data-toggle="tab">PPT资源</a>
+                    <a href="#ppt" class="active" data-toggle="tab">PPT资源</a>
                 </li>
                 <li>
                     <a href="#pdf" data-toggle="tab">PDF资源</a>
@@ -576,7 +580,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div class="tab-pane fade in" id="pdf">
+                <div class="tab-pane fade" id="pdf">
                     <div class="tab-content">
                         {% for foo in PDFPaginator %}
                             {% ifequal forloop.counter0 0 %}
@@ -644,7 +648,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div class="tab-pane fade in" id="media">
+                <div class="tab-pane fade" id="media">
                     <div class="tab-content">
                         {% for foo in MediaPaginator %}
                             {% ifequal forloop.counter0 0 %}
@@ -712,7 +716,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div class="tab-pane fade in" id="others">
+                <div class="tab-pane fade" id="others">
                     <div class="tab-content">
                         {% for foo in OthersPaginator %}
                             {% ifequal forloop.counter0 0 %}

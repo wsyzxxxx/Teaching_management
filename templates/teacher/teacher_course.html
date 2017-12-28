@@ -67,6 +67,11 @@
             else
                 return false;
         }
+        //处理bootstrap tab点击
+        $('[data-toggle="tab"]').click(function () {
+            $('[data-toggle="tab"]').removeClass('active');
+            //$(this).addClass('active');
+        })
     </script>
     <!--以下脚本对应课程大纲的所有操作-->
     <script>

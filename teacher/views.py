@@ -5,6 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 def index(request):
+    tmp = []
     # 通知列表设有一个标志位来标志是否已读，0为未读，1为已读，前端点击了通知详情按钮后，应该到后台将状态设置为已读
     GlobalNoticeList = [['1', '操作系统课程有新通知', '2017/12/12, 20:00:00', '作业1已发布，ddl为今晚10点'],
                         ['1', '计算机网络课程有新通知', '2017/12/13, 20:00:00', '作业2已发布，ddl为今晚10点'],
@@ -19,9 +20,42 @@ def index(request):
                    ['操作系统原理', ['伍赛', '邢卫'], '周一6，7，8', '专业课', '1', '2', '2'],
                    ['软件工程管理', ['金波', '邢卫'], '周一6，7，8', '专业课', '1', '3', '3'],
                    ['计算机网络', ['陆魁军', '邢卫'], '周一6，7，8', '专业课', '0', '4', ' 2'], ]
+    liuyanList = [['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                   '2017/12/12, 20:00:00', '1'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                   '2017/12/12, 20:00:00', '2'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+                   '2017/12/12, 20:00:00', '3'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+                   '2017/12/12, 20:00:00', '4'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                   '2017/12/12, 20:00:00', '5'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                   '2017/12/12, 20:00:00', '6'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+                   '2017/12/12, 20:00:00', '7'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+                   '2017/12/12, 20:00:00', '7'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                   '2017/12/12, 20:00:00', '9'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                   '2017/12/12, 20:00:00', '10'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+                   '2017/12/12, 20:00:00', '11'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+                   '2017/12/12, 20:00:00', '12'],
+                  ]
+    liuyanPage = Paginator(liuyanList, 10)
+    liuyanPaginator = []
+    for i in range(1, liuyanPage.num_pages + 1):
+        for j in liuyanPage.page(i):
+            tmp.append(liuyanPage.page(i))
+        liuyanPaginator.append(tmp)
+        tmp = []
     return render(request, 'teacher/index.html', {'GlobalNoticeList': GlobalNoticeList,
                                                   'unreadGlobalNotice': unreadGlobalNotice,
-                                                  'CoursesList': CoursesList})
+                                                  'CoursesList': CoursesList,
+                                                  'liuyanPage': liuyanPage, 'liuyanPaginator': liuyanPaginator})
 
 
 def course(request):
@@ -108,7 +142,8 @@ def course(request):
                                                            'PPTPage': PPTPage, 'PPTPaginator': PPTPaginator,
                                                            'PDFPage': PDFPage, 'PDFPaginator': PDFPaginator,
                                                            'MediaPage': MediaPage, 'MediaPaginator': MediaPaginator,
-                                                           'OthersPage': OthersPage, 'OthersPaginator': OthersPaginator})
+                                                           'OthersPage': OthersPage,
+                                                           'OthersPaginator': OthersPaginator})
 
 
 def hw(request):
