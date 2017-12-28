@@ -30,6 +30,11 @@
                 dimPage: false,
                 closable: false
             });
+            //处理bootstrap的tab点击，有bug
+            $('[data-toggle="tab"]').click(function () {
+                $('[data-toggle="tab"]').removeClass('active');
+                $(this).parent('li').addClass('active');
+            })
         });
 
         //通过button的value来定位对应的modal的id，实现modal.show

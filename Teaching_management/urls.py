@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^$', views.login),
     url(r'^index/', include('student.urls')),
     url(r'^t_index/', include('teacher.urls')),
+    url(r'^a_index/', include('administrator.urls')),
     url(r'^admin/', admin.site.urls),
 ]

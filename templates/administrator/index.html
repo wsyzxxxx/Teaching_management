@@ -34,7 +34,6 @@
                 $('[data-toggle="tab"]').removeClass('active');
                 $(this).parent('li').addClass('active');
             })
-
         });
 
         //通过button的value来定位对应的modal的id，实现modal.show
@@ -62,48 +61,27 @@
         }
     </script>
     <script>
-        //初始化个人信息表
-        function init() {
-            var personal_info = [];
-            personal_info[0] = "王泽杰";
-            personal_info[1] = 315010;
-            personal_info[2] = "计算机科学与技术学院";
-            personal_info[3] = "软件工程";
-            personal_info[4] = "315010@zju.edu.cn";
-            personal_info[5] = "18888888888";
-            var td_id;
-            var input_id;
-            for (var i = 0; i < 6; i++) {
-                td_id = "info" + i;
-                input_id = "modify_info" + i;
-                $("td[id=" + td_id + "]").text(personal_info[i]);
-                $("input[id=" + input_id + "]").val(personal_info[i]);
-            }
-        }
-
-        //修改个人信息表
-        function modify_info() {
-            var td_id;
-            var input_id;
-            for (var i = 0; i < 6; i++) {
-                td_id = "info" + i;
-                input_id = "modify_info" + i;
-                document.getElementById(td_id).innerHTML = document.getElementById(input_id).value;
-            }
-        }
-
         //将tab转成中文显示出来
         function trans(tab) {
             if (tab === 'home')
                 return '个人信息';
             else if (tab === 'course_table')
-                return '课程表';
+                return '课程管理';
             else if (tab === 'message')
                 return '消息';
             else if (tab === 'liuyan')
-                return '留言板';
+                return '留言板管理';
             else
                 return false;
+        }
+        //是否删除班级
+        function if_del_class() {
+            $('#del_class').modal('setting', 'closable', false).modal('show');
+        }
+        //确认删除班级
+        function confirm_del_class() {
+            alert('删除成功');
+            HideModal();
         }
     </script>
 </head>
@@ -112,17 +90,15 @@
 <!-- 左侧导航栏 -->
 <div style="background-color: #E0E0E0;" class="ui visible left overlay vertical small sidebar menu" id="left_sidebar">
     <div class="ui container">
-        <a class="item" data-tab="home">
-            <i class="student icon"></i>个人信息</a>
         <a class="active item" data-tab="course_table">
-            <i class="table icon"></i>课程表</a>
+            <i class="table icon"></i>课程管理</a>
         <a class="item" data-tab="message">
             <i class="announcement icon"></i>
             <div class="ui red label">{{ unreadGlobalNotice }}</div>
             消息
         </a>
         <a class="item" data-tab="liuyan">
-            <i class="edit icon"></i>留言板</a>
+            <i class="edit icon"></i>留言板管理</a>
     </div>
 </div>
 
@@ -135,7 +111,7 @@
                     <img src="{% static 'img/zju4.jpg' %}">
                 </a>
                 <div class="middle aligned content">
-                    <a class="header">欢迎使用浙江大学教学服务系统</a>
+                    <a class="header">浙江大学教学服务系统管理中心</a>
                 </div>
             </div>
         </div>
@@ -150,7 +126,7 @@
                             <i class="right chevron icon divider"></i>
                         </span>
                 </a>
-                <a class="item" id="second_item">课程表</a>
+                <a class="item" id="second_item">课程管理</a>
                 <div class="right menu">
                     <div class="ui right aligned category search item">
                         <div class="ui icon input">
@@ -159,202 +135,124 @@
                         </div>
                     </div>
                 </div>
-                <a class="item">退出</a>
+                <a class="item" href="http://127.0.0.1:8000">退出</a>
             </div>
         </div>
     </div>
     <div class="ui hidden divider"></div>
-    <!-- 个人信息tab -->
-    <div class="ui bottom attached tab" data-tab="home" style="min-height: 568px">
-        <div class="ui container" style="width: 90%">
-            <table class="ui celled padded selectable table segment" style="width: 50%">
-                <thead>
-                <tr>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>姓名</td>
-                    <td id="info0"></td>
-                </tr>
-                <tr>
-                    <td class="collapsing">学号</td>
-                    <td id="info1"></td>
-                </tr>
-                <tr>
-                    <td class="collapsing">学院</td>
-                    <td id="info2"></td>
-                </tr>
-                <tr>
-                    <td class="collapsing">专业</td>
-                    <td id="info3"></td>
-                </tr>
-                <tr>
-                    <td class="collapsing">电子邮箱</td>
-                    <td id="info4"></td>
-                </tr>
-                <tr>
-                    <td class="collapsing">联系方式</td>
-                    <td id="info5"></td>
-                </tr>
-                </tbody>
-            </table>
-            <a class="item" data-tab="modify_info">
-                <div class="ui top floated small primary labeled icon button">
-                    <i class="user icon"></i> 编辑个人信息
-                </div>
-            </a>
-        </div>
-    </div>
 
-    <!--修改个人信息tab-->
-    <div class="ui attached tab" data-tab="modify_info" style="min-height: 568px">
-        <div class="ui container" style="width: 90%">
-            <table class="ui celled padded selectable table segment" style="width: 50%">
-                <thead>
-                <tr>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>姓名</td>
-                    <td>
-                        <div class="ui left input">
-                            <label>
-                                <input type="text" id="modify_info0">
-                            </label>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="collapsing">学号</td>
-                    <td>
-                        <div class="ui left input">
-                            <label>
-                                <input type="text" id="modify_info1">
-                            </label>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="collapsing">学院</td>
-                    <td>
-                        <div class="ui left input">
-                            <label>
-                                <input type="text" id="modify_info2">
-                            </label>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="collapsing">专业</td>
-                    <td>
-                        <div class="ui left input">
-                            <label>
-                                <input type="text" id="modify_info3">
-                            </label>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="collapsing">电子邮箱</td>
-                    <td>
-                        <div class="ui left input">
-                            <label>
-                                <input type="text" id="modify_info4">
-                            </label>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="collapsing">联系方式</td>
-                    <td>
-                        <div class="ui left input">
-                            <label>
-                                <input type="text" id="modify_info5">
-                            </label>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <!--a class="item" data-tab="home"-->
-            <a class="item" data-tab="home" onclick="modify_info()">
-                <div class="ui top floated small primary labeled icon button">
-                    <i class="user icon"></i>保存修改
-                </div>
-            </a>
-        </div>
-    </div>
-
-    <!--学生课表tab-->
-    <div class="ui bottom attached active tab" data-tab="course_table" style="min-height: 568px">
+    <!--课表tab-->
+    <div class="ui bottom attached active tab" data-tab="course_table" style="min-height: 900px">
         <div class="ui container" style="width: 80%">
-            <!--{% for foo in CoursesList %}
-                <div class="ui link card" onclick="window.location.href='student_courses'">
-                    <div class="floating ui red label">{{ foo.4 }}</div>
-                    <div class="content">
-                        <div class="header">{{ foo.0 }}</div>
-                        <div class="meta">
-                            {% for i in foo.1 %}
-                            <a>{{ i }}</a>
-                            <a></a>
-                            {% endfor %}
-                        </div>
-                        <div class="description">{{ foo.2 }}</div>
-                        <div class="extra content">
-                            <span>{{ foo.3 }}</span>
-                        </div>
-                    </div>
+            <div class="tab-pane fade in active">
+                <div class="tab-content">
+                    {% for f in CoursesPaginator %}
+                        {% ifequal forloop.counter0 0 %}
+                            <div class="tab-pane fade in active" id="courses{{ forloop.counter0 }}">
+                                <table class="ui celled structured table">
+                                    <thead>
+                                    <tr>
+                                        <th class="center aligned two wide">课程名称</th>
+                                        <th class="center aligned two wide">课程教师</th>
+                                        <th class="center aligned">上课时间</th>
+                                        <th class="center aligned">上课地点</th>
+                                        <th class="center aligned two wide">课程类别</th>
+                                        <th class="center aligned two wide">考试时间</th>
+                                        <th>删除</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for j in f|slice:"1" %}
+                                        {% for foo in j %}
+                                            <tr>
+                                                <td class="center aligned">
+                                                    <a href='administrator_courses'>{{ foo.0 }}</a>
+                                                </td>
+                                                <td class="center aligned">
+                                                    {% for i in foo.1 %}
+                                                        <p>{{ i }}</p>
+                                                    {% endfor %}
+                                                </td>
+                                                <td class="center aligned">
+                                                    {% for i in foo.2 %}
+                                                        <p>{{ i }}</p>
+                                                    {% endfor %}
+                                                </td>
+                                                <td class="center aligned">
+                                                    {% for i in foo.3 %}
+                                                        <p>{{ i }}</p>
+                                                    {% endfor %}
+                                                </td>
+                                                <td class="center aligned">{{ foo.4 }}</td>
+                                                <td class="center aligned">{{ foo.5 }}</td>
+                                                <td class="collapsing">
+                                                    <div class="ui button" onclick="if_del_class()">删除</div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="tab-pane fade" id="courses{{ forloop.counter0 }}">
+                                <table class="ui celled structured table">
+                                    <thead>
+                                    <tr>
+                                        <th class="center aligned two wide">课程名称</th>
+                                        <th class="center aligned two wide">课程教师</th>
+                                        <th class="center aligned">上课时间</th>
+                                        <th class="center aligned">上课地点</th>
+                                        <th class="center aligned two wide">课程类别</th>
+                                        <th class="center aligned two wide">考试时间</th>
+                                        <th>删除</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for j in f|slice:"1" %}
+                                        {% for foo in j %}
+                                            <tr>
+                                                <td class="center aligned">
+                                                    <a href='administrator_courses'>{{ foo.0 }}</a>
+                                                </td>
+                                                <td class="center aligned">
+                                                    {% for i in foo.1 %}
+                                                        <p>{{ i }}</p>
+                                                    {% endfor %}
+                                                </td>
+                                                <td class="center aligned">
+                                                    {% for i in foo.2 %}
+                                                        <p>{{ i }}</p>
+                                                    {% endfor %}
+                                                </td>
+                                                <td class="center aligned">
+                                                    {% for i in foo.3 %}
+                                                        <p>{{ i }}</p>
+                                                    {% endfor %}
+                                                </td>
+                                                <td class="center aligned">{{ foo.4 }}</td>
+                                                <td class="center aligned">{{ foo.5 }}</td>
+                                                <td class="collapsing">
+                                                    <div class="ui button" onclick="if_del_class()">删除</div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endifequal %}
+                    {% endfor %}
                 </div>
-                {% endfor %}-->
-            <table class="ui celled structured table">
-                <thead>
-                <tr>
-                    <th class="center aligned two wide">课程名称</th>
-                    <th class="center aligned two wide">课程教师</th>
-                    <th class="center aligned two wide">上课时间</th>
-                    <th class="center aligned two wide">课程类别</th>
-                    <th colspan="2" class="center aligned four wide">待办事项</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for foo in CoursesList %}
-                    <tr>
-                        <td rowspan="3" class="center aligned">
-                            <a href='student_courses'>{{ foo.0 }}</a>
-                        </td>
-                        <td rowspan="3" class="center aligned">
-                            {% for i in foo.1 %}
-                                <p>{{ i }}</p>
-                            {% endfor %}
-                        </td>
-                        <td rowspan="3" class="center aligned">{{ foo.2 }}</td>
-                        <td rowspan="3" class="center aligned">{{ foo.3 }}</td>
-                        <td class="center aligned">
-                            <div class="ui header">未读通知</div>
-                        </td>
-                        <td>{{ foo.4 }}</td>
-                    </tr>
-                    <tr>
-                        <td class="center aligned">
-                            <div class="ui header">未完成作业</div>
-                        </td>
-                        <td>{{ foo.5 }}</td>
-                    </tr>
-                    <tr>
-                        <td class="center aligned two wide">
-                            <div class="ui header">未阅读课件</div>
-                        </td>
-                        <td>{{ foo.6 }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-
+                <div class="ui hidden divider"></div>
+                <div class="ui right floated pagination menu">
+                    {% for foo in CoursesPage.page_range %}
+                        <a data-toggle="tab" class="item" href="#courses{{ forloop.counter0 }}">{{ foo }}</a>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
-
     <!--全局消息tab-->
     <div class="ui bottom attached tab" data-tab="message" style="min-height: 568px">
         <div class="ui container" style="width: 90%">
@@ -365,7 +263,8 @@
                         <div class="header">{{ i.1 }}</div>
                         <p>{{ i.2 }}</p>
                     </div>
-                    <button class="ui button" value="global_notice{{ forloop.counter0 }}" onclick="showModal(this)">详情
+                    <button class="ui button" value="global_notice{{ forloop.counter0 }}"
+                            onclick="showModal(this)">详情
                     </button>
                 </div>
             {% else %}
@@ -375,7 +274,8 @@
                         <div class="header">{{ i.1 }}</div>
                         <p>{{ i.2 }}</p>
                     </div>
-                    <button class="ui button" value="global_notice{{ forloop.counter0 }}" onclick="showModal(this)">详情
+                    <button class="ui button" value="global_notice{{ forloop.counter0 }}"
+                            onclick="showModal(this)">详情
                     </button>
                 </div>
             {% endifequal %}
@@ -424,6 +324,9 @@
                                             <tr>
                                                 <td class="two wide">{{ j.4 }}</td>
                                                 <td>{{ j.5 }}楼</td>
+                                                <td class="collapsing">
+                                                    <div class="ui right floated tiny button">删除</div>
+                                                </td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -451,6 +354,9 @@
                                             <tr>
                                                 <td class="two wide">{{ j.4 }}</td>
                                                 <td>{{ j.5 }}楼</td>
+                                                <td class="collapsing">
+                                                    <div class="ui right floated tiny button">删除</div>
+                                                </td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -472,7 +378,7 @@
         <div class="ui container" style='width: 80%;' id="container2">
             <div class="ui form">
                 <div class="field">
-                    <label>发表留言：</label>
+                    <h3>发表留言：</h3>
                     <textarea rows="8" id="reply_text"></textarea>
                 </div>
                 <button class="ui button" onclick="reply()">发表</button>
@@ -518,6 +424,20 @@
         </div>
     </div>
 
+</div>
+<div class="ui small basic modal" id="del_class">
+    <i class="close icon"></i>
+    <div class="header">
+        您确定要删除此班级吗？（注意：此操作不可逆!)
+    </div>
+    <div class="actions">
+        <div class="ui red button" onclick="confirm_del_class()">
+            确定
+        </div>
+        <div class="ui green button" onclick="HideModal()">
+            取消
+        </div>
+    </div>
 </div>
 </body>
 
