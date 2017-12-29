@@ -154,5 +154,9 @@ def new_hw(request):
     return render(request, 'teacher/new_hw.html')
 
 
+def mark_hw(request):
+    return render(request, 'teacher/mark_hw.html')
+
+
 def teacher_forum(request):
     return render(request, 'teacher/teacher_forum.html')

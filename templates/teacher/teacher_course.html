@@ -7,8 +7,7 @@
     <title>教学服务系统</title>
     <!-- 使用本地的样式与js文件 -->
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
-
+    <script type="text/javascript" src="{% static 'bootstrap-4.0.0-alpha.6-dist/js/bootstrap.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'Semantic-UI-master/dist/semantic.min.css' %}">
     <script type="text/javascript" src="{% static 'Semantic-UI-master/dist/semantic.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/tab.css' %}">
@@ -28,6 +27,11 @@
                 dimPage: false,
                 closable: false
             });
+            //处理bootstrap的tab点击，有bug
+            $('[data-toggle="tab"]').click(function () {
+                $('[data-toggle="tab"]').removeClass('active');
+                $(this).parent('li').addClass('active');
+            })
         });
 
         //显示侧边栏
@@ -67,6 +71,7 @@
             else
                 return false;
         }
+
         //处理bootstrap tab点击
         $('[data-toggle="tab"]').click(function () {
             $('[data-toggle="tab"]').removeClass('active');
@@ -326,7 +331,7 @@
         <div class="ui container" style="width: 91%">
             <div class="ui secondary small breadcrumb borderless visible menu">
                 <a class="item" onclick="hide_left()" id="menu1">
-                    软件需求工程
+                    浙江大学教学服务系统
                     <span>
                             <i class="right chevron icon divider"></i>
                         </span>

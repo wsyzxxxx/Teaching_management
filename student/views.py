@@ -175,7 +175,11 @@ def course(request):
 
 
 def hw(request):
-    return render(request, 'student/student_hw.html')
+    #提交记录显示某次提交或保存的时间，保存为0，提交为1
+    SubmitRecord = [['2017/12/12, 20:00:00', 0],
+                    ['2017/12/13, 20:00:00', 0],
+                    ['2017/12/14, 20:00:00', 1]]
+    return render(request, 'student/student_hw.html', {'SubmitRecord': SubmitRecord})
 
 
 def forum(request):
