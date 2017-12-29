@@ -175,7 +175,7 @@ def course(request):
 
 
 def hw(request):
-    #提交记录显示某次提交或保存的时间，保存为0，提交为1
+    # 提交记录显示某次提交或保存的时间，保存为0，提交为1
     SubmitRecord = [['2017/12/12, 20:00:00', 0],
                     ['2017/12/13, 20:00:00', 0],
                     ['2017/12/14, 20:00:00', 1]]
@@ -184,6 +184,46 @@ def hw(request):
 
 def forum(request):
     return render(request, 'student/student_forum.html')
+
+
+def student_resource_comment(request):
+    tmp = []
+    ResourceName = 'uml.pdf'  #对应资源的名称
+    CommentList = [['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                   '2017/12/12, 20:00:00', '1'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                   '2017/12/12, 20:00:00', '2'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+                   '2017/12/12, 20:00:00', '3'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+                   '2017/12/12, 20:00:00', '4'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                   '2017/12/12, 20:00:00', '5'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                   '2017/12/12, 20:00:00', '6'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+                   '2017/12/12, 20:00:00', '7'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+                   '2017/12/12, 20:00:00', '7'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                   '2017/12/12, 20:00:00', '9'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                   '2017/12/12, 20:00:00', '10'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+                   '2017/12/12, 20:00:00', '11'],
+                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+                   '2017/12/12, 20:00:00', '12'],
+                  ]
+    CommentPage = Paginator(CommentList, 10)
+    CommentPaginator = []
+    for i in range(1, CommentPage.num_pages + 1):
+        for j in CommentPage.page(i):
+            tmp.append(CommentPage.page(i))
+        CommentPaginator.append(tmp)
+        tmp = []
+    return render(request, 'student/student_resource_comment.html', {'ResourceName': ResourceName,
+                                                                     'CommentPage': CommentPage,
+                                                                     'CommentPaginator': CommentPaginator})
 
 
 def ret(request):
