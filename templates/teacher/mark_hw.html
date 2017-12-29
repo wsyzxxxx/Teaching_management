@@ -27,6 +27,7 @@
                 $(".tab").removeClass("active");
                 $(".tab[data-tab=\"" + tab + "\"]").addClass("active");
             });
+            $('.ui .dropdown').dropdown();
         });
 
         //通过button的value来定位对应的modal的id，实现modal.show
@@ -255,11 +256,15 @@
             <a class="active item" data-tab="hw_list" id="hw_tab">作业内容</a>
             <a class="item" data-tab="record" id="record_tab">提交记录</a>
             <div class="right menu">
-                <div class="ui right aligned category search item">
-                    <div class="ui icon input">
-                        <input class="prompt" type="text" placeholder="搜索课程或教师">
+                <div class="ui action input">
+                    <select class="ui compact selection dropdown">
+                        <option selected="" value="courses">课程</option>
+                        <option value="teachers">教师</option>
+                    </select>
+                    <input class="prompt" type="text" placeholder="搜索课程或教师">
+                    <button class="ui icon button">
                         <i class="search icon"></i>
-                    </div>
+                    </button>
                 </div>
             </div>
             <a class="item" href="http://127.0.0.1:8000/index/student_courses">返回</a>

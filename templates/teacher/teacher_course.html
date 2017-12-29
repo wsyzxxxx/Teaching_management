@@ -62,8 +62,8 @@
                 return '课程作业';
             else if (tab === 'message')
                 return '课程通知';
-            else if (tab === 'teacher_list')
-                return '教师信息';
+            else if (tab === 'student_list')
+                return '选课名单';
             else if (tab === 'forum')
                 return '课程论坛';
             else if (tab === 'resources')
@@ -189,9 +189,9 @@
                 second_item.innerHTML = '课程通知';
             }
             else if (tab === '4') {
-                $('.ui .item[data-tab=teacher_list]').addClass('active');
-                $('.tab[data-tab=teacher_list]').addClass('active');
-                second_item.innerHTML = '教师信息';
+                $('.ui .item[data-tab=student_list]').addClass('active');
+                $('.tab[data-tab=student_list]').addClass('active');
+                second_item.innerHTML = '选课名单';
             }
             else if (tab === '5') {
                 $('.ui .item[data-tab=forum]').addClass('active');
@@ -292,6 +292,8 @@
 
         <a class="active item" data-tab="syllabus">
             <i class="home icon"></i>课程大纲</a>
+        <a class="item" data-tab="student_list">
+            <i class="comments outline icon"></i>选课名单</a>
         <a class="item" data-tab="homework">
             <i class="file text outline icon"></i>
             <div class="ui red label">{{ unsubmitHw }}</div>
@@ -338,11 +340,15 @@
                 </a>
                 <a class="item" id="second_item"></a>
                 <div class="right menu">
-                    <div class="ui search">
-                        <div class="ui icon input">
-                            <input class="prompt" type="text" placeholder="搜索课程或教师">
+                    <div class="ui action input">
+                        <select class="ui compact selection dropdown">
+                            <option selected="" value="courses">课程</option>
+                            <option value="teachers">教师</option>
+                        </select>
+                        <input class="prompt" type="text" placeholder="搜索课程或教师">
+                        <button class="ui icon button">
                             <i class="search icon"></i>
-                        </div>
+                        </button>
                     </div>
                 </div>
                 <a class="item">退出</a>
@@ -573,7 +579,8 @@
                                         {% for i in foo|slice:":1" %}
                                             {% for j in i %}
                                                 <tr>
-                                                    <td class="collapsing"><a href="teacher_resource_comment">{{ j.0 }}</a></td>
+                                                    <td class="collapsing"><a
+                                                            href="teacher_resource_comment">{{ j.0 }}</a></td>
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="collapsing">
@@ -604,7 +611,8 @@
                                         {% for i in foo|slice:":1" %}
                                             {% for j in i %}
                                                 <tr>
-                                                    <td class="collapsing"><a href="teacher_resource_comment">{{ j.0 }}</a></td>
+                                                    <td class="collapsing"><a
+                                                            href="teacher_resource_comment">{{ j.0 }}</a></td>
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="right allgn collapsing">
@@ -649,7 +657,8 @@
                                         {% for i in foo|slice:":1" %}
                                             {% for j in i %}
                                                 <tr>
-                                                    <td class="collapsing"><a href="teacher_resource_comment">{{ j.0 }}</a></td>
+                                                    <td class="collapsing"><a
+                                                            href="teacher_resource_comment">{{ j.0 }}</a></td>
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="collapsing">
@@ -680,7 +689,8 @@
                                         {% for i in foo|slice:":1" %}
                                             {% for j in i %}
                                                 <tr>
-                                                    <td class="collapsing"><a href="teacher_resource_comment">{{ j.0 }}</a></td>
+                                                    <td class="collapsing"><a
+                                                            href="teacher_resource_comment">{{ j.0 }}</a></td>
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="collapsing">
@@ -725,7 +735,8 @@
                                         {% for i in foo|slice:":1" %}
                                             {% for j in i %}
                                                 <tr>
-                                                    <td class="collapsing"><a href="teacher_resource_comment">{{ j.0 }}</a></td>
+                                                    <td class="collapsing"><a
+                                                            href="teacher_resource_comment">{{ j.0 }}</a></td>
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="collapsing">
@@ -756,7 +767,8 @@
                                         {% for i in foo|slice:":1" %}
                                             {% for j in i %}
                                                 <tr>
-                                                    <td class="collapsing"><a href="teacher_resource_comment">{{ j.0 }}</a></td>
+                                                    <td class="collapsing"><a
+                                                            href="teacher_resource_comment">{{ j.0 }}</a></td>
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="right allgn collapsing">
@@ -801,7 +813,8 @@
                                         {% for i in foo|slice:":1" %}
                                             {% for j in i %}
                                                 <tr>
-                                                    <td class="collapsing"><a href="teacher_resource_comment">{{ j.0 }}</a></td>
+                                                    <td class="collapsing"><a
+                                                            href="teacher_resource_comment">{{ j.0 }}</a></td>
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="right allgn collapsing">
@@ -832,7 +845,8 @@
                                         {% for i in foo|slice:":1" %}
                                             {% for j in i %}
                                                 <tr>
-                                                    <td class="collapsing"><a href="teacher_resource_comment">{{ j.0 }}</a></td>
+                                                    <td class="collapsing"><a
+                                                            href="teacher_resource_comment">{{ j.0 }}</a></td>
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="right allgn collapsing">
@@ -861,6 +875,54 @@
                 <button class="ui left floated blue button" onclick="shangchuan()">上传</button>
             </div>
 
+        </div>
+    </div>
+    <!--学生列表tab-->
+    <div class="ui bottom attached tab" data-tab="student_list" style="min-height: 571px">
+        <div class="ui container" style="width: 70%;">
+            <table class="ui large table" id="student_list">
+                <thead>
+                <tr>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>年级</th>
+                    <th>学院</th>
+                    <th>专业</th>
+                    <th>电子邮箱</th>
+                    <th>联系方式</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="list">
+                {% for foo in StudentList %}
+                    <tr>
+                        <td>{{ foo.0 }}</td>
+                        <td>{{ foo.1 }}</td>
+                        <td>{{ foo.2 }}</td>
+                        <td>{{ foo.3 }}</td>
+                        <td>{{ foo.4 }}</td>
+                        <td>{{ foo.5 }}</td>
+                        <td>{{ foo.6 }}</td>
+                        <td class="collapsing">
+                            <button class="ui button" onclick="window.location.href='message'">发送私信</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>总人数：{{ StudentNum }}</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </tfoot>
+            </table>
         </div>
     </div>
     <!--友情链接-->

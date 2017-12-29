@@ -112,11 +112,15 @@
                 <a class="item" href="student_courses?6">课程主页</a>
                 <a class="active item" data-tab="Comment" id="comment_tab">评论详情</a>
                 <div class="right menu">
-                    <div class="ui right aligned category search item">
-                        <div class="ui icon input">
-                            <input class="prompt" type="text" placeholder="搜索课程或教师">
+                    <div class="ui action input">
+                        <select class="ui compact selection dropdown">
+                            <option selected="" value="courses">课程</option>
+                            <option value="teachers">教师</option>
+                        </select>
+                        <input class="prompt" type="text" placeholder="搜索课程或教师">
+                        <button class="ui icon button">
                             <i class="search icon"></i>
-                        </div>
+                        </button>
                     </div>
                 </div>
                 <a class="item" href="http://127.0.0.1:8000/index/student_courses">返回</a>
@@ -130,7 +134,7 @@
     <div class="ui bottom attached active tab" data-tab="Comment" style="min-height: 568px">
         <div class="ui container" style="width: 63%;">
             <h3 class="ui block header" id="tittle_h3">
-            对{{ ResourceName }}的评论：
+                对{{ ResourceName }}的评论：
             </h3>
             <div class="tab-pane fade in active">
                 <div class="tab-content">

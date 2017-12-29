@@ -185,6 +185,11 @@
         function shangchuan() {
 
         }
+
+        //发送私信
+        function send_mesage() {
+            window.location.href = 'message';
+        }
     </script>
 </head>
 
@@ -243,11 +248,15 @@
                 </a>
                 <a class="item" id="second_item"></a>
                 <div class="right menu">
-                    <div class="ui search">
-                        <div class="ui icon input">
-                            <input class="prompt" type="text" placeholder="搜索课程或教师">
+                    <div class="ui action input">
+                        <select class="ui compact selection dropdown">
+                            <option selected="" value="courses">课程</option>
+                            <option value="teachers">教师</option>
+                        </select>
+                        <input class="prompt" type="text" placeholder="搜索课程或教师">
+                        <button class="ui icon button">
                             <i class="search icon"></i>
-                        </div>
+                        </button>
                     </div>
                 </div>
                 <a class="item">退出</a>
@@ -358,7 +367,7 @@
                                 <button class="ui basic green button" value="teacher{{ forloop.counter0 }}"
                                         onclick="showModal(this)">详细信息
                                 </button>
-                                <button class="ui basic blue button">发送私信</button>
+                                <button class="ui basic blue button" onclick="send_mesage()">发送私信</button>
                             </div>
                         </div>
                     </div>
@@ -530,7 +539,8 @@
                                         {% for i in foo|slice:":1" %}
                                             {% for j in i %}
                                                 <tr>
-                                                    <td class="collapsing"><a href="student_resource_comment">{{ j.0 }}</a></td>
+                                                    <td class="collapsing"><a
+                                                            href="student_resource_comment">{{ j.0 }}</a></td>
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="right allgn collapsing">
@@ -557,7 +567,8 @@
                                         {% for i in foo|slice:":1" %}
                                             {% for j in i %}
                                                 <tr>
-                                                    <td class="collapsing"><a href="student_resource_comment">{{ j.0 }}</a></td>
+                                                    <td class="collapsing"><a
+                                                            href="student_resource_comment">{{ j.0 }}</a></td>
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="right allgn collapsing">
@@ -570,7 +581,6 @@
                                     </table>
                                 </div>
                             {% endifequal %}
-
                         {% endfor %}
                     </div>
                     <div class="ui hidden divider"></div>
@@ -598,7 +608,8 @@
                                         {% for i in foo|slice:":1" %}
                                             {% for j in i %}
                                                 <tr>
-                                                    <td class="collapsing"><a href="student_resource_comment">{{ j.0 }}</a></td>
+                                                    <td class="collapsing"><a
+                                                            href="student_resource_comment">{{ j.0 }}</a></td>
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="right allgn collapsing">
@@ -625,7 +636,8 @@
                                         {% for i in foo|slice:":1" %}
                                             {% for j in i %}
                                                 <tr>
-                                                    <td class="collapsing"><a href="student_resource_comment">{{ j.0 }}</a></td>
+                                                    <td class="collapsing"><a
+                                                            href="student_resource_comment">{{ j.0 }}</a></td>
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="right allgn collapsing">
@@ -666,7 +678,8 @@
                                         {% for i in foo|slice:":1" %}
                                             {% for j in i %}
                                                 <tr>
-                                                    <td class="collapsing"><a href="student_resource_comment">{{ j.0 }}</a></td>
+                                                    <td class="collapsing"><a
+                                                            href="student_resource_comment">{{ j.0 }}</a></td>
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="right allgn collapsing">
@@ -693,7 +706,8 @@
                                         {% for i in foo|slice:":1" %}
                                             {% for j in i %}
                                                 <tr>
-                                                    <td class="collapsing"><a href="student_resource_comment">{{ j.0 }}</a></td>
+                                                    <td class="collapsing"><a
+                                                            href="student_resource_comment">{{ j.0 }}</a></td>
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="right allgn collapsing">
@@ -734,7 +748,8 @@
                                         {% for i in foo|slice:":1" %}
                                             {% for j in i %}
                                                 <tr>
-                                                    <td class="collapsing"><a href="student_resource_comment">{{ j.0 }}</a></td>
+                                                    <td class="collapsing"><a
+                                                            href="student_resource_comment">{{ j.0 }}</a></td>
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="right allgn collapsing">
@@ -761,7 +776,8 @@
                                         {% for i in foo|slice:":1" %}
                                             {% for j in i %}
                                                 <tr>
-                                                    <td class="collapsing"><a href="student_resource_comment">{{ j.0 }}</a></td>
+                                                    <td class="collapsing"><a
+                                                            href="student_resource_comment">{{ j.0 }}</a></td>
                                                     <td class="collapsing">{{ j.1 }}</td>
                                                     <td>{{ j.2 }}</td>
                                                     <td class="right allgn collapsing">

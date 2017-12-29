@@ -16,13 +16,13 @@ def index(request):
         if i[0] == '0':
             unreadGlobalNotice += 1
     # 课程表，应统计每门课程未读通知、未完成作业、未阅读课件的数量
-    CoursesList = [['软件需求工程', ['邢卫', '刘玉生'], '周一6，7，8', '专业课', '2', '1', '1'],
-                   ['操作系统原理', ['伍赛'], '周一6，7，8', '专业课', '1', '2', '2'],
-                   ['软件工程管理', ['金波'], '周一6，7，8', '专业课', '1', '3', '3'],
-                   ['计算机网络', ['陆魁军'], '周一6，7，8', '专业课', '0', '4', ' 2'],
-                   ['计算机网络', ['陆魁军'], '周一6，7，8', '专业课', '0', '5', '3'],
-                   ['计算机网络', ['陆魁军'], '周一6，7，8', '专业课', '0', '6', '3'],
-                   ['计算机网络', ['陆魁军'], '周一6，7，8', '专业课', '0', '7', '5'], ]
+    CoursesList = [['软件需求工程', ['邢卫', '刘玉生'], ['周一6，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '2', '1', '1'],
+                   ['操作系统原理', ['伍赛'], ['周一6，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '1', '2', '2'],
+                   ['软件工程管理', ['金波'], ['周一，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '1', '3', '3'],
+                   ['计算机网络', ['陆魁军'], ['周一6，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '0', '4', ' 2'],
+                   ['计算机网络', ['陆魁军'], ['周一，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '0', '5', '3'],
+                   ['计算机网络', ['陆魁军'], ['周一，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '0', '6', '3'],
+                   ['计算机网络', ['陆魁军'], ['周一6，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '0', '7', '5'], ]
     liuyanList = [['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
                    '2017/12/12, 20:00:00', '1'],
                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
@@ -183,7 +183,43 @@ def hw(request):
 
 
 def forum(request):
-    return render(request, 'student/student_forum.html')
+    tmp = []
+    PostName = '摸鱼求约'  # 对应资源的名称
+    PostList = [['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                 '2017/12/12, 20:00:00', '1'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                 '2017/12/12, 20:00:00', '2'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+                 '2017/12/12, 20:00:00', '3'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+                 '2017/12/12, 20:00:00', '4'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                 '2017/12/12, 20:00:00', '5'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                 '2017/12/12, 20:00:00', '6'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+                 '2017/12/12, 20:00:00', '7'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+                 '2017/12/12, 20:00:00', '7'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                 '2017/12/12, 20:00:00', '9'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                 '2017/12/12, 20:00:00', '10'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+                 '2017/12/12, 20:00:00', '11'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+                 '2017/12/12, 20:00:00', '12'],
+                ]
+    PostPage = Paginator(PostList, 10)
+    PostPaginator = []
+    for i in range(1, PostPage.num_pages + 1):
+        for j in PostPage.page(i):
+            tmp.append(PostPage.page(i))
+        PostPaginator.append(tmp)
+        tmp = []
+    return render(request, 'student/student_forum.html', {'PostPage': PostPage,
+                                                          'PostPaginator': PostPaginator,
+                                                          'PostName': PostName})
 
 
 def student_resource_comment(request):
@@ -225,6 +261,12 @@ def student_resource_comment(request):
                                                                      'CommentPage': CommentPage,
                                                                      'CommentPaginator': CommentPaginator})
 
+def message(request):
+    name = '吴朝晖'  #私信的对象
+    History = [['/static/img/kk.png', '吴朝晖', '2017/12/12, 20:00:00', '网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起'],
+               ['/static/img/zju.jpg', '王泽杰', '2017/12/14, 20:00:00', '不去']]
+    return render(request, 'student/message.html', {'name': name,
+                                                    'History': History})
 
 def ret(request):
-    return render(request, 'login.html')
+    return render(request, 'tmp.html')

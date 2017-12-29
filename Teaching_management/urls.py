@@ -19,6 +19,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.login),
+    url(r'^register/', views.register),
     url(r'^index/', include('student.urls')),
     url(r'^t_index/', include('teacher.urls')),
     url(r'^a_index/', include('administrator.urls')),

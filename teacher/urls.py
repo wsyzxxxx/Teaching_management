@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^new_hw', views.new_hw, name='new_hw'),
     url(r'^mark_hw', views.mark_hw, name='mark_hw'),
     url(r'^teacher_forum', views.teacher_forum, name='teacher_forum'),
-    url(r'^teacher_resource_comment', views.teacher_resource_comment, name='teacher_resource_comment')
+    url(r'^teacher_resource_comment', views.teacher_resource_comment, name='teacher_resource_comment'),
+    url(r'^message', views.message, name='teacher_message'),
 ]

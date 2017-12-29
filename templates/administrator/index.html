@@ -74,10 +74,12 @@
             else
                 return false;
         }
+
         //是否删除班级
         function if_del_class() {
             $('#del_class').modal('setting', 'closable', false).modal('show');
         }
+
         //确认删除班级
         function confirm_del_class() {
             alert('删除成功');
@@ -128,11 +130,15 @@
                 </a>
                 <a class="item" id="second_item">课程管理</a>
                 <div class="right menu">
-                    <div class="ui right aligned category search item">
-                        <div class="ui icon input">
-                            <input class="prompt" type="text" placeholder="搜索课程或教师">
+                    <div class="ui action input">
+                        <select class="ui compact selection dropdown">
+                            <option selected="" value="courses">课程</option>
+                            <option value="teachers">教师</option>
+                        </select>
+                        <input class="prompt" type="text" placeholder="搜索课程或教师">
+                        <button class="ui icon button">
                             <i class="search icon"></i>
-                        </div>
+                        </button>
                     </div>
                 </div>
                 <a class="item" href="http://127.0.0.1:8000">退出</a>

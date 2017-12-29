@@ -152,11 +152,15 @@
                 </a>
                 <a class="item" id="second_item">课程表</a>
                 <div class="right menu">
-                    <div class="ui right aligned category search item">
-                        <div class="ui icon input">
-                            <input class="prompt" type="text" placeholder="搜索课程或教师">
+                    <div class="ui action input">
+                        <select class="ui compact selection dropdown">
+                            <option selected="" value="courses">课程</option>
+                            <option value="teachers">教师</option>
+                        </select>
+                        <input class="prompt" type="text" placeholder="搜索课程或教师">
+                        <button class="ui icon button">
                             <i class="search icon"></i>
-                        </div>
+                        </button>
                     </div>
                 </div>
                 <a class="item">退出</a>
@@ -314,6 +318,7 @@
                     <th class="center aligned two wide">课程名称</th>
                     <th class="center aligned two wide">课程教师</th>
                     <th class="center aligned two wide">上课时间</th>
+                    <th class="center aligned two wide">上课地点</th>
                     <th class="center aligned two wide">课程类别</th>
                     <th colspan="2" class="center aligned four wide">待办事项</th>
                 </tr>
@@ -329,24 +334,33 @@
                                 <p>{{ i }}</p>
                             {% endfor %}
                         </td>
-                        <td rowspan="3" class="center aligned">{{ foo.2 }}</td>
-                        <td rowspan="3" class="center aligned">{{ foo.3 }}</td>
+                        <td rowspan="3" class="center aligned">
+                            {% for i in foo.2 %}
+                                <p>{{ i }}</p>
+                            {% endfor %}
+                        </td>
+                        <td rowspan="3" class="center aligned">
+                            {% for i in foo.3 %}
+                                <p>{{ i }}</p>
+                            {% endfor %}
+                        </td>
+                        <td rowspan="3" class="center aligned">{{ foo.4 }}</td>
                         <td class="center aligned">
                             <div class="ui header">未读通知</div>
                         </td>
-                        <td>{{ foo.4 }}</td>
+                        <td>{{ foo.5 }}</td>
                     </tr>
                     <tr>
                         <td class="center aligned">
                             <div class="ui header">未完成作业</div>
                         </td>
-                        <td>{{ foo.5 }}</td>
+                        <td>{{ foo.6 }}</td>
                     </tr>
                     <tr>
                         <td class="center aligned two wide">
                             <div class="ui header">未阅读课件</div>
                         </td>
-                        <td>{{ foo.6 }}</td>
+                        <td>{{ foo.7 }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -357,9 +371,9 @@
 
     <!--全局消息tab-->
     <div class="ui bottom attached tab" data-tab="message" style="min-height: 568px">
-        <div class="ui container" style="width: 90%">
+        <div class="ui container" style="width: 70%">
             {% for i in GlobalNoticeList %} {% ifequal i.0 '0' %}
-                <div class="ui icon red message" style="width: 50%">
+                <div class="ui icon red message">
                     <i class="inbox icon"></i>
                     <div class="content">
                         <div class="header">{{ i.1 }}</div>
@@ -369,7 +383,7 @@
                     </button>
                 </div>
             {% else %}
-                <div class="ui icon message" style="width: 50%">
+                <div class="ui icon message">
                     <i class="inbox icon"></i>
                     <div class="content">
                         <div class="header">{{ i.1 }}</div>
