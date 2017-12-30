@@ -5,8 +5,11 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import auth
 
 def teachercheck(user):
-    if user.userinfo.user_type == 2:
-        return True
+    try:
+        if user.userinfo.user_type == 2:
+            return True
+    except:
+        return False
     return False
 
 # Create your views here.

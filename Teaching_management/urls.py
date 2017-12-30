@@ -20,11 +20,11 @@ from . import views
 urlpatterns = [
     url(r'^$', views.login),
     url(r'^login', views.login),
-    url(r'^register/', views.register),
+    url(r'^register', views.register),
     url(r'^student/', include('student.urls')),
     url(r'^ta/', include('ta.urls')),
     url(r'^teacher/', include('teacher.urls')),
     url(r'^administrater/', include('administrator.urls')),
     url(r'^visitor/', include('visitor.urls')),
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin', admin.site.urls),
 ]

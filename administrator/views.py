@@ -6,8 +6,11 @@ from django.contrib import auth
 
 
 def admincheck(user):
-    if user.userinfo.user_type == 3:
-        return True
+    try:
+        if user.userinfo.user_type == 3:
+            return True
+    except:
+        return False
     return False
 
 

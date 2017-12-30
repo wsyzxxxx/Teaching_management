@@ -1,12 +1,15 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import auth
 
 def studentcheck(user):
-    if user.userinfo.user_type == 1:
-        return True
+    try:
+        if user.userinfo.user_type == 1:
+            return True
+    except:
+        return False
     return False
 
 # Create your views here.
