@@ -52,7 +52,7 @@ def index(request):
             tmp.append(liuyanPage.page(i))
         liuyanPaginator.append(tmp)
         tmp = []
-    return render(request, 'teacher/index.html', {'GlobalNoticeList': GlobalNoticeList,
+    return render(request, 'ta/index.html', {'GlobalNoticeList': GlobalNoticeList,
                                                   'unreadGlobalNotice': unreadGlobalNotice,
                                                   'CoursesList': CoursesList,
                                                   'liuyanPage': liuyanPage, 'liuyanPaginator': liuyanPaginator})
@@ -136,15 +136,12 @@ def course(request):
             tmp.append(OthersPage.page(i))
             OthersPaginator.append(tmp)
         tmp = []
-    StudentNum = 50  # 本班学生总数
+    StudentNum = 50 #本班学生总数
     StudentList = [['315010', '王泽杰', '2015', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'],
                    ['315010', '王泽杰', '2015', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'],
                    ['315010', '王泽杰', '2015', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'],
-                   ['315010', '王泽杰', '2015', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'], ]
-    TaList = [['315010', '王泽杰', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'],
-              ['315010', '王泽杰', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'],
-              ['315010', '王泽杰', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'],]
-    return render(request, 'teacher/teacher_course.html', {'PostList': PostList,
+                   ['315010', '王泽杰', '2015', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'],]
+    return render(request, 'ta/ta_course.html', {'PostList': PostList,
                                                            'NoticeList': NoticeList, 'unreadNotice': unreadNotice,
                                                            'HwList': HwList, 'unsubmitHw': unsubmitHw,
                                                            'PPTPage': PPTPage, 'PPTPaginator': PPTPaginator,
@@ -152,60 +149,55 @@ def course(request):
                                                            'MediaPage': MediaPage, 'MediaPaginator': MediaPaginator,
                                                            'OthersPage': OthersPage,
                                                            'OthersPaginator': OthersPaginator,
-                                                           'StudentNum': StudentNum, 'StudentList': StudentList,
-                                                           'TaList': TaList})
+                                                           'StudentNum': StudentNum, 'StudentList': StudentList})
 
 
 def hw(request):
-    StudentNum = 50  # 学生总数
-    SubmitNum = 20  # 已提交人数
+    StudentNum = 50 #学生总数
+    SubmitNum = 20 #已提交人数
     return render(request, 'teacher/teacher_hw.html', {'StudentNum': StudentNum,
                                                        'SubmitNum': SubmitNum})
-
-
 def message(request):
-    History = [['/static/img/kk.png', '吴朝晖', '2017/12/12, 20:00:00',
-                '网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起'],
+    History = [['/static/img/kk.png', '吴朝晖', '2017/12/12, 20:00:00', '网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起'],
                ['/static/img/zju.jpg', '王泽杰', '2017/12/14, 20:00:00', '不去']]
-    return render(request, 'teacher/message.html', {'History': History})
-
+    return render(request, 'ta/message.html', {'History': History})
 
 def new_hw(request):
-    return render(request, 'teacher/new_hw.html')
+    return render(request, 'ta/new_hw.html')
 
 
 def mark_hw(request):
-    return render(request, 'teacher/mark_hw.html')
+    return render(request, 'ta/mark_hw.html')
 
 
-def teacher_forum(request):
+def ta_forum(request):
     tmp = []
     PostName = '摸鱼求约'  # 对应资源的名称
     PostList = [['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                 '2017/12/12, 20:00:00', '1'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                 '2017/12/12, 20:00:00', '2'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
-                 '2017/12/12, 20:00:00', '3'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
-                 '2017/12/12, 20:00:00', '4'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                 '2017/12/12, 20:00:00', '5'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                 '2017/12/12, 20:00:00', '6'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
-                 '2017/12/12, 20:00:00', '7'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
-                 '2017/12/12, 20:00:00', '7'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                 '2017/12/12, 20:00:00', '9'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                 '2017/12/12, 20:00:00', '10'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
-                 '2017/12/12, 20:00:00', '11'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
-                 '2017/12/12, 20:00:00', '12'],
-                ]
+                    '2017/12/12, 20:00:00', '1'],
+                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                    '2017/12/12, 20:00:00', '2'],
+                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+                    '2017/12/12, 20:00:00', '3'],
+                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+                    '2017/12/12, 20:00:00', '4'],
+                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                    '2017/12/12, 20:00:00', '5'],
+                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                    '2017/12/12, 20:00:00', '6'],
+                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+                    '2017/12/12, 20:00:00', '7'],
+                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+                    '2017/12/12, 20:00:00', '7'],
+                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                    '2017/12/12, 20:00:00', '9'],
+                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                    '2017/12/12, 20:00:00', '10'],
+                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+                    '2017/12/12, 20:00:00', '11'],
+                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+                    '2017/12/12, 20:00:00', '12'],
+                   ]
     PostPage = Paginator(PostList, 10)
     PostPaginator = []
     for i in range(1, PostPage.num_pages + 1):
@@ -213,12 +205,12 @@ def teacher_forum(request):
             tmp.append(PostPage.page(i))
         PostPaginator.append(tmp)
         tmp = []
-    return render(request, 'teacher/teacher_forum.html', {'PostPage': PostPage,
+    return render(request, 'ta/ta_forum.html', {'PostPage': PostPage,
                                                           'PostPaginator': PostPaginator,
                                                           'PostName': PostName})
 
 
-def teacher_resource_comment(request):
+def ta_resource_comment(request):
     tmp = []
     ResourceName = 'uml.pdf'  # 对应资源的名称
     CommentList = [['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
@@ -253,9 +245,6 @@ def teacher_resource_comment(request):
             tmp.append(CommentPage.page(i))
         CommentPaginator.append(tmp)
         tmp = []
-    return render(request, 'teacher/teacher_resource_comment.html', {'ResourceName': ResourceName,
+    return render(request, 'ta/ta_resource_comment.html', {'ResourceName': ResourceName,
                                                                      'CommentPage': CommentPage,
                                                                      'CommentPaginator': CommentPaginator})
-
-def addta(request):
-    return render(request, 'teacher/add_ta.html')

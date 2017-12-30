@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^register/', views.register),
     url(r'^index/', include('student.urls')),
     url(r'^t_index/', include('teacher.urls')),
+    url(r'^ta_index/', include('ta.urls')),
     url(r'^a_index/', include('administrator.urls')),
     url(r'^v_index/', include('visitor.urls')),
     url(r'^admin/', admin.site.urls),
