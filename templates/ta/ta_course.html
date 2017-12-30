@@ -63,8 +63,6 @@
                 return '课程通知';
             else if (tab === 'student_list')
                 return '选课名单';
-            else if (tab === 'ta_list')
-                return '助教信息';
             else if (tab === 'forum')
                 return '课程论坛';
             else if (tab === 'resources')
@@ -204,11 +202,6 @@
                 $('.tab[data-tab=resources]').addClass('active');
                 second_item.innerHTML = '课程资源';
             }
-            else if (tab === '7') {
-                $('.ui .item[data-tab=ta_list]').addClass('active');
-                $('.tab[data-tab=ta_list]').addClass('active');
-                second_item.innerHTML = '助教信息';
-            }
             else {
                 $('.ui .item[data-tab=syllabus]').addClass('active');
                 $('.tab[data-tab=syllabus]').addClass('active');
@@ -289,21 +282,6 @@
             alert('删除成功');
             $('#del_res_modal').modal('hide');
         }
-
-        //是否删除助教
-        function if_del_ta() {
-            $('#del_ta_modal').modal('show').modal('setting', 'closable', false);
-        }
-
-        //确定删除助教
-        function confirm_del_ta() {
-            alert('删除成功');
-            HideModal();
-        }
-        //添加助教
-        function add_ta() {
-            window.location.href = 'add_ta'
-        }
     </script>
 </head>
 
@@ -315,8 +293,6 @@
             <i class="home icon"></i>课程大纲</a>
         <a class="item" data-tab="student_list">
             <i class="comments outline icon"></i>选课名单</a>
-        <a class="item" data-tab="ta_list">
-            <i class="comments outline icon"></i>助教信息</a>
         <a class="item" data-tab="homework">
             <i class="file text outline icon"></i>
             <div class="ui red label">{{ unsubmitHw }}</div>
@@ -948,41 +924,6 @@
             </table>
         </div>
     </div>
-    <!--助教列表tab-->
-    <div class="ui bottom attached tab" data-tab="ta_list" style="min-height: 571px">
-        <div class="ui container" style="width: 70%;">
-            <table class="ui large table" id="ta_list">
-                <thead>
-                <tr>
-                    <th>学号</th>
-                    <th>姓名</th>
-                    <th>学院</th>
-                    <th>专业</th>
-                    <th>电子邮箱</th>
-                    <th>联系方式</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody id="talist">
-                {% for foo in TaList %}
-                    <tr>
-                        <td>{{ foo.0 }}</td>
-                        <td>{{ foo.1 }}</td>
-                        <td>{{ foo.2 }}</td>
-                        <td>{{ foo.3 }}</td>
-                        <td>{{ foo.4 }}</td>
-                        <td>{{ foo.5 }}</td>
-                        <td class="right aligned collapsing">
-                            <button class="ui button" onclick="if_del_ta()">删除助教</button>
-                        </td>
-                    </tr>
-                {% endfor %}
-
-                </tbody>
-            </table>
-            <button class="ui button" onclick="add_ta()">添加助教</button>
-        </div>
-    </div>
     <!--友情链接-->
     <div class="ui footer basic segment" style="background-color: #E0E0E0;">
         <div class="ui center aligned container">
@@ -1076,21 +1017,6 @@
     </div>
     <div class="actions">
         <div class="ui red button" onclick="confirm_del_res()">
-            确定
-        </div>
-        <div class="ui green button" onclick="HideModal()">
-            取消
-        </div>
-    </div>
-</div>
-
-<div class="ui small basic modal" id="del_ta_modal">
-    <i class="close icon"></i>
-    <div class="header">
-        您确定要删除此助教吗？（注意：此操作不可逆!)
-    </div>
-    <div class="actions">
-        <div class="ui red button" onclick="confirm_del_ta()">
             确定
         </div>
         <div class="ui green button" onclick="HideModal()">

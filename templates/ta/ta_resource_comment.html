@@ -75,13 +75,13 @@
                 return false;
         }
 
-        //是否删除班级
-        function if_del_class() {
-            $('#del_class').modal('setting', 'closable', false).modal('show');
+        //是否删除评论
+        function if_del_comment() {
+            $('#del_comment').modal('setting', 'closable', false).modal('show');
         }
 
-        //确认删除班级
-        function confirm_del_class() {
+        //确认删除评论
+        function confirm_del_comment() {
             alert('删除成功');
             HideModal();
         }
@@ -89,19 +89,10 @@
 </head>
 
 <body onload="init()">
-<!-- 左侧导航栏 -->
-<div style="background-color: #E0E0E0;" class="ui visible left overlay vertical small sidebar menu" id="left_sidebar">
-    <div class="ui container">
-        <a class="active item" data-tab="course_table">
-            <i class="table icon"></i>课程管理</a>
-        <a class="item" data-tab="liuyan">
-            <i class="edit icon"></i>留言板管理</a>
-    </div>
-</div>
 
-<div class="pusher" id="pusher" style="margin-left: 182px;">
+<div class="pusher" id="pusher">
     <!--顶部-->
-    <div class="ui container" style="width: 90%;margin-top: 10px">
+    <div class="ui container" style="width: 62%;margin-top: 10px">
         <div class="ui items">
             <div class="item">
                 <a class="ui tiny image">
@@ -113,17 +104,13 @@
             </div>
         </div>
     </div>
+    <div class="ui hidden divider"></div>
     <!--菜单栏-->
-    <div class="ui vertical masthead center aligned segment">
-        <div class="ui container" style="width: 91%">
-            <div class="ui secondary small breadcrumb borderless visible menu">
-                <a class="item" onclick="hide_left()" id="menu1">
-                    浙江大学教学服务系统
-                    <span>
-                            <i class="right chevron icon divider"></i>
-                        </span>
-                </a>
-                <a class="item" id="second_item">课程管理</a>
+    <div class="ui vertical masthead center aligned">
+        <div class="ui container" style="width: 63%">
+            <div class="ui attached small red visible menu">
+                <a class="item" href="teacher_courses?6">课程主页</a>
+                <a class="active item" data-tab="Comment" id="comment_tab">评论详情</a>
                 <div class="right menu">
                     <div class="ui action input">
                         <select class="ui compact selection dropdown">
@@ -136,139 +123,30 @@
                         </button>
                     </div>
                 </div>
+                <a class="item" href="http://127.0.0.1:8000/index/teacher_course">返回</a>
                 <a class="item" href="http://127.0.0.1:8000">退出</a>
             </div>
         </div>
     </div>
     <div class="ui hidden divider"></div>
 
-    <!--课表tab-->
-    <div class="ui bottom attached active tab" data-tab="course_table" style="min-height: 900px">
-        <div class="ui container" style="width: 80%">
+    <!--评论区tab-->
+    <div class="ui bottom attached active tab" data-tab="Comment" style="min-height: 568px">
+        <div class="ui container" style="width: 63%;">
+            <h3 class="ui block header" id="tittle_h3">
+                对{{ ResourceName }}的评论：
+            </h3>
             <div class="tab-pane fade in active">
                 <div class="tab-content">
-                    {% for f in CoursesPaginator %}
+                    {% for foo in CommentPaginator %}
                         {% ifequal forloop.counter0 0 %}
-                            <div class="tab-pane fade in active" id="courses{{ forloop.counter0 }}">
-                                <table class="ui celled structured table">
-                                    <thead>
-                                    <tr>
-                                        <th class="center aligned two wide">课程名称</th>
-                                        <th class="center aligned two wide">课程教师</th>
-                                        <th class="center aligned">上课时间</th>
-                                        <th class="center aligned">上课地点</th>
-                                        <th class="center aligned two wide">课程类别</th>
-                                        <th class="center aligned two wide">考试时间</th>
-                                        <th>删除</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for j in f|slice:"1" %}
-                                        {% for foo in j %}
-                                            <tr>
-                                                <td class="center aligned">
-                                                    <a href='administrator_courses'>{{ foo.0 }}</a>
-                                                </td>
-                                                <td class="center aligned">
-                                                    {% for i in foo.1 %}
-                                                        <p>{{ i }}</p>
-                                                    {% endfor %}
-                                                </td>
-                                                <td class="center aligned">
-                                                    {% for i in foo.2 %}
-                                                        <p>{{ i }}</p>
-                                                    {% endfor %}
-                                                </td>
-                                                <td class="center aligned">
-                                                    {% for i in foo.3 %}
-                                                        <p>{{ i }}</p>
-                                                    {% endfor %}
-                                                </td>
-                                                <td class="center aligned">{{ foo.4 }}</td>
-                                                <td class="center aligned">{{ foo.5 }}</td>
-                                                <td class="collapsing">
-                                                    <div class="ui button" onclick="if_del_class()">删除</div>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        {% else %}
-                            <div class="tab-pane fade" id="courses{{ forloop.counter0 }}">
-                                <table class="ui celled structured table">
-                                    <thead>
-                                    <tr>
-                                        <th class="center aligned two wide">课程名称</th>
-                                        <th class="center aligned two wide">课程教师</th>
-                                        <th class="center aligned">上课时间</th>
-                                        <th class="center aligned">上课地点</th>
-                                        <th class="center aligned two wide">课程类别</th>
-                                        <th class="center aligned two wide">考试时间</th>
-                                        <th>删除</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for j in f|slice:"1" %}
-                                        {% for foo in j %}
-                                            <tr>
-                                                <td class="center aligned">
-                                                    <a href='administrator_courses'>{{ foo.0 }}</a>
-                                                </td>
-                                                <td class="center aligned">
-                                                    {% for i in foo.1 %}
-                                                        <p>{{ i }}</p>
-                                                    {% endfor %}
-                                                </td>
-                                                <td class="center aligned">
-                                                    {% for i in foo.2 %}
-                                                        <p>{{ i }}</p>
-                                                    {% endfor %}
-                                                </td>
-                                                <td class="center aligned">
-                                                    {% for i in foo.3 %}
-                                                        <p>{{ i }}</p>
-                                                    {% endfor %}
-                                                </td>
-                                                <td class="center aligned">{{ foo.4 }}</td>
-                                                <td class="center aligned">{{ foo.5 }}</td>
-                                                <td class="collapsing">
-                                                    <div class="ui button" onclick="if_del_class()">删除</div>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        {% endifequal %}
-                    {% endfor %}
-                </div>
-                <div class="ui hidden divider"></div>
-                <div class="ui right floated pagination menu">
-                    {% for foo in CoursesPage.page_range %}
-                        <a data-toggle="tab" class="item" href="#courses{{ forloop.counter0 }}">{{ foo }}</a>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--留言板tab-->
-    <div class="ui bottom attached tab" data-tab="liuyan" style="min-height: 568px">
-        <div class="ui container" style="width: 80%;">
-            <div class="tab-pane fade in active">
-                <div class="tab-content">
-                    {% for foo in liuyanPaginator %}
-                        {% ifequal forloop.counter0 0 %}
-                            <div class="tab-pane fade in active" id="liuyanpage{{ forloop.counter0 }}">
+                            <div class="tab-pane fade in active" id="Commentpage{{ forloop.counter0 }}">
                                 {% for i in foo|slice:":1" %}
                                     {% for j in i %}
                                         <table class="ui celled striped table">
                                             <tbody>
                                             <tr class="top aligned">
-                                                <td class="two wide">
+                                                <td class="three wide">
                                                     <h4 class="ui image header">
                                                         <img src="{{ j.0 }}"
                                                              class="ui large rounder image">
@@ -283,7 +161,9 @@
                                                 <td class="two wide">{{ j.4 }}</td>
                                                 <td>{{ j.5 }}楼</td>
                                                 <td class="collapsing">
-                                                    <div class="ui right floated tiny button">删除</div>
+                                                    <div class="ui right floated tiny button"
+                                                         onclick="if_del_comment()">删除
+                                                    </div>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -292,13 +172,13 @@
                                 {% endfor %}
                             </div>
                         {% else %}
-                            <div class="tab-pane fade" id="liuyanpage{{ forloop.counter0 }}">
+                            <div class="tab-pane fade" id="Commentpage{{ forloop.counter0 }}">
                                 {% for i in foo|slice:":1" %}
                                     {% for j in i %}
                                         <table class="ui celled striped table">
                                             <tbody>
                                             <tr class="top aligned">
-                                                <td class="two wide">
+                                                <td class="three wide">
                                                     <h4 class="ui image header">
                                                         <img src="{{ j.0 }}"
                                                              class="ui large rounder image">
@@ -313,7 +193,9 @@
                                                 <td class="two wide">{{ j.4 }}</td>
                                                 <td>{{ j.5 }}楼</td>
                                                 <td class="collapsing">
-                                                    <div class="ui right floated tiny button">删除</div>
+                                                    <div class="ui right floated tiny button"
+                                                         onclick="if_del_comment()">删除
+                                                    </div>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -326,17 +208,17 @@
                 </div>
                 <div class="ui hidden divider"></div>
                 <div class="ui right floated pagination menu">
-                    {% for foo in liuyanPage.page_range %}
-                        <a data-toggle="tab" class="item" href="#liuyanpage{{ forloop.counter0 }}">{{ foo }}</a>
+                    {% for foo in CommentPage.page_range %}
+                        <a data-toggle="tab" class="item" href="#Commentpage{{ forloop.counter0 }}">{{ foo }}</a>
                     {% endfor %}
                 </div>
             </div>
         </div>
         <div class="ui hidden divider"></div>
-        <div class="ui container" style='width: 80%;' id="container2">
+        <div class="ui container" style='width: 63%;' id="container2">
             <div class="ui form">
                 <div class="field">
-                    <h3>发表留言：</h3>
+                    <h3>发表评论：</h3>
                     <textarea rows="8" id="reply_text"></textarea>
                 </div>
                 <button class="ui button" onclick="reply()">发表</button>
@@ -383,13 +265,13 @@
     </div>
 
 </div>
-<div class="ui small basic modal" id="del_class">
+<div class="ui small basic modal" id="del_comment">
     <i class="close icon"></i>
     <div class="header">
-        您确定要删除此班级吗？（注意：此操作不可逆!)
+        您确定要删除此评论吗？（注意：此操作不可逆!)
     </div>
     <div class="actions">
-        <div class="ui red button" onclick="confirm_del_class()">
+        <div class="ui red button" onclick="confirm_del_comment()">
             确定
         </div>
         <div class="ui green button" onclick="HideModal()">
