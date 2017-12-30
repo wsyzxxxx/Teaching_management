@@ -125,3 +125,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'statics')
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+SESSION_COOKIE_AGE = 60*30

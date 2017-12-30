@@ -1,10 +1,18 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import auth
 
+def studentcheck(user):
+    if user.userinfo.user_type == 1:
+        return True
+    return False
 
 # Create your views here.
+@user_passes_test(studentcheck, login_url="/login")
 def index(request):
+    print(request.user)
     tmp = []
     # 通知列表设有一个标志位来标志是否已读，0为未读，1为已读，前端点击了通知详情按钮后，应该到后台将状态设置为已读
     GlobalNoticeList = [['1', '操作系统课程有新通知', '2017/12/12, 20:00:00', '作业1已发布，ddl为今晚10点'],
@@ -61,6 +69,7 @@ def index(request):
                                                   'liuyanPage': liuyanPage, 'liuyanPaginator': liuyanPaginator})
 
 
+@user_passes_test(studentcheck, login_url="/login")
 def course(request):
     tmp = []
     # 论坛贴子列表
@@ -174,6 +183,7 @@ def course(request):
                                                             })
 
 
+@user_passes_test(studentcheck, login_url="/login")
 def hw(request):
     # 提交记录显示某次提交或保存的时间，保存为0，提交为1
     SubmitRecord = [['2017/12/12, 20:00:00', 0],
@@ -182,6 +192,7 @@ def hw(request):
     return render(request, 'student/student_hw.html', {'SubmitRecord': SubmitRecord})
 
 
+@user_passes_test(studentcheck, login_url="/login")
 def forum(request):
     tmp = []
     PostName = '摸鱼求约'  # 对应资源的名称
@@ -222,6 +233,7 @@ def forum(request):
                                                           'PostName': PostName})
 
 
+@user_passes_test(studentcheck, login_url="/login")
 def student_resource_comment(request):
     tmp = []
     ResourceName = 'uml.pdf'  #对应资源的名称
@@ -261,6 +273,8 @@ def student_resource_comment(request):
                                                                      'CommentPage': CommentPage,
                                                                      'CommentPaginator': CommentPaginator})
 
+
+@user_passes_test(studentcheck, login_url="/login")
 def message(request):
     name = '吴朝晖'  #私信的对象
     History = [['/static/img/kk.png', '吴朝晖', '2017/12/12, 20:00:00', '网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起'],
@@ -268,5 +282,13 @@ def message(request):
     return render(request, 'student/message.html', {'name': name,
                                                     'History': History})
 
+
+@user_passes_test(studentcheck, login_url="/login")
 def ret(request):
     return render(request, 'tmp.html')
+
+
+@user_passes_test(studentcheck, login_url="/login")
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect("/")

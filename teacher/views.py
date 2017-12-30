@@ -1,15 +1,24 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import auth
 
+def teachercheck(user):
+    if user.userinfo.user_type == 2:
+        return True
+    return False
 
 # Create your views here.
+@user_passes_test(teachercheck, login_url="/login")
 def index(request):
     tmp = []
     # 通知列表设有一个标志位来标志是否已读，0为未读，1为已读，前端点击了通知详情按钮后，应该到后台将状态设置为已读
     GlobalNoticeList = [['1', '操作系统课程有新通知', '2017/12/12, 20:00:00', '作业1已发布，ddl为今晚10点'],
-                        ['1', '计算机网络课程有新通知', '2017/12/13, 20:00:00', '作业2已发布，ddl为今晚10点'],
-                        ['0', '软件需求工程课程有新通知', '2017/12/14, 20:00:00', '作业3已发布，ddl为今晚10点'],
+                        ['1', '计算机网络课程有新通知', '2017/12/13, 20:00:00',
+                            '作业2已发布，ddl为今晚10点'],
+                        ['0', '软件需求工程课程有新通知', '2017/12/14, 20:00:00',
+                            '作业3已发布，ddl为今晚10点'],
                         ['0', '操作系统课程有新通知', '2017/12/14, 20:00:00', '作业4已发布，ddl为今晚10点']]
     unreadGlobalNotice = 0
     for i in GlobalNoticeList:
@@ -17,8 +26,10 @@ def index(request):
             unreadGlobalNotice += 1
     # 课程表，应统计每门课程未读通知+未提交的作业数量
     CoursesList = [['软件需求工程', ['邢卫', '刘玉生'], ['周一6，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '2', '1', '1'],
-                   ['操作系统原理', ['伍赛', '邢卫'], ['周一6，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '1', '2', '2'],
-                   ['软件工程管理', ['金波', '邢卫'], ['周一6，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '1', '3', '3'],
+                   ['操作系统原理', ['伍赛', '邢卫'], ['周一6，7，8'], [
+                       '玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '1', '2', '2'],
+                   ['软件工程管理', ['金波', '邢卫'], ['周一6，7，8'], [
+                       '玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '1', '3', '3'],
                    ['计算机网络', ['陆魁军', '邢卫'], ['周一6，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '0', '4', ' 2'], ]
     liuyanList = [['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
                    '2017/12/12, 20:00:00', '1'],
@@ -58,6 +69,7 @@ def index(request):
                                                   'liuyanPage': liuyanPage, 'liuyanPaginator': liuyanPaginator})
 
 
+@user_passes_test(teachercheck, login_url="/login")
 def course(request):
     tmp = []
     PostList = [['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
@@ -136,11 +148,16 @@ def course(request):
             tmp.append(OthersPage.page(i))
             OthersPaginator.append(tmp)
         tmp = []
-    StudentNum = 50 #本班学生总数
+    StudentNum = 50  # 本班学生总数
     StudentList = [['315010', '王泽杰', '2015', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'],
-                   ['315010', '王泽杰', '2015', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'],
-                   ['315010', '王泽杰', '2015', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'],
-                   ['315010', '王泽杰', '2015', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'],]
+                   ['315010', '王泽杰', '2015', '计算机科学与技术学院',
+                       '软件工程', '18888@qq.com', '10086'],
+                   ['315010', '王泽杰', '2015', '计算机科学与技术学院',
+                       '软件工程', '18888@qq.com', '10086'],
+                   ['315010', '王泽杰', '2015', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'], ]
+    TaList = [['315010', '王泽杰', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'],
+              ['315010', '王泽杰', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'],
+              ['315010', '王泽杰', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'], ]
     return render(request, 'teacher/teacher_course.html', {'PostList': PostList,
                                                            'NoticeList': NoticeList, 'unreadNotice': unreadNotice,
                                                            'HwList': HwList, 'unsubmitHw': unsubmitHw,
@@ -149,55 +166,64 @@ def course(request):
                                                            'MediaPage': MediaPage, 'MediaPaginator': MediaPaginator,
                                                            'OthersPage': OthersPage,
                                                            'OthersPaginator': OthersPaginator,
-                                                           'StudentNum': StudentNum, 'StudentList': StudentList})
+                                                           'StudentNum': StudentNum, 'StudentList': StudentList,
+                                                           'TaList': TaList})
 
 
+@user_passes_test(teachercheck, login_url="/login")
 def hw(request):
-    StudentNum = 50 #学生总数
-    SubmitNum = 20 #已提交人数
+    StudentNum = 50  # 学生总数
+    SubmitNum = 20  # 已提交人数
     return render(request, 'teacher/teacher_hw.html', {'StudentNum': StudentNum,
                                                        'SubmitNum': SubmitNum})
+
+@user_passes_test(teachercheck, login_url="/login")
 def message(request):
-    History = [['/static/img/kk.png', '吴朝晖', '2017/12/12, 20:00:00', '网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起'],
+    History = [['/static/img/kk.png', '吴朝晖', '2017/12/12, 20:00:00',
+                '网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起'],
                ['/static/img/zju.jpg', '王泽杰', '2017/12/14, 20:00:00', '不去']]
     return render(request, 'teacher/message.html', {'History': History})
 
+
+@user_passes_test(teachercheck, login_url="/login")
 def new_hw(request):
     return render(request, 'teacher/new_hw.html')
 
 
+@user_passes_test(teachercheck, login_url="/login")
 def mark_hw(request):
     return render(request, 'teacher/mark_hw.html')
 
 
+@user_passes_test(teachercheck, login_url="/login")
 def teacher_forum(request):
     tmp = []
     PostName = '摸鱼求约'  # 对应资源的名称
     PostList = [['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                    '2017/12/12, 20:00:00', '1'],
-                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                    '2017/12/12, 20:00:00', '2'],
-                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
-                    '2017/12/12, 20:00:00', '3'],
-                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
-                    '2017/12/12, 20:00:00', '4'],
-                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                    '2017/12/12, 20:00:00', '5'],
-                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                    '2017/12/12, 20:00:00', '6'],
-                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
-                    '2017/12/12, 20:00:00', '7'],
-                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
-                    '2017/12/12, 20:00:00', '7'],
-                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                    '2017/12/12, 20:00:00', '9'],
-                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                    '2017/12/12, 20:00:00', '10'],
-                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
-                    '2017/12/12, 20:00:00', '11'],
-                   ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
-                    '2017/12/12, 20:00:00', '12'],
-                   ]
+                 '2017/12/12, 20:00:00', '1'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                 '2017/12/12, 20:00:00', '2'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+                 '2017/12/12, 20:00:00', '3'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+                 '2017/12/12, 20:00:00', '4'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                 '2017/12/12, 20:00:00', '5'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                 '2017/12/12, 20:00:00', '6'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+                 '2017/12/12, 20:00:00', '7'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+                 '2017/12/12, 20:00:00', '7'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                 '2017/12/12, 20:00:00', '9'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+                 '2017/12/12, 20:00:00', '10'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+                 '2017/12/12, 20:00:00', '11'],
+                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+                 '2017/12/12, 20:00:00', '12'],
+                ]
     PostPage = Paginator(PostList, 10)
     PostPaginator = []
     for i in range(1, PostPage.num_pages + 1):
@@ -210,6 +236,7 @@ def teacher_forum(request):
                                                           'PostName': PostName})
 
 
+@user_passes_test(teachercheck, login_url="/login")
 def teacher_resource_comment(request):
     tmp = []
     ResourceName = 'uml.pdf'  # 对应资源的名称
@@ -248,3 +275,13 @@ def teacher_resource_comment(request):
     return render(request, 'teacher/teacher_resource_comment.html', {'ResourceName': ResourceName,
                                                                      'CommentPage': CommentPage,
                                                                      'CommentPaginator': CommentPaginator})
+
+
+@user_passes_test(teachercheck, login_url="/login")
+def addta(request):
+    return render(request, 'teacher/add_ta.html')
+
+@user_passes_test(teachercheck, login_url="/login")
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect("/")

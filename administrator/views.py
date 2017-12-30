@@ -1,8 +1,17 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import auth
 
 
+def admincheck(user):
+    if user.userinfo.user_type == 3:
+        return True
+    return False
+
+
+@user_passes_test(admincheck, login_url="/login")
 def index(request):
     tmp = []
     # 通知列表设有一个标志位来标志是否已读，0为未读，1为已读，前端点击了通知详情按钮后，应该到后台将状态设置为已读
@@ -88,6 +97,7 @@ def index(request):
                                                         'CoursesPaginator': CoursesPaginator})
 
 
+@user_passes_test(admincheck, login_url="/login")
 def courses(request):
     # 课程信息表，包括课程号，课程名，开课学院，开班数，本班教师
     CourseInfo = ['2B12345', '操作系统', '计算机科学与技术学院', '4', ['陈纯', '冯雁']]
@@ -124,3 +134,9 @@ def courses(request):
                                                                         'StudentList': StudentList,
                                                                         'CourseInfo': CourseInfo,
                                                                         'CoursesList': CoursesList})
+
+
+@user_passes_test(admincheck, login_url="/login")
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect("/")
