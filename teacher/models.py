@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 class UserInfo(models.Model):
 
     user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=30, null=True)
     user_type = models.IntegerField()
     user_course = models.ManyToManyField('CourseInfo')
 
@@ -64,9 +65,10 @@ class CourseInfo(models.Model):
     course_syllabus = models.TextField(null=True)
     course_teacher = models.CharField(max_length=50, null=True)
     course_type = models.CharField(max_length=50, null=True)
+    course_time = models.CharField(max_length=30, null=True)
+    course_pos = models.CharField(max_length=30, null=True)
 
-    def __str__(self):
-        return "courseinfo name:{}, syllabus:{}".format(self.course_name, self.course_syllabus)
+
 
 class CourseTime(models.Model):
 

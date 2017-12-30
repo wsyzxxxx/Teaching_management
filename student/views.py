@@ -3,6 +3,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import auth
+from teacher.models import UserInfo, TeacherInfo, StudentInfo, ManagerInfo, CourseInfo, \
+                           CourseTime, Homework, MultipleChoice, ShortAnswer, HwOfCourse, \
+                           StudentAnswer, HwGrade, ForumList, PostReply, Source, Message, \
+                           Announcement, Customer, IsRead
+import time
 
 def studentcheck(user):
     try:
@@ -15,50 +20,90 @@ def studentcheck(user):
 # Create your views here.
 @user_passes_test(studentcheck, login_url="/login")
 def index(request):
-    print(request.user)
+    
+    # 加载课程列表
+    userCourse = request.user.userinfo.user_course.all()
+    CoursesList = []
+    for i in userCourse:
+        singleCourse = [i.course_name, i.course_teacher.split(';'), i.course_time.split(
+            ';'), i.course_pos.split(';'), i. course_type, '1', '2', '3']
+        CoursesList.append(singleCourse)
+
+    # a = []
+    # for i in userCourse:
+    #     announcement = Announcement.objects.filter(announce_course = i)
+    #     #a.append(len(announcement))
+    #     for j in announcement:
+    #         print(j.isread_set.all().filter(read_user=request.user.userinfo))
+    #for i in a:
+        #print(i)
+
+    userMessage = request.user.userinfo.isread_set.all()
+    GlobalNoticeList = []
+    for i in userMessage:
+        if i.read_isread == True:
+            flag = '1'
+        else:
+            flag = '0'
+        if i.read_message != None:
+            singleMessage = [flag, i.read_message.message_sender.name,
+                             i.read_message.message_time.strftime("%Y-%m-%d %H:%M:%S"), i.read_message.message_content]
+        else:
+            singleMessage = [flag, i.read_announce.announce_title,
+                             i.read_announce.announce_time.strftime("%Y-%m-%d %H:%M:%S"), i.read_announce.announce_content]
+        GlobalNoticeList.append(singleMessage)
+    
+    liuyanList = []
+    leftmessage = Customer.objects.all()
+    j = 1
+    for i in leftmessage:
+        liuyanList.append(
+            ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', i.customer_title + i.customer_content, i.customer_time.strftime("%Y-%m-%d %H:%M:%S"), j])
+        j += 1
+
     tmp = []
     # 通知列表设有一个标志位来标志是否已读，0为未读，1为已读，前端点击了通知详情按钮后，应该到后台将状态设置为已读
-    GlobalNoticeList = [['1', '操作系统课程有新通知', '2017/12/12, 20:00:00', '作业1已发布，ddl为今晚10点'],
-                        ['1', '计算机网络课程有新通知', '2017/12/13, 20:00:00', '作业2已发布，ddl为今晚10点'],
-                        ['0', '软件需求工程课程有新通知', '2017/12/14, 20:00:00', '作业3已发布，ddl为今晚10点'],
-                        ['0', '操作系统课程有新通知', '2017/12/14, 20:00:00', '作业4已发布，ddl为今晚10点']]
+    # GlobalNoticeList = [['1', '操作系统课程有新通知', '2017/12/12, 20:00:00', '作业1已发布，ddl为今晚10点'],
+    #                     ['1', '计算机网络课程有新通知', '2017/12/13, 20:00:00', '作业2已发布，ddl为今晚10点'],
+    #                     ['0', '软件需求工程课程有新通知', '2017/12/14, 20:00:00', '作业3已发布，ddl为今晚10点'],
+    #                     ['0', '操作系统课程有新通知', '2017/12/14, 20:00:00', '作业4已发布，ddl为今晚10点']]
     unreadGlobalNotice = 0
     for i in GlobalNoticeList:
         if i[0] == '0':
             unreadGlobalNotice += 1
     # 课程表，应统计每门课程未读通知、未完成作业、未阅读课件的数量
-    CoursesList = [['软件需求工程', ['邢卫', '刘玉生'], ['周一6，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '2', '1', '1'],
-                   ['操作系统原理', ['伍赛'], ['周一6，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '1', '2', '2'],
-                   ['软件工程管理', ['金波'], ['周一，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '1', '3', '3'],
-                   ['计算机网络', ['陆魁军'], ['周一6，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '0', '4', ' 2'],
-                   ['计算机网络', ['陆魁军'], ['周一，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '0', '5', '3'],
-                   ['计算机网络', ['陆魁军'], ['周一，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '0', '6', '3'],
-                   ['计算机网络', ['陆魁军'], ['周一6，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '0', '7', '5'], ]
-    liuyanList = [['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                   '2017/12/12, 20:00:00', '1'],
-                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                   '2017/12/12, 20:00:00', '2'],
-                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
-                   '2017/12/12, 20:00:00', '3'],
-                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
-                   '2017/12/12, 20:00:00', '4'],
-                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                   '2017/12/12, 20:00:00', '5'],
-                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                   '2017/12/12, 20:00:00', '6'],
-                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
-                   '2017/12/12, 20:00:00', '7'],
-                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
-                   '2017/12/12, 20:00:00', '7'],
-                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                   '2017/12/12, 20:00:00', '9'],
-                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                   '2017/12/12, 20:00:00', '10'],
-                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
-                   '2017/12/12, 20:00:00', '11'],
-                  ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
-                   '2017/12/12, 20:00:00', '12'],
-                  ]
+    # CoursesList = [['软件需求工程', ['邢卫', '刘玉生'], ['周一6，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '2', '1', '1'],
+    #                ['操作系统原理', ['伍赛'], ['周一6，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '1', '2', '2'],
+    #                ['软件工程管理', ['金波'], ['周一，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '1', '3', '3'],
+    #                ['计算机网络', ['陆魁军'], ['周一6，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '0', '4', ' 2'],
+    #                ['计算机网络', ['陆魁军'], ['周一，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '0', '5', '3'],
+    #                ['计算机网络', ['陆魁军'], ['周一，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '0', '6', '3'],
+    #                ['计算机网络', ['陆魁军'], ['周一6，7，8'], ['玉泉曹光彪西-503', '玉泉教7-304(多)'], '专业课', '0', '7', '5'], ]
+    # liuyanList = [['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+    #                '2017/12/12, 20:00:00', '1'],
+    #               ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+    #                '2017/12/12, 20:00:00', '2'],
+    #               ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+    #                '2017/12/12, 20:00:00', '3'],
+    #               ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+    #                '2017/12/12, 20:00:00', '4'],
+    #               ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+    #                '2017/12/12, 20:00:00', '5'],
+    #               ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+    #                '2017/12/12, 20:00:00', '6'],
+    #               ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+    #                '2017/12/12, 20:00:00', '7'],
+    #               ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+    #                '2017/12/12, 20:00:00', '7'],
+    #               ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+    #                '2017/12/12, 20:00:00', '9'],
+    #               ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+    #                '2017/12/12, 20:00:00', '10'],
+    #               ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+    #                '2017/12/12, 20:00:00', '11'],
+    #               ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+    #                '2017/12/12, 20:00:00', '12'],
+    #               ]
     liuyanPage = Paginator(liuyanList, 10)
     liuyanPaginator = []
     for i in range(1, liuyanPage.num_pages + 1):

@@ -3,6 +3,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import auth
+from teacher.models import UserInfo, TeacherInfo, StudentInfo, ManagerInfo, CourseInfo, \
+                           CourseTime, Homework, MultipleChoice, ShortAnswer, HwOfCourse, \
+                           StudentAnswer, HwGrade, ForumList, PostReply, Source, Message, \
+                           Announcement, Customer, IsRead
 
 
 def admincheck(user):
@@ -18,6 +22,7 @@ def admincheck(user):
 def index(request):
     tmp = []
     # 通知列表设有一个标志位来标志是否已读，0为未读，1为已读，前端点击了通知详情按钮后，应该到后台将状态设置为已读
+
     GlobalNoticeList = [['1', '操作系统课程有新通知', '2017/12/12, 20:00:00', '作业1已发布，ddl为今晚10点'],
                         ['1', '计算机网络课程有新通知', '2017/12/13, 20:00:00', '作业2已发布，ddl为今晚10点'],
                         ['0', '软件需求工程课程有新通知', '2017/12/14, 20:00:00', '作业3已发布，ddl为今晚10点'],
