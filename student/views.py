@@ -26,9 +26,10 @@ def index(request):
     CoursesList = []
     for i in userCourse:
         singleCourse = [i.course_name, i.course_teacher.split(';'), i.course_time.split(
-            ';'), i.course_pos.split(';'), i. course_type, '1', '2', '3']
+            ';'), i.course_pos.split(';'), i. course_type, '1', '2', '3', i.id]
         CoursesList.append(singleCourse)
 
+    #### 缺少一个数量的统计
     # a = []
     # for i in userCourse:
     #     announcement = Announcement.objects.filter(announce_course = i)
@@ -118,22 +119,31 @@ def index(request):
 
 
 @user_passes_test(studentcheck, login_url="/login")
-def course(request):
+def course(request, id):
+    # id = request.GET['id']
+    course = CourseInfo.objects.get(id=id)
+    forum = course.forumlist_set.all()
+    print(forum)
+    PostList = []
+    for i in forum:
+        PostList.append([i.forum_title, i.forum_user.name, i.forum_time.strftime("%Y-%m-%d %H:%M:%S"), '', '', '0'])
+    
+    #### 缺少一个最后回复的显示
     tmp = []
     # 论坛贴子列表
-    PostList = [['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
-                ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
-                ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
-                ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
-                ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
-                ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
-                ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
-                ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
-                ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
-                ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
-                ['摸鱼', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
-                ['摸鱼', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
-                ]
+    # PostList = [['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
+    #             ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
+    #             ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
+    #             ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
+    #             ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
+    #             ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
+    #             ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
+    #             ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
+    #             ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
+    #             ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
+    #             ['摸鱼', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
+    #             ['摸鱼', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
+    #             ]
     PostPage = Paginator(PostList, 10)
     PostPaginator = []
     for i in range(1, PostPage.num_pages + 1):
@@ -141,39 +151,81 @@ def course(request):
             tmp.append(PostPage.page(i))
         PostPaginator.append(tmp)
         tmp = []
+
     # 通知列表设有一个标志位来标志是否已读，0为未读，1为已读，前端点击了通知详情按钮后，应该到后台将状态设置为已读
-    NoticeList = [['1', '作业1已发布', '2017/12/12, 20:00:00', '作业1已发布，ddl为今晚10点'],
-                  ['1', '作业2已发布', '2017/12/13, 20:00:00', '作业2已发布，ddl为今晚10点'],
-                  ['0', '作业3已发布', '2017/12/14, 20:00:00', '作业3已发布，ddl为今晚10点'],
-                  ['0', '作业4已发布', '2017/12/14, 20:00:00', '作业4已发布，ddl为今晚10点']]
+    userMessage = request.user.userinfo.isread_set.all()
+    NoticeList = []
+    for i in userMessage:
+        if i.read_isread == True:
+            flag = '1'
+        else:
+            flag = '0'
+        if i.read_message != None:
+            singleMessage = [flag, i.read_message.message_sender.name,
+                             i.read_message.message_time.strftime("%Y-%m-%d %H:%M:%S"), i.read_message.message_content]
+        else:
+            singleMessage = [flag, i.read_announce.announce_title,
+                             i.read_announce.announce_time.strftime("%Y-%m-%d %H:%M:%S"), i.read_announce.announce_content]
+        NoticeList.append(singleMessage)
+
+    #### 缺少对应课程的通知
+
+    # NoticeList = [['1', '作业1已发布', '2017/12/12, 20:00:00', '作业1已发布，ddl为今晚10点'],
+    #               ['1', '作业2已发布', '2017/12/13, 20:00:00', '作业2已发布，ddl为今晚10点'],
+    #               ['0', '作业3已发布', '2017/12/14, 20:00:00', '作业3已发布，ddl为今晚10点'],
+    #               ['0', '作业4已发布', '2017/12/14, 20:00:00', '作业4已发布，ddl为今晚10点']]
     unreadNotice = 0
     for i in NoticeList:
         if i[0] == '0':
             unreadNotice += 1
-    # 作业列表设有一个标志位来标志是否已提交，0为未提交，1为已提交，前端提交作业后，应该到后台将状态设置为已提交；
+    # 作业列表设有一个标志位来标志是否已提交，0为未提交，1为已提交，前端提交作业后，应该到后台将状态设置为已提交
     # 应能正确指导前端进行页面跳转
-    HwList = [['1', '作业1', '2017/12/12, 20:00:00'],
-              ['1', '作业2', '2017/12/13, 20:00:00'],
-              ['0', '作业3', '2017/12/14, 20:00:00']]
+    
+    HwList = []
+    homework = course.homework_set.all()
+    for i in homework:
+        try:
+            status = i.hwgrade_set.get(id=i.id)
+            HwList.append(['1', i.homework_name, i.homework_deadline])
+        except:
+            HwList.append(['0', i.homework_name, i.homework_deadline])
+
+    # HwList = [['1', '作业1', '2017/12/12, 20:00:00'],
+    #           ['1', '作业2', '2017/12/13, 20:00:00'],
+    #           ['0', '作业3', '2017/12/14, 20:00:00']]
+
     unsubmitHw = 0
     for i in HwList:
         if i[0] == '0':
             unsubmitHw += 1
+    
+    TeacherList = []
+    teacher = course.userinfo_set.filter(user_type=2)
+    for i in teacher:
+        TeacherList.append([i.teacherinfo.teacher_name, '教授',
+                            '计算机科学与技术学院', i.teacherinfo.teacher_email, i.teacherinfo.teacher_phone])
+
     # 教师信息表
-    TeacherList = [['邢卫', '教授', '计算机科学与技术学院', '10086@zju.edu.cn', '18888888888'],
-                   ['邢卫', '教授', '计算机科学与技术学院', '10086@zju.edu.cn', '18888888888'],
-                   ]
+    # TeacherList = [['邢卫', '教授', '计算机科学与技术学院', '10086@zju.edu.cn', '18888888888'],
+    #                ['邢卫', '教授', '计算机科学与技术学院', '10086@zju.edu.cn', '18888888888'],
+    #                ]
     # 资源列表
-    PPTList = [['uml.ppt', '刘玉生', '2017/12/12, 20:00:00'],
-               ['5.ppt', '刘玉生', '2017/12/12, 20:00:00'],
-               ['操作系统概念.ppt', '王泽杰', '2017/12/12, 20:00:00'],
-               ['软件需求.ppt', '邢卫', '2017/12/12, 20:00:00'],
-               ['作业成绩.ppt', '邢卫', '2017/12/12, 20:00:00'],
-               ['uml.ppt', '刘生', '2017/12/12, 20:00:00'],
-               ['5.ppt', '刘生', '2017/12/12, 20:00:00'],
-               ['操作系统概念.ppt', '王泽杰', '2017/12/12, 20:00:00'],
-               ['软件需求.ppt', '邢卫', '2017/12/12, 20:00:00'],
-               ['作业成绩.ppt', '邢卫', '2017/12/12, 20:00:00']]
+
+    PPTList = []
+    source = course.source_set.filter(source_type=1).all()
+    for i in source:
+        PPTList.append([i.source_name, i.source_user.name,
+                        i.source_time.strftime("%Y-%m-%d %H:%M:%S")])
+    # PPTList = [['uml.ppt', '刘玉生', '2017/12/12, 20:00:00'],
+    #            ['5.ppt', '刘玉生', '2017/12/12, 20:00:00'],
+    #            ['操作系统概念.ppt', '王泽杰', '2017/12/12, 20:00:00'],
+    #            ['软件需求.ppt', '邢卫', '2017/12/12, 20:00:00'],
+    #            ['作业成绩.ppt', '邢卫', '2017/12/12, 20:00:00'],
+    #            ['uml.ppt', '刘生', '2017/12/12, 20:00:00'],
+    #            ['5.ppt', '刘生', '2017/12/12, 20:00:00'],
+    #            ['操作系统概念.ppt', '王泽杰', '2017/12/12, 20:00:00'],
+    #            ['软件需求.ppt', '邢卫', '2017/12/12, 20:00:00'],
+    #            ['作业成绩.ppt', '邢卫', '2017/12/12, 20:00:00']]
     PPTPage = Paginator(PPTList, 5)
     PPTPaginator = []
     for i in range(1, PPTPage.num_pages + 1):
@@ -181,12 +233,18 @@ def course(request):
             tmp.append(PPTPage.page(i))
         PPTPaginator.append(tmp)
         tmp = []
-    PDFList = [['uml.pdf', '刘玉生', '2017/12/12, 20:00:00'],
-               ['5.pdf', '刘玉生', '2017/12/12, 20:00:00'],
-               ['操作系统概念.pdf', '王泽杰', '2017/12/12, 20:00:00'],
-               ['软件需求.pdf', '邢卫', '2017/12/12, 20:00:00'],
-               ['作业成绩.pdf', '邢卫', '2017/12/12, 20:00:00'],
-               ['作业成绩.pdf', '邢卫', '2017/12/12, 20:00:00']]
+
+    PDFList = []
+    source = course.source_set.filter(source_type=2).all()
+    for i in source:
+        PDFList.append([i.source_name, i.source_user.name,
+                        i.source_time.strftime("%Y-%m-%d %H:%M:%S")])
+    # PDFList = [['uml.pdf', '刘玉生', '2017/12/12, 20:00:00'],
+    #            ['5.pdf', '刘玉生', '2017/12/12, 20:00:00'],
+    #            ['操作系统概念.pdf', '王泽杰', '2017/12/12, 20:00:00'],
+    #            ['软件需求.pdf', '邢卫', '2017/12/12, 20:00:00'],
+    #            ['作业成绩.pdf', '邢卫', '2017/12/12, 20:00:00'],
+    #            ['作业成绩.pdf', '邢卫', '2017/12/12, 20:00:00']]
     PDFPage = Paginator(PDFList, 5)
     PDFPaginator = []
     for i in range(1, PDFPage.num_pages + 1):
@@ -194,11 +252,17 @@ def course(request):
             tmp.append(PDFPage.page(i))
         PDFPaginator.append(tmp)
         tmp = []
-    MediaList = [['uml.mp4', '刘玉生', '2017/12/12, 20:00:00'],
-                 ['5.mp4', '刘玉生', '2017/12/12, 20:00:00'],
-                 ['操作系统概念.mp4', '王泽杰', '2017/12/12, 20:00:00'],
-                 ['软件需求.mp4', '邢卫', '2017/12/12, 20:00:00'],
-                 ['作业成绩.mp4', '邢卫', '2017/12/12, 20:00:00']]
+    
+    MediaList = []
+    source = course.source_set.filter(source_type=3).all()
+    for i in source:
+        MediaList.append([i.source_name, i.source_user.name,
+                        i.source_time.strftime("%Y-%m-%d %H:%M:%S")])
+    # MediaList = [['uml.mp4', '刘玉生', '2017/12/12, 20:00:00'],
+    #              ['5.mp4', '刘玉生', '2017/12/12, 20:00:00'],
+    #              ['操作系统概念.mp4', '王泽杰', '2017/12/12, 20:00:00'],
+    #              ['软件需求.mp4', '邢卫', '2017/12/12, 20:00:00'],
+    #              ['作业成绩.mp4', '邢卫', '2017/12/12, 20:00:00']]
     MediaPage = Paginator(MediaList, 5)
     MediaPaginator = []
     for i in range(1, MediaPage.num_pages + 1):
@@ -206,11 +270,17 @@ def course(request):
             tmp.append(MediaPage.page(i))
             MediaPaginator.append(tmp)
         tmp = []
-    OthersList = [['uml.doc', '刘玉生', '2017/12/12, 20:00:00'],
-                  ['5.docx', '刘玉生', '2017/12/12, 20:00:00'],
-                  ['操作系统概念.doc', '王泽杰', '2017/12/12, 20:00:00'],
-                  ['软件需求.xls', '邢卫', '2017/12/12, 20:00:00'],
-                  ['作业成绩.docx', '邢卫', '2017/12/12, 20:00:00']]
+
+    OthersList = []
+    source = course.source_set.filter(source_type=4).all()
+    for i in source:
+        OthersList.append([i.source_name, i.source_user.name,
+                        i.source_time.strftime("%Y-%m-%d %H:%M:%S")])
+    # OthersList = [['uml.doc', '刘玉生', '2017/12/12, 20:00:00'],
+    #               ['5.docx', '刘玉生', '2017/12/12, 20:00:00'],
+    #               ['操作系统概念.doc', '王泽杰', '2017/12/12, 20:00:00'],
+    #               ['软件需求.xls', '邢卫', '2017/12/12, 20:00:00'],
+    #               ['作业成绩.docx', '邢卫', '2017/12/12, 20:00:00']]
     OthersPage = Paginator(OthersList, 5)
     OthersPaginator = []
     for i in range(1, OthersPage.num_pages + 1):
@@ -232,8 +302,12 @@ def course(request):
 
 
 @user_passes_test(studentcheck, login_url="/login")
-def hw(request):
+def hw(request, hwid):
     # 提交记录显示某次提交或保存的时间，保存为0，提交为1
+
+    SubmitRecord = []
+
+    
     SubmitRecord = [['2017/12/12, 20:00:00', 0],
                     ['2017/12/13, 20:00:00', 0],
                     ['2017/12/14, 20:00:00', 1]]
@@ -319,7 +393,8 @@ def student_resource_comment(request):
         tmp = []
     return render(request, 'student/student_resource_comment.html', {'ResourceName': ResourceName,
                                                                      'CommentPage': CommentPage,
-                                                                     'CommentPaginator': CommentPaginator})
+                                                                     'CommentPaginator': CommentPaginator,
+                                                                     'id': id})
 
 
 @user_passes_test(studentcheck, login_url="/login")

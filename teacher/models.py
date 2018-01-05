@@ -135,11 +135,19 @@ class StudentAnswer(models.Model):
     def __str__(self):
         return "answer question:{}, student:{}, choice:{}, short:{}, score:{}".format(self.answer_question, self.answer_student, self.answer_choice, self.answer_short, self.answer_score)
 
+class HwSubmit(models.Model):
+
+    submit_homework = models.ForeignKey('Homework', on_delete=models.CASCADE)
+    submit_student = models.ForeignKey('UserInfo', on_delete=models.CASCADE)
+    submit_status = models.IntegerField(null=True)
+    submit_time = models.DateTimeField(null=True)
+
 class HwGrade(models.Model):
 
     grade_homework = models.ForeignKey('Homework', on_delete=models.CASCADE)
     grade_student = models.ForeignKey('UserInfo', on_delete=models.CASCADE)
     grade_score = models.IntegerField(null=True)
+    grade_submit = models.BooleanField()
 
     def __str__(self):
         return "grade homework:{}, student:{}, score:{}".format(self.grade_homework, self.grade_student, self.grade_score)
@@ -173,6 +181,7 @@ class Source(models.Model):
     source_course = models.ForeignKey('CourseInfo', on_delete=models.CASCADE)
     source_user = models.ForeignKey('UserInfo', on_delete=models.CASCADE)
     source_time = models.DateTimeField(null=True)
+    source_type = models.IntegerField(null=True)
 
     def __str__(self):
         return "source name:{}, file:{}, course:{}, user:{}, time:{}".format( \

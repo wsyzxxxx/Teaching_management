@@ -265,108 +265,109 @@
                             <th>删除</th>
                         </tr>
                     </thead>
-                    <tbody id=student_list ">
-                {% for foo in StudentList %}
-                    <tr>
-                        <td>{{ foo.0 }}</td>
-                        <td>{{ foo.1 }}</td>
-                        <td>{{ foo.2 }}级</td>
-                        <td>{{ foo.3 }}</td>
-                        <td>{{ foo.4 }}</td>
-                        <td>{{ foo.5 }}</td>
-                        <td>{{ foo.6 }}</td>
-                        <td class="collapsing ">
-                            <div class="ui button " onclick="if_del_student() ">删除</div>
-                        </td>
-                    </tr>
-                {% endfor %}
+                    <tbody id="student_list">
+                        {% for foo in StudentList %}
+                        <tr>
+                            <td>{{ foo.0 }}</td>
+                            <td>{{ foo.1 }}</td>
+                            <td>{{ foo.2 }}级</td>
+                            <td>{{ foo.3 }}</td>
+                            <td>{{ foo.4 }}</td>
+                            <td>{{ foo.5 }}</td>
+                            <td>{{ foo.6 }}</td>
+                            <td class="collapsing ">
+                                <div class="ui button " onclick="if_del_student() ">删除</div>
+                            </td>
+                        </tr>
+                        {% endfor %}
 
-                </tbody>
-            </table>
-        </div>
-        <div class="ui hidden divider "></div>
-    </div>
-    <!--底部友情链接-->
-    <div class="ui footer basic segment " style="background-color: #E0E0E0; ">
-        <div class="ui center aligned container ">
-            <div class="ui stackable divided equal height stackable grid ">
-                <div class="five wide column ">
-                    <h4 class="ui header ">友情链接</h4>
-                    <div class="ui link list ">
-                        <a href="http://www.zju.edu.cn " class="item ">浙江大学官方网站</a>
-                        <a href="http://jwbinfosys.zju.edu.cn/default2.aspx " class="item ">浙江大学现代教务管理系统</a>
-                        <a href="http://www.cs.zju.edu.cn/ " class="item ">浙江大学计算机科学与技术学院</a>
-                        <a href="http://www.cc98.org/ " class="item ">CC98论坛</a>
-                    </div>
-                </div>
-                <div class="five wide column ">
-                    <h4 class="ui header ">常用网站导航</h4>
-                    <div class="ui link list ">
-                        <a href="https://github.com/ " class="item ">GitHub</a>
-                        <a href="https://scholar.google.com/ " class="item ">Gooele Scholar</a>
-                        <a href="https://translate.google.cn/ " class="item ">Google Translate</a>
-                        <a href="http://www.cnki.net/ " class="item ">中国知网</a>
-                    </div>
-                </div>
-                <div class="four wide column ">
-                    <h4 class="ui header ">资源导航</h4>
-                    <div class="ui link list ">
-                        <a href="http://mirrors.zju.edu.cn/#list " class="item ">浙江大学开源镜像站</a>
-                        <a href="https://www.jiumodiary.com/ " class="item ">Jiumo E-Book Search</a>
-                        <a href="http://www.nexushd.org/index.php " class="item ">NexusHD</a>
-                        <a href="ftp://software.cc98.org/ " class="item ">CC98资源站</a>
-                    </div>
-                </div>
+                    </tbody>
+                </table>
             </div>
-            <div class="ui inverted section divider "></div>
-            <h4>浙江大学2015级软件需求工程、软件工程管理G04课程组开发</h4>
+            <div class="ui hidden divider "></div>
+        </div>
+        <!--底部友情链接-->
+        <div class="ui footer basic segment " style="background-color: #E0E0E0; ">
+            <div class="ui center aligned container ">
+                <div class="ui stackable divided equal height stackable grid ">
+                    <div class="five wide column ">
+                        <h4 class="ui header ">友情链接</h4>
+                        <div class="ui link list ">
+                            <a href="http://www.zju.edu.cn " class="item ">浙江大学官方网站</a>
+                            <a href="http://jwbinfosys.zju.edu.cn/default2.aspx " class="item ">浙江大学现代教务管理系统</a>
+                            <a href="http://www.cs.zju.edu.cn/ " class="item ">浙江大学计算机科学与技术学院</a>
+                            <a href="http://www.cc98.org/ " class="item ">CC98论坛</a>
+                        </div>
+                    </div>
+                    <div class="five wide column ">
+                        <h4 class="ui header ">常用网站导航</h4>
+                        <div class="ui link list ">
+                            <a href="https://github.com/ " class="item ">GitHub</a>
+                            <a href="https://scholar.google.com/ " class="item ">Gooele Scholar</a>
+                            <a href="https://translate.google.cn/ " class="item ">Google Translate</a>
+                            <a href="http://www.cnki.net/ " class="item ">中国知网</a>
+                        </div>
+                    </div>
+                    <div class="four wide column ">
+                        <h4 class="ui header ">资源导航</h4>
+                        <div class="ui link list ">
+                            <a href="http://mirrors.zju.edu.cn/#list " class="item ">浙江大学开源镜像站</a>
+                            <a href="https://www.jiumodiary.com/ " class="item ">Jiumo E-Book Search</a>
+                            <a href="http://www.nexushd.org/index.php " class="item ">NexusHD</a>
+                            <a href="ftp://software.cc98.org/ " class="item ">CC98资源站</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui inverted section divider "></div>
+                <h4>浙江大学2015级软件需求工程、软件工程管理G04课程组开发</h4>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="ui small basic modal " id="del_class ">
+        <i class="close icon "></i>
+        <div class="header ">
+            您确定要删除此班级吗？（注意：此操作不可逆!)
+        </div>
+        <div class="actions ">
+            <div class="ui red button " onclick="confirm_del_class() ">
+                确定
+            </div>
+            <div class="ui green button " onclick="HideModal() ">
+                取消
+            </div>
         </div>
     </div>
 
-</div>
-
-<div class="ui small basic modal " id="del_class ">
-    <i class="close icon "></i>
-    <div class="header ">
-        您确定要删除此班级吗？（注意：此操作不可逆!)
-    </div>
-    <div class="actions ">
-        <div class="ui red button " onclick="confirm_del_class() ">
-            确定
+    <div class="ui small basic modal " id="del_teacher ">
+        <i class="close icon "></i>
+        <div class="header ">
+            您确定要删除此教师吗？（注意：此操作不可逆!)
         </div>
-        <div class="ui green button " onclick="HideModal() ">
-            取消
-        </div>
-    </div>
-</div>
-
-<div class="ui small basic modal " id="del_teacher ">
-    <i class="close icon "></i>
-    <div class="header ">
-        您确定要删除此教师吗？（注意：此操作不可逆!)
-    </div>
-    <div class="actions ">
-        <div class="ui red button " onclick="confirm_del_teacher() ">
-            确定
-        </div>
-        <div class="ui green button " onclick="HideModal() ">
-            取消
+        <div class="actions ">
+            <div class="ui red button " onclick="confirm_del_teacher() ">
+                确定
+            </div>
+            <div class="ui green button " onclick="HideModal() ">
+                取消
+            </div>
         </div>
     </div>
-</div>
-<div class="ui small basic modal " id="del_student ">
-    <i class="close icon "></i>
-    <div class="header ">
-        您确定要删除此学生吗？（注意：此操作不可逆!)
-    </div>
-    <div class="actions ">
-        <div class="ui red button " onclick="confirm_del_student() ">
-            确定
+    <div class="ui small basic modal " id="del_student ">
+        <i class="close icon "></i>
+        <div class="header ">
+            您确定要删除此学生吗？（注意：此操作不可逆!)
         </div>
-        <div class="ui green button " onclick="HideModal() ">
-            取消
+        <div class="actions ">
+            <div class="ui red button " onclick="confirm_del_student() ">
+                确定
+            </div>
+            <div class="ui green button " onclick="HideModal() ">
+                取消
+            </div>
         </div>
     </div>
-</div>
 </body>
+
 </html>

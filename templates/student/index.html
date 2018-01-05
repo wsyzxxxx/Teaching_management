@@ -146,9 +146,9 @@
                     <a class="item" onclick="hide_left()" id="menu1">
                     浙江大学教学服务系统
                     <span>
-                            <i class="right chevron icon divider"></i>
-                        </span>
-                </a>
+                        <i class="right chevron icon divider"></i>
+                    </span>
+                    </a>
                     <a class="item" id="second_item">课程表</a>
                     <div class="right menu">
                         <div class="ui action input">
@@ -293,24 +293,6 @@
         <!--学生课表tab-->
         <div class="ui bottom attached active tab" data-tab="course_table" style="min-height: 568px">
             <div class="ui container" style="width: 80%">
-                <!--{% for foo in CoursesList %}
-                <div class="ui link card" onclick="window.location.href='student_courses'">
-                    <div class="floating ui red label">{{ foo.4 }}</div>
-                    <div class="content">
-                        <div class="header">{{ foo.0 }}</div>
-                        <div class="meta">
-                            {% for i in foo.1 %}
-                            <a>{{ i }}</a>
-                            <a></a>
-                            {% endfor %}
-                        </div>
-                        <div class="description">{{ foo.2 }}</div>
-                        <div class="extra content">
-                            <span>{{ foo.3 }}</span>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}-->
                 <table class="ui celled structured table">
                     <thead>
                         <tr>
@@ -326,7 +308,7 @@
                         {% for foo in CoursesList %}
                         <tr>
                             <td rowspan="3" class="center aligned">
-                                <a href='student_courses'>{{ foo.0 }}</a>
+                                <a href='student_courses/{{ foo.8 }}/'>{{ foo.0 }}</a>
                             </td>
                             <td rowspan="3" class="center aligned">
                                 {% for i in foo.1 %}
