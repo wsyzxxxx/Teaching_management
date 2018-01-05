@@ -6,7 +6,7 @@ from django.contrib import auth
 from teacher.models import UserInfo, TeacherInfo, StudentInfo, ManagerInfo, CourseInfo, \
                            CourseTime, Homework, MultipleChoice, ShortAnswer, HwOfCourse, \
                            StudentAnswer, HwGrade, ForumList, PostReply, Source, Message, \
-                           Announcement, Customer, IsRead
+    Announcement, Customer, IsRead, HwSubmit
 import time
 
 def studentcheck(user):
@@ -186,9 +186,9 @@ def course(request, id):
     for i in homework:
         try:
             status = i.hwgrade_set.get(id=i.id)
-            HwList.append(['1', i.homework_name, i.homework_deadline])
+            HwList.append(['1', i.homework_name, i.homework_deadline, i.id])
         except:
-            HwList.append(['0', i.homework_name, i.homework_deadline])
+            HwList.append(['0', i.homework_name, i.homework_deadline, i.id])
 
     # HwList = [['1', '作业1', '2017/12/12, 20:00:00'],
     #           ['1', '作业2', '2017/12/13, 20:00:00'],
@@ -306,16 +306,18 @@ def hw(request, hwid):
     # 提交记录显示某次提交或保存的时间，保存为0，提交为1
 
     SubmitRecord = []
-
-    
-    SubmitRecord = [['2017/12/12, 20:00:00', 0],
-                    ['2017/12/13, 20:00:00', 0],
-                    ['2017/12/14, 20:00:00', 1]]
+    homework = Homework.objects.get(id=hwid)
+    submit = homework.hwsubmit_set.filter()
+    for i in submit:
+        SubmitRecord.append([i.submit_time.strftime("%Y-%m-%d %H:%M:%S"), i.submit_status])
+    # SubmitRecord = [['2017/12/12, 20:00:00', 0],
+    #                 ['2017/12/13, 20:00:00', 0],
+    #                 ['2017/12/14, 20:00:00', 1]]
     return render(request, 'student/student_hw.html', {'SubmitRecord': SubmitRecord})
 
 
 @user_passes_test(studentcheck, login_url="/login")
-def forum(request):
+def forum(request, id):
     tmp = []
     PostName = '摸鱼求约'  # 对应资源的名称
     PostList = [['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',

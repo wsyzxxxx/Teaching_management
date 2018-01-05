@@ -289,7 +289,7 @@
                         <div class="header">{{ foo.1 }}</div>
                         <p>{{ foo.2 }}</p>
                     </div>
-                    <button class="ui button" onclick="window.location.href='student_hw'">详情</button>
+                    <button class="ui button" onclick="window.location.href='/student/student_hw/{{ foo.3}}'">详情</button>
                 </div>
                 {% else %}
                 <div class="ui icon message">
@@ -298,7 +298,7 @@
                         <div class="header">{{ foo.1 }}</div>
                         <p>{{ foo.2 }}</p>
                     </div>
-                    <button class="ui button" onclick="window.location.href='student_hw'">详情</button>
+                    <button class="ui button" onclick="window.location.href='/student/student_hw/{{ foo.3}}'">详情</button>
                 </div>
                 {% endifequal %} {% endfor %}
             </div>
