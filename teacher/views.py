@@ -3,6 +3,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import auth
+from django.contrib import auth
+from django.contrib.auth.models import User
+from django.db.models import Q
+from teacher.models import UserInfo, TeacherInfo, StudentInfo, ManagerInfo, CourseInfo, \
+    CourseTime, Homework, MultipleChoice, ShortAnswer, HwOfCourse, \
+    StudentAnswer, HwGrade, ForumList, PostReply, Source, Message, \
+    Announcement, Customer, IsRead, HwSubmit
 
 def teachercheck(user):
     try:
@@ -36,6 +43,7 @@ def index(request):
         if i[0] == '0':
             unreadGlobalNotice += 1
     # 课程表，应统计每门课程未读通知+未提交的作业数量
+
     userCourse = request.user.userinfo.user_course.all()
     CoursesList = []
     for i in userCourse:
@@ -57,6 +65,7 @@ def index(request):
             tmp.append(liuyanPage.page(i))
         liuyanPaginator.append(tmp)
         tmp = []
+
     return render(request, 'teacher/index.html', {'GlobalNoticeList': GlobalNoticeList,
                                                   'unreadGlobalNotice': unreadGlobalNotice,
                                                   'CoursesList': CoursesList,
@@ -64,40 +73,54 @@ def index(request):
 
 
 @user_passes_test(teachercheck, login_url="/login")
-def course(request):
+def course(request, courseid):
     tmp = []
-    PostList = [['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
-                ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0'],
-                ['摸鱼求约', '邢卫', '2017/12/12, 20:00:00', '', '', '0']]
+    course = CourseInfo.objects.get(id=courseid)
+    forum = course.forumlist_set.all()
+    PostList = []
+    for i in forum:
+        PostList.append([i.forum_title, i.forum_user.name, i.forum_time.strftime(
+            "%Y-%m-%d %H:%M:%S"), '', '', '0', i.id])
+
     # 通知列表设有一个标志位来标志是否已读，0为未读，1为已读，前端点击了通知详情按钮后，应该到后台将状态设置为已读
-    NoticeList = [['1', '作业1ddl已到', '2017/12/12, 20:00:00', '作业1ddl已到，请您及时批改'],
-                  ['1', '作业2ddl已到', '2017/12/13, 20:00:00', '作业2ddl已到，请您及时批改'],
-                  ['0', '作业3ddl已到', '2017/12/14, 20:00:00', '作业3ddl已到，请您及时批改'],
-                  ['0', '作业4ddl已到', '2017/12/14, 20:00:00', '作业4ddl已到，请您及时批改']]
+    userMessage = request.user.userinfo.isread_set.all()
+    NoticeList = []
+    for i in userMessage:
+        if i.read_isread == True:
+            flag = '1'
+        else:
+            flag = '0'
+        if i.read_message != None:
+            singleMessage = [flag, i.read_message.message_sender.name,
+                             i.read_message.message_time.strftime("%Y-%m-%d %H:%M:%S"), i.read_message.message_content]
+        else:
+            singleMessage = [flag, i.read_announce.announce_title,
+                             i.read_announce.announce_time.strftime("%Y-%m-%d %H:%M:%S"), i.read_announce.announce_content]
+        NoticeList.append(singleMessage)
     unreadNotice = 0
     for i in NoticeList:
         if i[0] == '0':
             unreadNotice += 1
     # 作业列表设有一个标志位来标志是否已批改，0为未提交，1为已提交，前端批改作业后，应该到后台将状态设置为已提交；
     # 应能正确指导前端进行页面跳转
-    HwList = [['1', '作业1', '2017/12/12, 20:00:00'],
-              ['1', '作业2', '2017/12/13, 20:00:00'],
-              ['0', '作业3', '2017/12/14, 20:00:00']]
+    HwList = []
+    homework = course.homework_set.all()
+    for i in homework:
+        try:
+            status = i.hwgrade_set.get(id=i.id)
+            HwList.append(['1', i.homework_name, i.homework_deadline, i.id])
+        except:
+            HwList.append(['0', i.homework_name, i.homework_deadline, i.id])
     unsubmitHw = 0
     for i in HwList:
         if i[0] == '0':
             unsubmitHw += 1
     # 资源列表
-    PPTList = [['uml.ppt', '刘玉生', '2017/12/12, 20:00:00'],
-               ['5.ppt', '刘玉生', '2017/12/12, 20:00:00'],
-               ['操作系统概念.ppt', '王泽杰', '2017/12/12, 20:00:00'],
-               ['软件需求.ppt', '邢卫', '2017/12/12, 20:00:00'],
-               ['作业成绩.ppt', '邢卫', '2017/12/12, 20:00:00'],
-               ['uml.ppt', '刘生', '2017/12/12, 20:00:00'],
-               ['5.ppt', '刘生', '2017/12/12, 20:00:00'],
-               ['操作系统概念.ppt', '王泽杰', '2017/12/12, 20:00:00'],
-               ['软件需求.ppt', '邢卫', '2017/12/12, 20:00:00'],
-               ['作业成绩.ppt', '邢卫', '2017/12/12, 20:00:00']]
+    PPTList = []
+    source = course.source_set.filter(source_type=1).all()
+    for i in source:
+        PPTList.append([i.source_name, i.source_user.name,
+                        i.source_time.strftime("%Y-%m-%d %H:%M:%S")])
     PPTPage = Paginator(PPTList, 5)
     PPTPaginator = []
     for i in range(1, PPTPage.num_pages + 1):
@@ -105,12 +128,11 @@ def course(request):
             tmp.append(PPTPage.page(i))
         PPTPaginator.append(tmp)
         tmp = []
-    PDFList = [['uml.pdf', '刘玉生', '2017/12/12, 20:00:00'],
-               ['5.pdf', '刘玉生', '2017/12/12, 20:00:00'],
-               ['操作系统概念.pdf', '王泽杰', '2017/12/12, 20:00:00'],
-               ['软件需求.pdf', '邢卫', '2017/12/12, 20:00:00'],
-               ['作业成绩.pdf', '邢卫', '2017/12/12, 20:00:00'],
-               ['作业成绩.pdf', '邢卫', '2017/12/12, 20:00:00']]
+    PDFList = []
+    source = course.source_set.filter(source_type=2).all()
+    for i in source:
+        PDFList.append([i.source_name, i.source_user.name,
+                        i.source_time.strftime("%Y-%m-%d %H:%M:%S")])
     PDFPage = Paginator(PDFList, 5)
     PDFPaginator = []
     for i in range(1, PDFPage.num_pages + 1):
@@ -118,11 +140,11 @@ def course(request):
             tmp.append(PDFPage.page(i))
         PDFPaginator.append(tmp)
         tmp = []
-    MediaList = [['uml.mp4', '刘玉生', '2017/12/12, 20:00:00'],
-                 ['5.mp4', '刘玉生', '2017/12/12, 20:00:00'],
-                 ['操作系统概念.mp4', '王泽杰', '2017/12/12, 20:00:00'],
-                 ['软件需求.mp4', '邢卫', '2017/12/12, 20:00:00'],
-                 ['作业成绩.mp4', '邢卫', '2017/12/12, 20:00:00']]
+    MediaList = []
+    source = course.source_set.filter(source_type=3).all()
+    for i in source:
+        MediaList.append([i.source_name, i.source_user.name,
+                          i.source_time.strftime("%Y-%m-%d %H:%M:%S")])
     MediaPage = Paginator(MediaList, 5)
     MediaPaginator = []
     for i in range(1, MediaPage.num_pages + 1):
@@ -130,11 +152,11 @@ def course(request):
             tmp.append(MediaPage.page(i))
             MediaPaginator.append(tmp)
         tmp = []
-    OthersList = [['uml.doc', '刘玉生', '2017/12/12, 20:00:00'],
-                  ['5.docx', '刘玉生', '2017/12/12, 20:00:00'],
-                  ['操作系统概念.doc', '王泽杰', '2017/12/12, 20:00:00'],
-                  ['软件需求.xls', '邢卫', '2017/12/12, 20:00:00'],
-                  ['作业成绩.docx', '邢卫', '2017/12/12, 20:00:00']]
+    OthersList = []
+    source = course.source_set.filter(source_type=4).all()
+    for i in source:
+        OthersList.append([i.source_name, i.source_user.name,
+                           i.source_time.strftime("%Y-%m-%d %H:%M:%S")])
     OthersPage = Paginator(OthersList, 5)
     OthersPaginator = []
     for i in range(1, OthersPage.num_pages + 1):
@@ -161,18 +183,19 @@ def course(request):
                                                            'OthersPage': OthersPage,
                                                            'OthersPaginator': OthersPaginator,
                                                            'StudentNum': StudentNum, 'StudentList': StudentList,
-                                                           'TaList': TaList})
+                                                           'TaList': TaList,
+                                                           'courseid': courseid})
 
 
 @user_passes_test(teachercheck, login_url="/login")
-def hw(request):
+def hw(request, courseid):
     StudentNum = 50  # 学生总数
     SubmitNum = 20  # 已提交人数
     return render(request, 'teacher/teacher_hw.html', {'StudentNum': StudentNum,
                                                        'SubmitNum': SubmitNum})
 
 @user_passes_test(teachercheck, login_url="/login")
-def message(request):
+def message(request, courseid):
     History = [['/static/img/kk.png', '吴朝晖', '2017/12/12, 20:00:00',
                 '网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起'],
                ['/static/img/zju.jpg', '王泽杰', '2017/12/14, 20:00:00', '不去']]
@@ -180,7 +203,7 @@ def message(request):
 
 
 @user_passes_test(teachercheck, login_url="/login")
-def new_hw(request):
+def new_hw(request, courseid):
     return render(request, 'teacher/new_hw.html')
 
 

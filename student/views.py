@@ -125,7 +125,6 @@ def course(request, id):
     # id = request.GET['id']
     course = CourseInfo.objects.get(id=id)
     forum = course.forumlist_set.all()
-    print(forum)
     PostList = []
     for i in forum:
         PostList.append([i.forum_title, i.forum_user.name, i.forum_time.strftime("%Y-%m-%d %H:%M:%S"), '', '', '0', i.id])
