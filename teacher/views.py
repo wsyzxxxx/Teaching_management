@@ -10,6 +10,7 @@ from teacher.models import UserInfo, TeacherInfo, StudentInfo, ManagerInfo, Cour
     CourseTime, Homework, MultipleChoice, ShortAnswer, HwOfCourse, \
     StudentAnswer, HwGrade, ForumList, PostReply, Source, Message, \
     Announcement, Customer, IsRead, HwSubmit
+import json
 
 def teachercheck(user):
     try:
@@ -78,9 +79,19 @@ def course(request, courseid):
     course = CourseInfo.objects.get(id=courseid)
     forum = course.forumlist_set.all()
     PostList = []
+    re = 0
     for i in forum:
-        PostList.append([i.forum_title, i.forum_user.name, i.forum_time.strftime(
-            "%Y-%m-%d %H:%M:%S"), '', '', '0', i.id])
+        posts = i.postreply_set.all()
+        for j in posts:
+            re += 1
+            lastname = j.reply_user.name
+            lasttime = j.reply_time.strftime("%Y-%m-%d %H:%M:%S")
+        PostList.append([i.forum_title, i.forum_user.name, i.forum_time.strftime("%Y-%m-%d %H:%M:%S"), lastname, lasttime, re, i.id])
+        
+    time = course.coursetime_set.all()
+    coursetime = []
+    for i in time:
+        coursetime.append([i.course_date.strftime("%Y-%m-%d"), i.course_time, i.course_assignment, i.course_position])
 
     # 通知列表设有一个标志位来标志是否已读，0为未读，1为已读，前端点击了通知详情按钮后，应该到后台将状态设置为已读
     userMessage = request.user.userinfo.isread_set.all()
@@ -164,16 +175,21 @@ def course(request, courseid):
             tmp.append(OthersPage.page(i))
             OthersPaginator.append(tmp)
         tmp = []
-    StudentNum = 50  # 本班学生总数
-    StudentList = [['315010', '王泽杰', '2015', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'],
-                   ['315010', '王泽杰', '2015', '计算机科学与技术学院',
-                       '软件工程', '18888@qq.com', '10086'],
-                   ['315010', '王泽杰', '2015', '计算机科学与技术学院',
-                       '软件工程', '18888@qq.com', '10086'],
-                   ['315010', '王泽杰', '2015', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'], ]
-    TaList = [['315010', '王泽杰', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'],
-              ['315010', '王泽杰', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'],
-              ['315010', '王泽杰', '计算机科学与技术学院', '软件工程', '18888@qq.com', '10086'], ]
+    
+    StudentNum = 4  # 本班学生总数
+    StudentList = []
+    students = course.userinfo_set.filter(user_type=1).all()
+
+    StudentList = [['3150100654', '薛伟', '2015', '计算机科学与技术学院', '软件工程', '645658325@qq.com', '18143465569'],
+                   ['3150101234', '王泽杰', '2015', '计算机科学与技术学院',
+                       '软件工程', '789452405@qq.com', '18143485594'],
+                   ['3150105248', '陈立华', '2015', '计算机科学与技术学院',
+                       '软件工程', '548123475@qq.com', '18143465587'],
+                   ['3150102259', '梁杰', '2015', '计算机科学与技术学院', '软件工程', '785425910@qq.com', '18143454424'], ]
+    
+    TaList = [['3140101111', '李刚', '计算机科学与技术学院', '软件工程', '789524512@qq.com', '1504158534'],
+              ['3140102222', '李明', '计算机科学与技术学院', '软件工程', '18888@qq.com', '18547186253'],
+              ['3140103333', '小明', '计算机科学与技术学院', '软件工程', '18888@qq.com', '13357628512'], ]
     return render(request, 'teacher/teacher_course.html', {'PostList': PostList,
                                                            'NoticeList': NoticeList, 'unreadNotice': unreadNotice,
                                                            'HwList': HwList, 'unsubmitHw': unsubmitHw,
@@ -184,7 +200,8 @@ def course(request, courseid):
                                                            'OthersPaginator': OthersPaginator,
                                                            'StudentNum': StudentNum, 'StudentList': StudentList,
                                                            'TaList': TaList,
-                                                           'courseid': courseid})
+                                                           'courseid': courseid,
+                                                           'time': json.dumps(coursetime)})
 
 
 @user_passes_test(teachercheck, login_url="/login")

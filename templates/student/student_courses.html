@@ -35,6 +35,7 @@
         //通过button的value来定位对应的modal的id，实现modal.show
         function showModal(e) {
             $("#" + e.value).modal('show');
+            $(e).parent().removeClass('red');
         }
 
         //隐藏模态层
@@ -86,11 +87,8 @@
             p.innerHTML = summary;
             $('#modify_summary').val(summary);
             //以下部分初始化课程日历
-            var arrangement_td = []; //表格每栏的内容，从后台获取
-            arrangement_td[0] = '2017.12.12'; //此处初始化用于测试
-            arrangement_td[1] = '13:15~15:40';
-            arrangement_td[2] = '第一次上课';
-            arrangement_td[3] = '教7-604';
+            var arrangement_td = {{ time|safe }}; //表格每栏的内容，从后台获取
+            
             var tbody = document.getElementById('calendars'); //tbody标签
             var tr; //表格tr标签
             var td = []; //表格td标签
@@ -99,7 +97,7 @@
                 tbody.appendChild(tr); //创建tr标签并加入tbody中
                 for (var j = 0; j < 4; j++) {
                     td[j] = document.createElement('td');
-                    td[j].innerHTML = arrangement_td[j];
+                    td[j].innerHTML = arrangement_td[i][j];
                     tr.appendChild(td[j]); //创建四个td标签并加入tr中
                 }
                 td[0].className = 'collapsing';
@@ -181,7 +179,7 @@
 
         //发送私信
         function send_mesage() {
-            window.location.href = 'message';
+            window.location.href = '/student/message/3/';
         }
     </script>
 </head>
@@ -252,7 +250,7 @@
                         </button>
                         </div>
                     </div>
-                    <a class="item">退出</a>
+                    <a class="item" href="/student/logout">退出</a>
                 </div>
             </div>
         </div>
@@ -423,7 +421,7 @@
                                     {% for i in foo|slice:":1" %} {% for element in i %}
                                     <tr id="pos{{ forloop.counter0 }}">
                                         <td>
-                                            <a href="student_forum.html">{{ element.0 }}</a>
+                                            <a href="/student/student_forum/1/">{{ element.0 }}</a>
                                         </td>
                                         <td>{{ element.1 }}</td>
                                         <td>{{ element.2 }}</td>
@@ -523,7 +521,7 @@
                                         <tr>
                                             <td class="collapsing">{{ j.2 }}</td>
                                             <td class="collapsing">{{ j.1 }}</td>
-                                            <td><a href="student_resource_comment">{{ j.0 }}</a></td>
+                                            <td><a href="/student/student_resource_comment">{{ j.0 }}</a></td>
                                             <td class="right allgn collapsing">
                                                 <button class="ui button">下载</button>
                                             </td>

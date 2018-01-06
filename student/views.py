@@ -9,7 +9,7 @@ from teacher.models import UserInfo, TeacherInfo, StudentInfo, ManagerInfo, Cour
                            CourseTime, Homework, MultipleChoice, ShortAnswer, HwOfCourse, \
                            StudentAnswer, HwGrade, ForumList, PostReply, Source, Message, \
     Announcement, Customer, IsRead, HwSubmit
-import time
+import time, json
 
 def studentcheck(user):
     try:
@@ -126,9 +126,20 @@ def course(request, id):
     course = CourseInfo.objects.get(id=id)
     forum = course.forumlist_set.all()
     PostList = []
+    re = 0
     for i in forum:
-        PostList.append([i.forum_title, i.forum_user.name, i.forum_time.strftime("%Y-%m-%d %H:%M:%S"), '', '', '0', i.id])
+        posts = i.postreply_set.all()
+        for j in posts:
+            re += 1
+            lastname = j.reply_user.name
+            lasttime = j.reply_time.strftime("%Y-%m-%d %H:%M:%S")
+        PostList.append([i.forum_title, i.forum_user.name, i.forum_time.strftime("%Y-%m-%d %H:%M:%S"), lastname, lasttime, re, i.id])
     
+
+    time = course.coursetime_set.all()
+    coursetime = []
+    for i in time:
+        coursetime.append([i.course_date.strftime("%Y-%m-%d"), i.course_time, i.course_assignment, i.course_position])
     #### 缺少一个最后回复的显示
     tmp = []
     # 论坛贴子列表
@@ -299,7 +310,7 @@ def course(request, id):
                                                             'MediaPage': MediaPage, 'MediaPaginator': MediaPaginator,
                                                             'OthersPage': OthersPage,
                                                             'OthersPaginator': OthersPaginator,
-                                                            })
+                                                            'time': json.dumps(coursetime)})
 
 
 @user_passes_test(studentcheck, login_url="/login")
@@ -428,10 +439,10 @@ def message(request, messageid):
     # name = '吴朝晖'  #私信的对象
     for i in messages:
         if i.message_sender == id1:
-            History.append(['/static/img/kk.png', id1.name,
+            History.append(['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', id1.name,
                         i.message_time.strftime("%Y-%m-%d %H:%M:%S"), i.message_content])
         else:
-            History.append(['/static/img/zju.jpg', id2.name,
+            History.append(['/static/img/kk.png', id2.name,
                         i.message_time.strftime("%Y-%m-%d %H:%M:%S"), i.message_content])
     # History = [['/static/img/kk.png', '吴朝晖', '2017/12/12, 20:00:00', '网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起'],
     #            ['/static/img/zju.jpg', '王泽杰', '2017/12/14, 20:00:00', '不去']]

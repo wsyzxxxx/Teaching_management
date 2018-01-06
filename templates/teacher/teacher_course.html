@@ -90,12 +90,7 @@
             p.innerHTML = summary;
             $('#modify_summary').val(summary);
             //以下部分初始化课程日历
-            var arrangement_td = []; //表格每栏的内容，从后台获取
-            arrangement_td[0] = '2017.12.12'; //此处初始化用于测试
-            arrangement_td[1] = '13:15~15:40';
-            arrangement_td[2] = '第一次上课';
-            arrangement_td[3] = '教7-604';
-            arrangement_td[4] = '<div class="ui button" onclick="modify_row(this)">修改</div><div class="ui button" onclick="delete_row(this)">删除</div>'; //按钮必须初始化
+            var arrangement_td = {{ time | safe }};
             var tbody = document.getElementById('calendars'); //tbody标签
             var tr; //表格tr标签
             var td = []; //表格td标签
@@ -104,7 +99,10 @@
                 tbody.appendChild(tr); //创建tr标签并加入tbody中
                 for (var j = 0; j < 5; j++) {
                     td[j] = document.createElement('td');
-                    td[j].innerHTML = arrangement_td[j];
+                    td[j].innerHTML = arrangement_td[i][j];
+                    if (j == 4) {
+                        td[4].innerHTML = '<div class="ui button" onclick="modify_row(this)">修改</div><div class="ui button" onclick="delete_row(this)">删除</div>';
+                    }
                     tr.appendChild(td[j]); //创建5个td标签并加入tr中
                 }
                 td[0].className = 'collapsing';
@@ -295,7 +293,7 @@
         }
         //添加助教
         function add_ta() {
-            window.location.href = 'add_ta'
+            window.location.href = '/teacher/add_ta'
         }
     </script>
 </head>
@@ -326,7 +324,7 @@
                 <i class="folder open outline icon"></i>课程资源</a>
             <a class="item" data-tab="return" onclick="window.location.href='/teacher'">
                 <i class="reply icon"></i>返回个人主页</a>
-            <a class="item" data-tab="logout" onclick="window.location.href='logout'">
+            <a class="item" data-tab="logout" onclick="window.location.href='/teacher/logout'">
                 <i class="sign out icon"></i>退出系统</a>
         </div>
     </div>
@@ -367,7 +365,7 @@
                         </button>
                         </div>
                     </div>
-                    <a class="item" href="logout">退出</a>
+                    <a class="item" href="/teacher/logout">退出</a>
                 </div>
             </div>
         </div>
@@ -529,7 +527,7 @@
                         {% for element in PostList %}
                         <tr id="post{{ forloop.counter0 }}">
                             <td>
-                                <a href="teacher_forum.html">{{ element.0 }}</a>
+                                <a href="/teacher/teacher_forum">{{ element.0 }}</a>
                             </td>
                             <td>{{ element.1 }}</td>
                             <td>{{ element.2 }}</td>
@@ -595,7 +593,7 @@
                                         <tr>
                                             <td class="collapsing">{{ j.2 }}</td>
                                             <td class="collapsing">{{ j.1 }}</td>
-                                            <td><a href="teacher_resource_comment">{{ j.0 }}</a></td>
+                                            <td><a href="/teacher/teacher_resource_comment">{{ j.0 }}</a></td>
                                             <td class="collapsing">
                                                 <button class="ui button" onclick="download()">下载</button>
                                             </td>
@@ -624,7 +622,7 @@
                                         <tr>
                                             <td class="collapsing">{{ j.2 }}</td>
                                             <td class="collapsing">{{ j.1 }}</td>
-                                            <td><a href="teacher_resource_comment">{{ j.0 }}</a></td>
+                                            <td><a href="/teacher/teacher_resource_comment">{{ j.0 }}</a></td>
                                             <td class="right allgn collapsing">
                                                 <button class="ui button" onclick="download()">下载</button>
                                             </td>

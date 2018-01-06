@@ -11,5 +11,7 @@ urlpatterns = [
     url(r'^teacher_resource_comment/(.+)/$',
         views.teacher_resource_comment, name='teacher_resource_comment'),
     url(r'^message/(.+)/$', views.message, name='teacher_message'),
-    url(r'^add_ta/(.+)/$', views.addta, name='add_ta')
+    url(r'^add_ta/(.+)/$', views.addta, name='add_ta'),
+    url(r'^teacher_forum$', views.teacher_forum, name='forum'),
+    url(r'^logout$', views.logout, name='logout'),
 ]
