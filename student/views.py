@@ -3,6 +3,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import auth
+from django.contrib.auth.models import User
+from django.db.models import Q
 from teacher.models import UserInfo, TeacherInfo, StudentInfo, ManagerInfo, CourseInfo, \
                            CourseTime, Homework, MultipleChoice, ShortAnswer, HwOfCourse, \
                            StudentAnswer, HwGrade, ForumList, PostReply, Source, Message, \
@@ -126,7 +128,7 @@ def course(request, id):
     print(forum)
     PostList = []
     for i in forum:
-        PostList.append([i.forum_title, i.forum_user.name, i.forum_time.strftime("%Y-%m-%d %H:%M:%S"), '', '', '0'])
+        PostList.append([i.forum_title, i.forum_user.name, i.forum_time.strftime("%Y-%m-%d %H:%M:%S"), '', '', '0', i.id])
     
     #### 缺少一个最后回复的显示
     tmp = []
@@ -203,7 +205,7 @@ def course(request, id):
     teacher = course.userinfo_set.filter(user_type=2)
     for i in teacher:
         TeacherList.append([i.teacherinfo.teacher_name, '教授',
-                            '计算机科学与技术学院', i.teacherinfo.teacher_email, i.teacherinfo.teacher_phone])
+                            '计算机科学与技术学院', i.teacherinfo.teacher_email, i.teacherinfo.teacher_phone, i.user.id])
 
     # 教师信息表
     # TeacherList = [['邢卫', '教授', '计算机科学与技术学院', '10086@zju.edu.cn', '18888888888'],
@@ -319,32 +321,46 @@ def hw(request, hwid):
 @user_passes_test(studentcheck, login_url="/login")
 def forum(request, id):
     tmp = []
-    PostName = '摸鱼求约'  # 对应资源的名称
-    PostList = [['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                 '2017/12/12, 20:00:00', '1'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                 '2017/12/12, 20:00:00', '2'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
-                 '2017/12/12, 20:00:00', '3'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
-                 '2017/12/12, 20:00:00', '4'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                 '2017/12/12, 20:00:00', '5'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                 '2017/12/12, 20:00:00', '6'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
-                 '2017/12/12, 20:00:00', '7'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
-                 '2017/12/12, 20:00:00', '7'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                 '2017/12/12, 20:00:00', '9'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
-                 '2017/12/12, 20:00:00', '10'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
-                 '2017/12/12, 20:00:00', '11'],
-                ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
-                 '2017/12/12, 20:00:00', '12'],
-                ]
+
+    post = ForumList.objects.get(id=id)
+    reply = post.postreply_set.all()
+
+    PostName = post.forum_title
+    j = 0
+    PostList = []
+    for i in reply:
+        j += 1
+        if i.reply_user.user_type == 1:
+            identity = '学生'
+        elif i.reply_user.user_type == 2:
+            identity = '教师'
+        PostList.append(
+            ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', i.reply_user.name, identity, i.reply_content, i.reply_time.strftime("%Y-%m-%d %H:%M:%S"), j])
+    # PostList = [['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+    #              '2017/12/12, 20:00:00', '1'],
+    #             ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+    #              '2017/12/12, 20:00:00', '2'],
+    #             ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+    #              '2017/12/12, 20:00:00', '3'],
+    #             ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+    #              '2017/12/12, 20:00:00', '4'],
+    #             ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+    #              '2017/12/12, 20:00:00', '5'],
+    #             ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+    #              '2017/12/12, 20:00:00', '6'],
+    #             ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+    #              '2017/12/12, 20:00:00', '7'],
+    #             ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+    #              '2017/12/12, 20:00:00', '7'],
+    #             ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+    #              '2017/12/12, 20:00:00', '9'],
+    #             ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
+    #              '2017/12/12, 20:00:00', '10'],
+    #             ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '游客', '游客', '垃圾网站',
+    #              '2017/12/12, 20:00:00', '11'],
+    #             ['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '游客', '垃圾网站',
+    #              '2017/12/12, 20:00:00', '12'],
+    #             ]
     PostPage = Paginator(PostList, 10)
     PostPaginator = []
     for i in range(1, PostPage.num_pages + 1):
@@ -360,6 +376,8 @@ def forum(request, id):
 @user_passes_test(studentcheck, login_url="/login")
 def student_resource_comment(request):
     tmp = []
+
+
     ResourceName = 'uml.pdf'  #对应资源的名称
     CommentList = [['/static/Semantic-UI-master/examples/assets/images/avatar/tom.jpg', '邢卫', '教师', '垃圾网站',
                    '2017/12/12, 20:00:00', '1'],
@@ -400,10 +418,24 @@ def student_resource_comment(request):
 
 
 @user_passes_test(studentcheck, login_url="/login")
-def message(request):
-    name = '吴朝晖'  #私信的对象
-    History = [['/static/img/kk.png', '吴朝晖', '2017/12/12, 20:00:00', '网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起'],
-               ['/static/img/zju.jpg', '王泽杰', '2017/12/14, 20:00:00', '不去']]
+def message(request, messageid):
+
+    user1 = User.objects.get(id=messageid)
+    id1 = UserInfo.objects.get(user=user1)
+    id2 = request.user.userinfo
+    name = User.objects.get(id=messageid).userinfo.name
+    messages = Message.objects.filter(Q(message_sender=id1, message_receiver=id2) | Q(message_receiver=id1, message_sender=id2)).order_by("message_time")
+    History = []
+    # name = '吴朝晖'  #私信的对象
+    for i in messages:
+        if i.message_sender == id1:
+            History.append(['/static/img/kk.png', id1.name,
+                        i.message_time.strftime("%Y-%m-%d %H:%M:%S"), i.message_content])
+        else:
+            History.append(['/static/img/zju.jpg', id2.name,
+                        i.message_time.strftime("%Y-%m-%d %H:%M:%S"), i.message_content])
+    # History = [['/static/img/kk.png', '吴朝晖', '2017/12/12, 20:00:00', '网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起网吧走起'],
+    #            ['/static/img/zju.jpg', '王泽杰', '2017/12/14, 20:00:00', '不去']]
     return render(request, 'student/message.html', {'name': name,
                                                     'History': History})
 
