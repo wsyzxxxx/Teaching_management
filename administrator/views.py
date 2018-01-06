@@ -97,12 +97,37 @@ def index(request):
             tmp.append(liuyanPage.page(i))
         liuyanPaginator.append(tmp)
         tmp = []
+    # 用户表
+    UserList = [['3150100000', '王泽杰', '10086@zju.edu.cn', '10086'],
+                ['3150100000', '王泽杰', '10086@zju.edu.cn', '10086'],
+                ['3150100000', '王泽杰', '10086@zju.edu.cn', '10086'],
+                ['3150100000', '王泽杰', '10086@zju.edu.cn', '10086'],
+                ['3150100000', '王泽杰', '10086@zju.edu.cn', '10086'],
+                ['3150100000', '王泽杰', '10086@zju.edu.cn', '10086'],
+                ['3150100000', '王泽杰', '10086@zju.edu.cn', '10086'],
+                ['3150100000', '王泽杰', '10086@zju.edu.cn', '10086'],
+                ['3150100000', '王泽杰', '10086@zju.edu.cn', '10086'],
+                ['3150100000', '王泽杰', '10086@zju.edu.cn', '10086'],
+                ['3150100000', '王泽杰', '10086@zju.edu.cn', '10086'],
+                ['3150100000', '王泽杰', '10086@zju.edu.cn', '10086'],
+                ['3150100000', '王泽杰', '10086@zju.edu.cn', '10086'],
+                ['3150100000', '王泽杰', '10086@zju.edu.cn', '10086'],
+                ['3150100000', '王泽杰', '10086@zju.edu.cn', '10086'],
+                ['3150100000', '王泽杰', '10086@zju.edu.cn', '10086'],]
+    UserPage = Paginator(UserList, 10)
+    UserPaginator = []
+    for i in range(1, UserPage.num_pages + 1):
+        for j in UserPage.page(i):
+            tmp.append(UserPage.page(i))
+        UserPaginator.append(tmp)
+        tmp = []
     return render(request, 'administrator/index.html', {'GlobalNoticeList': GlobalNoticeList,
                                                         'unreadGlobalNotice': unreadGlobalNotice,
                                                         'CoursesList': CoursesList,
                                                         'liuyanPage': liuyanPage, 'liuyanPaginator': liuyanPaginator,
                                                         'CoursesPage': CoursesPage,
-                                                        'CoursesPaginator': CoursesPaginator})
+                                                        'CoursesPaginator': CoursesPaginator,
+                                                        'UserPage': UserPage, 'UserPaginator': UserPaginator})
 
 
 @user_passes_test(admincheck, login_url="/login")

@@ -103,8 +103,17 @@
                 return '消息';
             else if (tab === 'liuyan')
                 return '留言板';
+            else if (tab === 'modify_info')
+                return '编辑个人信息';
+            else if (tab === 'modify_pwd')
+                return '修改密码';
             else
                 return false;
+        }
+        
+        //修改密码
+        function modify_pwd() {
+            
         }
     </script>
 </head>
@@ -210,8 +219,40 @@
                     <i class="user icon"></i> 编辑个人信息
                 </div>
             </a>
+            <a class="item" data-tab="modify_pwd">
+                <div class="ui button">修改密码</div>
+            </a>
         </div>
     </div>
+
+    <!--修改密码tab-->
+    <div class="ui bottom attached tab" data-tab="modify_pwd" style="min-height: 568px">
+        <div class="ui hidden divider"></div>
+        <div class="ui container" style='width: 90%;'>
+            <div class="ui form">
+                <div class="fields">
+                    <div class="field">
+                        <label>请输入旧密码</label>
+                        <input type="password">
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="field">
+                        <label>请输入新密码</label>
+                        <input type="password">
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="field">
+                        <label>请再次输入新密码</label>
+                        <input type="password">
+                    </div>
+                </div>
+                <div class="ui submit button" onclick="modify_pwd()">提交</div>
+            </div>
+        </div>
+    </div>
+
     <!--个人课表tab-->
     <div class="ui bottom attached active tab" data-tab="course_table" style="min-height: 571px">
         <div class="ui container" style="width: 90%">
